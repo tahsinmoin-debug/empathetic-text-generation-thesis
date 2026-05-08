@@ -1,0 +1,501 @@
+text,actual,predicted,correct,score_Loss,score_Anger,score_Fear,score_Self-Conscious,score_Disgust
+You must be new here if that's the cringiest shit you've seen so far.,Self-Conscious,Anger,False,2.417695999145508,2.1768205165863037,2.419367790222168,2.3511555194854736,2.2155604362487793
+I’m guessing theyve been together for a few years and once she was no longer a teenager and it wasn’t as risqué he lost interest.,Loss,Disgust,False,3.1536805629730225,3.0160913467407227,3.1972720623016357,3.103693962097168,2.953824043273926
+[NAME] has weird ideas about everything.,Self-Conscious,Disgust,False,2.68308162689209,2.248735189437866,2.640307664871216,2.525927782058716,2.2068231105804443
+I wouldn't announce that they are LuLaRoe.,Anger,Disgust,False,3.704676389694214,3.3202569484710693,3.647563934326172,3.41526460647583,3.1892752647399902
+The next step in human evolution is for humanity to end. Life isn't worth preserving.,Anger,Anger,True,2.9873130321502686,2.720454216003418,3.016199827194214,2.9388837814331055,2.735567569732666
+"But for real. Like, phones, you guys. Am I right?",Self-Conscious,Disgust,False,3.4662370681762695,3.2139127254486084,3.53889536857605,3.378058433532715,3.1614413261413574
+I've always wondered how much of this stuff doesn't end up on the internet,Self-Conscious,Disgust,False,2.444901943206787,2.184478998184204,2.4119036197662354,2.313314199447632,2.1670615673065186
+That's until a golden retriever runs for office. Humans can't be trusted,Anger,Disgust,False,3.3460533618927,3.0200228691101074,3.2969276905059814,3.208467483520508,2.949218511581421
+"wild guess but I think any cheering for her to ""clean him out"" comes from her being cheated on.",Loss,Disgust,False,4.144458293914795,3.8897957801818848,4.1835198402404785,4.053471565246582,3.88775372505188
+"Closure, like vomit, comes from within.",Disgust,Disgust,True,3.2964789867401123,3.0035345554351807,3.411919593811035,3.1583337783813477,2.8910293579101562
+"Good idea, but unfortunately not running on the weekend. ",Loss,Disgust,False,3.0858850479125977,2.785654067993164,3.105346441268921,2.947948932647705,2.744746685028076
+"It's always been a dodgy road, proposals were put in ages ago",Anger,Disgust,False,4.159493446350098,3.7741968631744385,4.0831379890441895,3.910651206970215,3.7145066261291504
+He was horrible,Disgust,Disgust,True,2.9225480556488037,2.390209197998047,3.012338399887085,2.7783563137054443,2.352175712585449
+StS and Thronebreaker are both singeplayer. Comparing them with Artifact is disingenuous.,Loss,Disgust,False,4.216392993927002,3.9465224742889404,4.228608131408691,4.0257978439331055,3.876110315322876
+Neither does she because her lips are too large to talk,Self-Conscious,Disgust,False,3.6260509490966797,3.201404571533203,3.621359348297119,3.332059383392334,3.1539595127105713
+"Yes, we do. One with very misguided priorities",Self-Conscious,Disgust,False,3.690457820892334,3.3290536403656006,3.687732219696045,3.5061001777648926,3.2527217864990234
+I've never read an article that made me experience both disgust and schadenfreude in equal measure like this one has.,Disgust,Disgust,True,2.664971351623535,2.4598753452301025,2.6709253787994385,2.549168348312378,2.3134915828704834
+"As a computer science student but also a lifelong [NAME], the issues surrounding Amazon in Queens have left me substantially torn. ",Loss,Disgust,False,4.077936172485352,3.900657892227173,4.157909870147705,3.968799114227295,3.8481359481811523
+Lady looks a bit psychopathic,Self-Conscious,Disgust,False,3.5883123874664307,3.120936393737793,3.5638959407806396,3.3257439136505127,3.0153579711914062
+Scat will NEVER be my thing. Or vomit.,Disgust,Disgust,True,3.4767849445343018,3.123896837234497,3.4250898361206055,3.2555930614471436,2.9620420932769775
+"Yeah it’s pretty cringe tbh, I think he’s a good guy just a little insecure ",Disgust,Disgust,True,2.8911123275756836,2.7245078086853027,2.938847303390503,2.803131341934204,2.706599235534668
+The weirdest part of this is how good he is at singing,Disgust,Disgust,True,2.783902406692505,2.490278482437134,2.7892119884490967,2.6389968395233154,2.468480110168457
+Its almost as if everyone is too afraid to be politically incorrect to admit that height and race are a factor.,Fear,Anger,False,3.251042127609253,2.998023271560669,3.2809650897979736,3.2137796878814697,3.047438144683838
+This just made me laugh loudly in public causing uncomfortable stares.,Self-Conscious,Disgust,False,3.1423425674438477,2.7877883911132812,3.1163744926452637,2.9458603858947754,2.7134852409362793
+"In the 50s my aunt was 6 weeks old when a flu virus caused inflammation of the heart and she died. So there's that, too.",Loss,Disgust,False,3.0306782722473145,2.878727436065674,3.027970552444458,2.9506285190582275,2.835583209991455
+"Yes...it would be weird, but at the same time there are immigrant families without citizenship or working toward getting citizenship.",Disgust,Disgust,True,3.4173381328582764,3.2740204334259033,3.4041247367858887,3.336874485015869,3.2043890953063965
+I too cuddle with this guy’s sister in law if his wife is tired,Disgust,Disgust,True,3.6427183151245117,3.3997318744659424,3.629351854324341,3.5094025135040283,3.330448865890503
+"What scares me is that now that this happened, they're going to try and find ways to take women's phones away from them.",Fear,Disgust,False,2.559865713119507,2.3892276287078857,2.5145604610443115,2.522552490234375,2.345593214035034
+This would be a good thing. I want capitalism to die.,Anger,Anger,True,2.773470640182495,2.476393461227417,2.7755372524261475,2.7402167320251465,2.4802913665771484
+Plenty of Aboriginal blokes on here who criticised [NAME] too.,Self-Conscious,Disgust,False,3.7515225410461426,3.3256945610046387,3.7584328651428223,3.515131950378418,3.2889230251312256
+I both loathe and applaud you,Disgust,Disgust,True,3.3106067180633545,2.798403263092041,3.3306972980499268,3.0351648330688477,2.700666666030884
+"Examples of useless government entities, little buddy.",Self-Conscious,Disgust,False,4.219372749328613,3.7198100090026855,4.249475002288818,4.032992362976074,3.6406409740448
+"Well, could be worse. It could be India.",Disgust,Disgust,True,2.5878844261169434,2.3478102684020996,2.575613498687744,2.5177125930786133,2.2174296379089355
+Overhead fans are absolute shit. They literally do nothing but blow dust around.,Anger,Disgust,False,3.4172232151031494,2.901123046875,3.2320597171783447,3.094541549682617,2.834470510482788
+[NAME] looks miserable in those photos.,Loss,Disgust,False,2.49273943901062,2.169281005859375,2.523529529571533,2.3820302486419678,2.0835249423980713
+"Oh, give me a break, it was worded like an insult, clear as a day. A mild one, but still.",Self-Conscious,Disgust,False,3.0713577270507812,2.8774375915527344,3.0715811252593994,2.975078582763672,2.869764566421509
+"fyi, straight men also use dildos. Also, your mom is awesome!",Disgust,Disgust,True,3.5390586853027344,3.247641086578369,3.466377019882202,3.359801769256592,3.213974952697754
+"This happens to me all the time I’m so sorry 😣 it’s always with burgers, too. So painful. ",Loss,Disgust,False,3.200770616531372,3.0321030616760254,3.263080358505249,3.1588668823242188,2.993107557296753
+Okay this is racist fear mongering. I got it now thanks.,Fear,Disgust,False,3.3170533180236816,2.9369916915893555,3.2352135181427,3.152353048324585,2.9294333457946777
+"Oh they can make numbers up too , good idea. Astroturfing starwars, this is the worst timeline.",Loss,Disgust,False,4.050200462341309,3.816288471221924,4.077254295349121,3.947983741760254,3.803330183029175
+Everyone just called me the bad guy and said they're glad she's marrying him and rejected me and that i deserved it.,Self-Conscious,Disgust,False,3.6366922855377197,3.443805456161499,3.6603565216064453,3.538588285446167,3.39567232131958
+"Nah, they always were a government's tool to enslave us",Loss,Disgust,False,3.5489394664764404,3.1100995540618896,3.4685380458831787,3.330047607421875,3.055938243865967
+Not ok. They could have easily given them a drug test if they really wanted to know if they were on drugs. Disgusting.,Disgust,Disgust,True,2.5603139400482178,2.3471615314483643,2.5762345790863037,2.542267322540283,2.3190293312072754
+"lol, thank u. i might just not be the smartest, always possible",Anger,Anger,True,3.5985426902770996,3.2366461753845215,3.531287908554077,3.394767999649048,3.2448689937591553
+I didn't realize there was ever an initial post on this subject.,Loss,Disgust,False,2.9261438846588135,2.675020933151245,2.952925205230713,2.8173718452453613,2.6313085556030273
+"Sorry bb :( I understand that feeling all too well, haha",Loss,Anger,False,3.148164749145508,2.9436452388763428,3.3010401725769043,3.1428685188293457,2.979773998260498
+"If he's still blaming [NAME] for his issues, the therapist is doing a bad job.",Loss,Disgust,False,2.6207845211029053,2.446194887161255,2.666595697402954,2.5717549324035645,2.4353578090667725
+That legitimately made me nauseous.,Loss,Disgust,False,2.8763680458068848,2.381295919418335,2.787139892578125,2.631850004196167,2.1482160091400146
+Huh. Weird.,Disgust,Anger,False,2.4324872493743896,1.8916797637939453,2.3882710933685303,2.2662196159362793,1.9049198627471924
+"For every Undertale or Stardew Valley there's dozens, if not hundreds of other games developers put their heart and soul to, but never catch on.",Loss,Disgust,False,3.3574955463409424,3.193450927734375,3.341064691543579,3.241753101348877,3.1285240650177
+Dallas should feel absolutely horrible this is a 1 goal game given how patheticallly bad the Devils are tonight.,Loss,Anger,False,4.776164531707764,4.5125041007995605,4.878564357757568,4.68601655960083,4.5506367683410645
+Just rubbish.,Anger,Disgust,False,3.3513314723968506,2.689626932144165,3.4221153259277344,3.049757242202759,2.5993411540985107
+"I didn’t like him before this, now I really don’t like him. ",Anger,Disgust,False,2.1835362911224365,1.9903650283813477,2.1796135902404785,2.1656084060668945,1.9517329931259155
+Are you kidding? She literally got on top of him while he was tripping and he's the asshole?,Disgust,Anger,False,2.751539468765259,2.4903056621551514,2.7704224586486816,2.6752259731292725,2.501884937286377
+U.S. are going to fuck this [NAME] guy so hard...he's going to need help to remove all the stars from his rectum,Anger,Anger,True,3.361051321029663,3.164090633392334,3.3841192722320557,3.2945621013641357,3.20046329498291
+"I had a breakthrough last night and i wanted to share, I hope this helps.",Loss,Anger,False,2.783576011657715,2.6269328594207764,2.8205108642578125,2.761963129043579,2.6301610469818115
+Nothing matters. The world was burning when you came in to it and it will be burning when you leave it.,Anger,Anger,True,2.6794052124023438,2.511460304260254,2.6961023807525635,2.682461738586426,2.555229425430298
+trailer fabulous!!! i miss it,Loss,Disgust,False,4.494744777679443,3.915102958679199,4.585009574890137,4.17915678024292,3.8512797355651855
+The [NAME] of horror!,Fear,Anger,False,2.853013753890991,2.385350465774536,2.8355941772460938,2.699009418487549,2.3883683681488037
+"I’m sorry. But, keep your respectability politics to yourself",Loss,Disgust,False,3.5671722888946533,3.272681474685669,3.506162166595459,3.2735371589660645,3.1708292961120605
+"But that makes even less sense. The government is having a hard time collecting taxes, therefore people are poor? ",Disgust,Disgust,True,2.9661128520965576,2.782794237136841,3.0134739875793457,2.941136360168457,2.771388292312622
+His smile is so damn creepy,Fear,Disgust,False,3.1717538833618164,2.6409835815429688,3.0840272903442383,2.9668638706207275,2.569606065750122
+Is this because of the sudden spate of comments feeling shocked that we don't respect proud right leaners or have you always had these mails?,Self-Conscious,Disgust,False,4.238020896911621,4.00505256652832,4.186534404754639,4.0848798751831055,3.9264440536499023
+Ugh I've had my mirena for a few years. I get none of bleeding and all of the cramps,Disgust,Disgust,True,3.1070773601531982,2.8982512950897217,3.1273951530456543,3.061427116394043,2.888136148452759
+"Wow, the Wizards are horrible ",Loss,Disgust,False,3.6720187664031982,3.143376588821411,3.639209508895874,3.3832218647003174,3.0680837631225586
+It's just sad; she was just nice and normal before she messed with her looks,Loss,Disgust,False,3.485286235809326,3.259892702102661,3.464020013809204,3.3144631385803223,3.1529853343963623
+I don't see anything about harassment in that statement. Weird.,Disgust,Disgust,True,2.7958879470825195,2.4384655952453613,2.743744373321533,2.6430182456970215,2.4230997562408447
+The ones who supported ETC were more concerned with negatively impacting Ethereum and it's community than the DAO rollback in my opinion.,Loss,Disgust,False,4.0270466804504395,3.8235745429992676,4.033879280090332,3.9280662536621094,3.7556824684143066
+I mean it's not wrong,Fear,Disgust,False,2.2962839603424072,1.8504341840744019,2.3071157932281494,2.1405062675476074,1.8392459154129028
+They'll make them walk the plank. Granny will pirate!,Self-Conscious,Disgust,False,4.189423561096191,3.7200264930725098,4.1482391357421875,3.88887095451355,3.608440399169922
+This happens all the time when guys pick me up. I don’t know anything about cars. Just tell me the color,Self-Conscious,Disgust,False,2.714874029159546,2.5265438556671143,2.6801393032073975,2.578401565551758,2.5089917182922363
+Not really... I haven't lived anywhere where trains are common.,Self-Conscious,Disgust,False,3.1284453868865967,2.8457024097442627,3.1315255165100098,3.0115573406219482,2.831920862197876
+Yeah but how is that even possible if 99% of girls who are out are with friends? That’s pretty intimidating,Fear,Disgust,False,3.288400650024414,3.0821828842163086,3.2042183876037598,3.1769042015075684,3.038458824157715
+I'm scared to do these cuz the S.A.G.E. told me I was a transvestite,Fear,Disgust,False,3.2562854290008545,2.983548879623413,3.1128296852111816,3.083498954772949,2.956050395965576
+"A small sample size can also be skewed the opposite direction, who’s to say the rape rate wouldn’t be much higher ",Self-Conscious,Anger,False,3.430640935897827,3.1776585578918457,3.3977346420288086,3.3183767795562744,3.182898759841919
+I want 10 - 0. This organization deserves the embarrassment.,Self-Conscious,Disgust,False,3.6513776779174805,3.28843092918396,3.676353931427002,3.472184896469116,3.191713333129883
+Some bioshock shit right here.,Fear,Disgust,False,3.61803936958313,3.103090524673462,3.7048802375793457,3.430079936981201,3.0925357341766357
+Young [NAME] works to hard for his name to be slandered like this.,Loss,Anger,False,2.875518798828125,2.5855348110198975,2.93452525138855,2.8047521114349365,2.645522356033325
+Plead not guilty and try your luck in court.,Disgust,Anger,False,2.52470326423645,2.226520538330078,2.571268081665039,2.5164623260498047,2.313328504562378
+So THIS is the Bad Place!,Disgust,Disgust,True,3.6388843059539795,3.1521384716033936,3.6958353519439697,3.3562581539154053,3.083631992340088
+because people are idiots and don't like being wrong,Anger,Anger,True,2.683079719543457,2.3302934169769287,2.696915626525879,2.6242125034332275,2.375337839126587
+My favorite pairing now is [NAME] and [NAME]. There's nothing else good. Of course I Like [NAME] and [NAME] too but I miss [NAME] so much,Loss,Disgust,False,2.3628461360931396,2.2663958072662354,2.374546766281128,2.3453094959259033,2.2526888847351074
+I remember the last protest we hid against these guys. Scum bags,Disgust,Disgust,True,4.180962562561035,3.832716464996338,4.187490940093994,3.9523279666900635,3.7014524936676025
+"YES PLEASE... I thought they did a while back but maybe not. Either way, they should! Very annoying.",Anger,Anger,True,3.3962748050689697,3.1741745471954346,3.382556438446045,3.345813274383545,3.1860249042510986
+I would feel like the biggest idiot if I made your comment.,Self-Conscious,Disgust,False,2.7476284503936768,2.478999376296997,2.7296957969665527,2.5875461101531982,2.412827491760254
+Just get divorced and be roommates.‍♀️,Loss,Disgust,False,3.522953987121582,3.237865686416626,3.593062400817871,3.403210163116455,3.160240411758423
+By that logic the NDP need to stop existing to prevent the Liberals from going to the left.,Anger,Disgust,False,3.1116325855255127,2.8597567081451416,3.1172094345092773,3.0140438079833984,2.8236119747161865
+He has the maturity of a 2 year old and you are right...ugly in his soul.,Disgust,Disgust,True,3.196786403656006,2.957833766937256,3.227168321609497,3.10693359375,2.9391353130340576
+It took you a month to answer and every single word is wrong. That's almost an accomplishment.,Self-Conscious,Anger,False,3.0389349460601807,2.792391061782837,3.0451512336730957,2.912990093231201,2.8145461082458496
+> Crab Rave Ayyy I've never seen this before I kinda wanna go but seems scary.,Fear,Disgust,False,4.204461097717285,3.8741211891174316,4.141536235809326,4.003896236419678,3.8193914890289307
+"TTs have size limits. The group I was acquainted with had, ahem, ""leadership"" problems as well.",Self-Conscious,Disgust,False,3.9682412147521973,3.6915957927703857,3.951314687728882,3.79770827293396,3.6867759227752686
+Always take a chance on the dork. We rock in general l. There are a few weirdos hut by and large dorks have it together.,Disgust,Disgust,True,4.003658771514893,3.773745059967041,3.9890763759613037,3.8398516178131104,3.7440528869628906
+"I was honestly shocked when they denied an overpayment, especially since after the charges cleared it would have been a $0 balance.",Self-Conscious,Disgust,False,3.452842950820923,3.265850067138672,3.4359683990478516,3.3448550701141357,3.2032222747802734
+"Ironic, since [NAME] is literally doing that, but with migrant children",Self-Conscious,Disgust,False,3.3328795433044434,3.0260181427001953,3.2985239028930664,3.1629974842071533,2.935086250305176
+I never said anything. I’m just cynical that change can happen when there is so much money on the line. Decisions are bought not made.,Disgust,Disgust,True,3.102848529815674,2.9592461585998535,3.1264712810516357,3.063793897628784,2.950989246368408
+"The most siamese cat thing ive ever seen- weird, sexy, playful, smart, deadly. ",Self-Conscious,Disgust,False,3.8638756275177,3.6036131381988525,3.8787033557891846,3.6825520992279053,3.6013290882110596
+Great quote for a fictional universe in which you can speak with ghosts of the deceased. Sadly doesn’t offer comfort here.,Loss,Disgust,False,3.749760866165161,3.6352617740631104,3.8144326210021973,3.707609176635742,3.5869221687316895
+Pretty sure it was a joke bud,Loss,Anger,False,3.0378785133361816,2.480396270751953,3.0214028358459473,2.8176047801971436,2.5842976570129395
+[NAME] is good but he needs to never take a midrange shot again,Disgust,Anger,False,2.747262716293335,2.5184097290039062,2.7883262634277344,2.6779396533966064,2.524428129196167
+Gotta keep losing to make sure 5th is our worst case scenario,Loss,Anger,False,3.142160415649414,2.993734836578369,3.2823922634124756,3.18424654006958,3.09088397026062
+"Tl, dr - Take the abuse. Squirming only gets them off more.",Fear,Anger,False,3.7575390338897705,3.4253711700439453,3.780749559402466,3.6305623054504395,3.4448907375335693
+Poor fella just got his arms out of plaster and we’re already making fun of him,Disgust,Disgust,True,3.2104721069335938,2.943341016769409,3.2054131031036377,3.10638427734375,2.9308812618255615
+"If you wanna be my lover, You gotta get with my fat, Make it last forever, Inconvinience never ends.",Loss,Disgust,False,3.8044846057891846,3.5807833671569824,3.8123154640197754,3.664971351623535,3.565491199493408
+would be US Biggest error ever,Self-Conscious,Disgust,False,5.046398639678955,4.451253890991211,5.089768409729004,4.614117622375488,4.352389335632324
+Crazy how [NAME] sheds more light on this than Blm. Shame,Self-Conscious,Disgust,False,3.4519424438476562,3.1210291385650635,3.486968994140625,3.340801477432251,3.110154151916504
+kind of funny considering that the fentanyl that is killing people in North America - Canada and USA - comes from China.,Loss,Disgust,False,3.1464314460754395,2.984243631362915,3.193927764892578,3.0924806594848633,2.9381442070007324
+That awkward moment when you fully embrace misogyny but believe homophobia is wrong.,Self-Conscious,Disgust,False,3.421510934829712,3.1086678504943848,3.37345814704895,3.236966848373413,3.0548925399780273
+Pig Latin kills me internally this is why plastic surgery exsists.,Fear,Disgust,False,4.5143632888793945,4.115386962890625,4.495627403259277,4.231546401977539,4.072574615478516
+I'm 35 and never knew this was a thing anyone did until I saw this posted on Facebook awhile ago. It looks massively uncomfortable?,Self-Conscious,Disgust,False,3.40411639213562,3.2261548042297363,3.3943326473236084,3.252159833908081,3.142775774002075
+Grow up mate,Anger,Anger,True,3.3961968421936035,2.5432989597320557,3.3945932388305664,3.020522117614746,2.64056396484375
+Oh man first game of the split and I already came in my pants :/ . GG TSM,Anger,Disgust,False,4.022326469421387,3.782902956008911,4.079927444458008,3.9040942192077637,3.705061197280884
+"I wasn’t being sarcastic, I was just asking if you are morbidly obese. ",Disgust,Disgust,True,2.5519449710845947,2.355942726135254,2.544264316558838,2.43634033203125,2.3485591411590576
+Looks weirdly fake Edit: turns out it’s real,Self-Conscious,Disgust,False,3.571866989135742,3.140742063522339,3.574553966522217,3.3470211029052734,3.039301872253418
+"""Should be"" being the operative phrase. Not happening at my store.",Loss,Disgust,False,3.424747943878174,3.108553171157837,3.4520082473754883,3.2204291820526123,3.0551435947418213
+As comic book guy from Simpson’s would say. WORST. WRITTEN CRIMELORD. EVER....,Disgust,Disgust,True,4.404948711395264,4.165441513061523,4.405340671539307,4.234094619750977,4.084392547607422
+"I couldn’t imagine putting a brand new car on these roads, let alone a Tesla.",Fear,Disgust,False,2.91560435295105,2.721120595932007,2.8830373287200928,2.8406171798706055,2.6648831367492676
+Swear i have seen this before? had it been reposted?,Fear,Anger,False,3.3447654247283936,2.909832000732422,3.2775256633758545,3.1240508556365967,2.9450037479400635
+Oh [NAME] imagining this tween screaming yaaass queen at a poor drag queen made me cringe into a ball,Fear,Disgust,False,4.5029377937316895,4.259052753448486,4.545042037963867,4.35141134262085,4.208202838897705
+"I'll chase you till the ends of the eaaaaarth, Shooooooooooooooooooooooooooocker!!!!!!!",Anger,Disgust,False,4.13810920715332,3.814922571182251,4.105459690093994,3.9585092067718506,3.8016104698181152
+"Did a lousy job, my dishes are still dirty.",Loss,Disgust,False,3.1835527420043945,2.798110008239746,3.213089942932129,2.9739041328430176,2.7520360946655273
+That's a hot pic Shame she'll kill us all,Fear,Disgust,False,3.959233045578003,3.51252818107605,3.8951680660247803,3.591768264770508,3.371755599975586
+"Yeah, but the sound of a fork against the stainless would be absolutely unbearable. ",Anger,Disgust,False,3.332808494567871,3.0848560333251953,3.2982709407806396,3.1805059909820557,2.9886584281921387
+Putting any human on the same level as [NAME] is sacrilegious and you should be ashamed for spreading such blasphemy.,Self-Conscious,Anger,False,2.3334763050079346,2.193995475769043,2.383761405944824,2.334118604660034,2.2076504230499268
+DAYUM!!!!! This post is lit AF. Got some verbal geniuses on this one.,Anger,Disgust,False,4.0164031982421875,3.694733142852783,4.091455459594727,3.8356001377105713,3.687471389770508
+"[NAME] no, these are horrid on anyone.",Fear,Disgust,False,3.3716650009155273,3.012256622314453,3.3397059440612793,3.161160945892334,2.971863031387329
+Those mindsets are extremely dangerous to our democracy.,Fear,Disgust,False,3.181929111480713,2.6972076892852783,3.0772619247436523,2.9838778972625732,2.6485393047332764
+Agreed. How do you feel about the rumors that he doesn't pick any girl as an endgame?,Disgust,Anger,False,3.027932643890381,2.805438756942749,2.983778238296509,2.9413061141967773,2.82590389251709
+I love the way you phrased that. I do believe she is terribly afraid to look inward at herself.,Fear,Disgust,False,2.967275619506836,2.816678047180176,2.88417649269104,2.8632566928863525,2.7535011768341064
+Sucks that [NAME] won't get to play [NAME],Anger,Anger,True,2.172612190246582,1.9108737707138062,2.144091844558716,2.1444995403289795,1.9320456981658936
+"isnt that halloween or like easter, man people are weird",Self-Conscious,Disgust,False,3.965569257736206,3.5544776916503906,3.9503891468048096,3.751908779144287,3.5122694969177246
+Buddy. Your prejudice is showing. Also plot twist I'm a white [NAME] woman. You don't understand the principle of what white privilege is.,Loss,Disgust,False,3.5917139053344727,3.371450424194336,3.5872976779937744,3.467097282409668,3.3613929748535156
+"Holy crap, what happened to that guy?",Anger,Disgust,False,2.505798101425171,2.084622859954834,2.3664708137512207,2.312113046646118,1.9934176206588745
+"Ha, I just saw that highlight. nasty",Disgust,Disgust,True,3.6739919185638428,3.2230491638183594,3.6337459087371826,3.4010462760925293,3.104544162750244
+[NAME] on a pretzel. That is just...fucked up. Those comments are absolutely...I can’t think of anything awful enough to describe them.,Fear,Disgust,False,2.9604990482330322,2.7905163764953613,3.00417423248291,2.9237446784973145,2.780986785888672
+We also one because [NAME] straight took that game over late.,Anger,Disgust,False,4.342047214508057,3.9991636276245117,4.331052303314209,4.064957141876221,3.905890703201294
+Ohhh sorry. I got it now. Thanks bruv,Loss,Disgust,False,2.9309396743774414,2.6615371704101562,2.966385841369629,2.8217506408691406,2.6609127521514893
+"Its often not like they can fight back or, hell, remember the treatment to give them bad rep later on",Anger,Disgust,False,4.6872382164001465,4.3854594230651855,4.685482501983643,4.496874809265137,4.357081890106201
+League wants an LA team to finally work so bad,Loss,Disgust,False,4.449298858642578,4.054410934448242,4.5061163902282715,4.223576545715332,3.95526385307312
+Still a bit of redesign & this would look much better.,Loss,Disgust,False,3.7256126403808594,3.3710384368896484,3.8020105361938477,3.4696764945983887,3.304347276687622
+"In that video, the pulls a sweet drift into a ditch and blows up.",Fear,Disgust,False,4.296201229095459,3.9522061347961426,4.293898105621338,4.082812786102295,3.8771650791168213
+I miss my Shrek Ghrok :(,Loss,Disgust,False,4.994758129119873,4.50948429107666,5.087234020233154,4.65664005279541,4.380205154418945
+"The children are still being abused, neglected and treated like rubbish. White Australian policy has been horrific and continues to be horrific.",Fear,Disgust,False,3.4289538860321045,3.1727652549743652,3.377488851547241,3.3073911666870117,3.1173009872436523
+What law did they break? This is just another example abusing a system for profit without the necessary laws in place to protect people.,Disgust,Disgust,True,3.181995391845703,2.9428250789642334,3.153592109680176,3.1550750732421875,2.9344310760498047
+And thirsty babies,Loss,Disgust,False,3.8202145099639893,3.1106677055358887,3.8750600814819336,3.40986704826355,2.9638540744781494
+Plant 3-0. UZ is just coming in without jabbing getting caught,Fear,Disgust,False,4.863888263702393,4.577188968658447,4.900890827178955,4.700360298156738,4.5501227378845215
+[NAME] that is frightening...,Fear,Disgust,False,3.0309736728668213,2.583127737045288,2.8411977291107178,2.8541433811187744,2.468250274658203
+"Not out of a trash can though, surely? That'd be disgusting.",Loss,Disgust,False,3.278756618499756,2.9734532833099365,3.2697088718414307,3.125300168991089,2.801039934158325
+Yepp. I've struggled to hold a job so I'd be in trouble without it.,Fear,Disgust,False,3.305032968521118,3.11016845703125,3.3168747425079346,3.206519603729248,3.092074155807495
+"Run the addresses through the property records. If the mailing address of owner ain't local, they its a lie. ",Fear,Disgust,False,4.416981220245361,4.107117652893066,4.433432579040527,4.19881534576416,4.099652290344238
+"I'm going to use ""my dicky has to perpetually get sticky"" as a line to pick up ladies. Wish me luck, guys!",Disgust,Disgust,True,3.6903865337371826,3.461857557296753,3.6511905193328857,3.471957206726074,3.4133594036102295
+Icing on a cake of sadness.,Loss,Disgust,False,2.706389904022217,2.5210351943969727,2.8583412170410156,2.664032459259033,2.4272477626800537
+The area around Parliament is full of nutters of every political persuasion When I went there was loads of CND types.,Anger,Disgust,False,3.8045995235443115,3.4859554767608643,3.7064201831817627,3.599616289138794,3.422177314758301
+I kill them all and THEN overwrite my only save. I'm bonkers.,Loss,Disgust,False,4.066617012023926,3.7152066230773926,4.080300807952881,3.8804073333740234,3.679544687271118
+"??? Technically the peso is always in devaluation, also it's not worst right now than before.",Loss,Disgust,False,3.9823076725006104,3.7003414630889893,3.9684338569641113,3.8869471549987793,3.6943163871765137
+I learned about [NAME] about 1749485 times in medical school lmao Soap helped a ton but it just did not cut it after a while,Disgust,Disgust,True,3.672394275665283,3.531754493713379,3.653377056121826,3.5791513919830322,3.484832763671875
+"You’re an animal, and you deserve all the shame/repercussions you get.",Self-Conscious,Disgust,False,3.159926414489746,2.9365603923797607,3.1743485927581787,3.0496466159820557,2.861818313598633
+What the heck did I just watch,Loss,Disgust,False,2.388770580291748,1.9504145383834839,2.338798761367798,2.217182159423828,1.8284286260604858
+I did. In a selfless sacrifice that I hope brings ample awards.,Fear,Disgust,False,4.090723514556885,3.7665154933929443,4.065188407897949,3.84993577003479,3.7081923484802246
+Anyone that puts something in their ass/genitals then touches it and then puts their and on their face is gross,Disgust,Disgust,True,3.916741132736206,3.615130662918091,3.9017574787139893,3.7614009380340576,3.4947288036346436
+"""PPG Paints"" arena or whatever it's called now is worse",Loss,Disgust,False,3.444516897201538,3.125437021255493,3.426649570465088,3.199199914932251,3.036024570465088
+Why a 14 year old? WHY WEAR LIP STICK WHEN KISSING PAPER?,Anger,Disgust,False,3.5318167209625244,3.218581199645996,3.5117552280426025,3.365647315979004,3.1984927654266357
+"Strangely enough, the major news orgs didn't go out of their way to publicize it.",Self-Conscious,Anger,False,2.474792242050171,2.268341541290283,2.4945602416992188,2.4427683353424072,2.276829719543457
+[NAME] is such a disgusting champ to play against ....,Disgust,Disgust,True,3.5081920623779297,3.1010947227478027,3.511383533477783,3.3202826976776123,2.9423866271972656
+Kinda sad if that's what you got out of the ad lol,Loss,Disgust,False,2.911888837814331,2.6967694759368896,3.011171340942383,2.8457746505737305,2.680464267730713
+"I feel you, names are the worst. ",Disgust,Disgust,True,2.834618330001831,2.5054500102996826,2.8030905723571777,2.6442699432373047,2.4383225440979004
+Loooool I didn’t know that it’s ridiculous,Disgust,Disgust,True,3.285090446472168,2.927395820617676,3.3050537109375,3.13642954826355,2.924753427505493
+"I’m sorry should I have brought my make-up wipes and washed my face during my MRI? Or my ultrasound? Find some peace, man. ",Loss,Disgust,False,4.045412063598633,3.8681228160858154,4.052661418914795,3.8968586921691895,3.8346927165985107
+"Yeah I probably would've started crying on the spot. Loud, sudden and especially shrill noises are extremely *""cringey""* and uncomfortable and stressful",Loss,Disgust,False,4.076426029205322,3.8708581924438477,4.069162845611572,3.9165022373199463,3.849609851837158
+To make money from money is disgusting and is screwing up the economy.,Disgust,Disgust,True,3.3149380683898926,2.997300148010254,3.2930362224578857,3.1957623958587646,2.918116807937622
+A fuckin men,Anger,Anger,True,3.5659377574920654,2.888561487197876,3.5717453956604004,3.3011932373046875,2.954721450805664
+[NAME] 12 min long? That other 1 min video spoiled me.,Loss,Disgust,False,3.6790168285369873,3.3393161296844482,3.662949323654175,3.498004913330078,3.2981984615325928
+"Well it gets the stupid people to eat tide pods, evolution needs a helping hand after shifting in the gene pool.",Anger,Disgust,False,4.491994380950928,4.224236965179443,4.516866683959961,4.323628902435303,4.134932518005371
+Any good reading on [NAME]? I don't really know if I like her or not.,Disgust,Disgust,True,2.4920878410339355,2.298049211502075,2.498602867126465,2.417813301086426,2.2698984146118164
+"All the time, you just sort of accept it round here. Butt-hurt mombies and bitter regretful daddicts are what I usually chalk it up to.",Anger,Anger,True,4.325556755065918,4.158735275268555,4.341443061828613,4.205963134765625,4.169924736022949
+Goodbye to what QCX own you once Ernst & Young Inc pay themselves,Anger,Disgust,False,6.135376930236816,5.675671577453613,6.161724090576172,5.810426712036133,5.5676164627075195
+No kids? Who cares. Go your separate ways.,Anger,Disgust,False,3.156803607940674,2.7650258541107178,3.138089418411255,3.019002914428711,2.7253026962280273
+Victimless crime? Fuck you! Sounds like your unrepentant for being a crippling alchoholic.,Self-Conscious,Anger,False,3.316608190536499,3.1040613651275635,3.391186475753784,3.2944233417510986,3.1633007526397705
+Damn look at [NAME] and his insane get off. We could use an [NAME] now probably now than anyone on this roster.,Anger,Anger,True,3.5673933029174805,3.462555408477783,3.6476919651031494,3.5598933696746826,3.4665117263793945
+says the insecure idiot who just had to dig through my comment history to try to get back at me. lol creep,Anger,Disgust,False,3.613621234893799,3.2999939918518066,3.54858136177063,3.399871587753296,3.248718500137329
+I could upload this to YouTube if I wanted to. No problem. You couldn’t do anything.,Self-Conscious,Disgust,False,2.9013547897338867,2.6472442150115967,2.810333251953125,2.72871994972229,2.5869457721710205
+You actually seem like an abusive alt yourself.,Self-Conscious,Anger,False,3.5294275283813477,2.9636189937591553,3.4826819896698,3.292576551437378,2.990898847579956
+Pretty fucking brutal when your starting front court is 0-10 from the field. Whatever. I figured we would split this back to back anyway. Good game for our big 3.,Anger,Anger,True,3.568127393722534,3.456408977508545,3.6418609619140625,3.526346445083618,3.4600303173065186
+I kinda like the swirlies in the hair. But then I saw that her eyebrow is actually just the hair and hated it.,Disgust,Disgust,True,3.512561559677124,3.331395387649536,3.514301061630249,3.3706929683685303,3.2349369525909424
+Cheese Most of my friends love cheese so much that I’m scared to tell them that I can barely even bring myself to eat it,Fear,Disgust,False,2.907923936843872,2.7285969257354736,2.927968978881836,2.8302745819091797,2.6771020889282227
+I had to put Bird Box because it's the only direct to streaming movie I saw. I feel dirty.,Disgust,Disgust,True,3.5510847568511963,3.2657554149627686,3.5031192302703857,3.3734211921691895,3.1403565406799316
+"Yeah, at least carry a ziploc bag of dead cockroaches with you for this purpose, like a self respecting meal scamming scumbag. ",Anger,Disgust,False,3.552656412124634,3.384392261505127,3.5463814735412598,3.4517321586608887,3.3146042823791504
+Someone with erectile dysfunction already can't (conventionally) orgasm. What the fuck are you talking about?,Self-Conscious,Anger,False,3.3632113933563232,3.0469841957092285,3.3471996784210205,3.2244913578033447,3.093087673187256
+I rolled my eyes so hard I think I just saw my brain,Loss,Disgust,False,2.6620073318481445,2.307312488555908,2.64054274559021,2.520073652267456,2.269198417663574
+"Yup, same as you but when I'm waking up. Too much effort trying to remember letters with little meaning when I'm waking up.",Fear,Disgust,False,3.4713046550750732,3.249005079269409,3.4408321380615234,3.320664882659912,3.2234420776367188
+Teen spirit sure ain't what it used to be...,Anger,Anger,True,2.830061674118042,2.510664701461792,2.88015079498291,2.7797133922576904,2.5223734378814697
+i find it a little disgusting if swear words are used frequently and unironically.,Disgust,Disgust,True,3.3681747913360596,3.0428085327148438,3.3750596046447754,3.2375638484954834,2.9895458221435547
+I keep forgetting she won! Just goes Bob Alaska Aquaria for me until I’m reminded!,Self-Conscious,Disgust,False,5.171387195587158,4.9437055587768555,5.234129428863525,5.007665634155273,4.840234756469727
+I read a news piece 10-15 years ago about how much garbage China dumps at sea. The numbers were staggering back then.,Disgust,Disgust,True,2.775618076324463,2.61008620262146,2.7325587272644043,2.6872599124908447,2.5255608558654785
+Don't forget about the Kraken!,Fear,Disgust,False,2.661128282546997,2.222881317138672,2.594782590866089,2.4943392276763916,2.2084641456604004
+"Omg thank you for this Lol and the answer is obvious for [NAME], release Malicious Zangief who can teleport SPD and scowls really REALLY hard.",Anger,Disgust,False,4.713982582092285,4.54371452331543,4.760165214538574,4.607532978057861,4.52059268951416
+And then you can commit felony credit card fraud because they rejected you,Fear,Disgust,False,3.4546315670013428,3.1390092372894287,3.45884108543396,3.2750418186187744,3.0927796363830566
+This argument makes zero sense. The same tax exclusions and exemptions that were around when the marginal rate was at 90 are not around today.,Anger,Disgust,False,3.2334280014038086,3.0211222171783447,3.2303566932678223,3.132157802581787,2.9984946250915527
+All I want for Christmas is a broken home,Loss,Disgust,False,2.4806337356567383,2.205104351043701,2.532526731491089,2.4129738807678223,2.1472270488739014
+Like racism? No thanks.,Anger,Disgust,False,3.2246978282928467,2.6799235343933105,3.180158853530884,3.014997959136963,2.6081631183624268
+Was at wreck beach yesterday a guy was masturbating around kids family etc just sitting next to a log...,Self-Conscious,Disgust,False,4.950828552246094,4.622748851776123,4.975213050842285,4.7127790451049805,4.523932456970215
+"They never seem to think this when the police arrive, with their guns, to end a terrible situation. ",Disgust,Disgust,True,3.5399434566497803,3.280219554901123,3.507946014404297,3.4011611938476562,3.1962294578552246
+That's just sad if it's for a game,Loss,Disgust,False,2.7027974128723145,2.3589842319488525,2.654862880706787,2.5489513874053955,2.255464792251587
+So edgy.,Fear,Disgust,False,2.8278968334198,2.217935800552368,2.850801944732666,2.5619657039642334,2.2095234394073486
+"What, again? This stupid country!",Anger,Disgust,False,3.641077756881714,3.0281779766082764,3.5972189903259277,3.3387084007263184,2.9762277603149414
+YOU CAN'T TELL ME WHAT TO DO,Anger,Anger,True,2.058473825454712,1.603917121887207,1.9640246629714966,1.9707125425338745,1.713667392730713
+The amount of overreaction on this thread is too damn high!,Anger,Anger,True,3.245915412902832,2.7995433807373047,3.221686601638794,3.061826467514038,2.8653645515441895
+You can't reason with some people. This person said people call 911 (emergency number) when they see his face.,Fear,Disgust,False,3.1564900875091553,2.906151294708252,3.0947048664093018,3.059631109237671,2.893484115600586
+No you are providing more than enough evidence. Post histories do exist. Now fuck off.,Loss,Anger,False,3.6761505603790283,3.355059862136841,3.6726415157318115,3.5180296897888184,3.358854055404663
+There is an actual subreddit for cheating. It's disgusting.,Disgust,Disgust,True,3.3945884704589844,2.94321608543396,3.3680715560913086,3.205632448196411,2.8937385082244873
+People are idiots! No one should shame [NAME] for doing her job as a mom! Shame [NAME] instead for putting her kids' life in danger!,Self-Conscious,Anger,False,2.8295748233795166,2.623322010040283,2.871032238006592,2.80729603767395,2.674651622772217
+"Thank you for the update, I’ve been stressing about the shutdown and lines. This helps.",Fear,Disgust,False,3.3365530967712402,3.159937858581543,3.2955548763275146,3.263221502304077,3.09171199798584
+Oh we’re TANKING tanking,Anger,Disgust,False,3.831477642059326,3.409928321838379,3.8319053649902344,3.6163086891174316,3.3107845783233643
+"And you were too stupid to find your own sriracha, or you thought that $7.50 entitled you to your personal dancing monkey.",Self-Conscious,Disgust,False,3.6985042095184326,3.4920966625213623,3.7343859672546387,3.599984884262085,3.4870336055755615
+SC is still the only game that makes mt entire body overheat to the point of death.,Fear,Disgust,False,3.9823198318481445,3.665210723876953,3.925663471221924,3.7968943119049072,3.582369089126587
+"Precisely that. I hope you’re able to find strategies to deal with it easier, it’s really tough",Fear,Anger,False,2.876038074493408,2.7400894165039062,2.9338653087615967,2.8747313022613525,2.7524969577789307
+"I said to myself ""It's going to be reefer madness"" Clicked the link and it was Reefer Madness.",Self-Conscious,Disgust,False,3.1525216102600098,2.9555723667144775,3.1557629108428955,3.040614128112793,2.899725914001465
+That entire family is so embarrassing.,Self-Conscious,Disgust,False,3.2527384757995605,2.797482967376709,3.2059712409973145,2.912633180618286,2.658226490020752
+I genuinely think that would be an iconic shot if it was in a famous horror film. The way the legs just keep on coming is terrifying.,Fear,Disgust,False,3.445166826248169,3.2913851737976074,3.400607109069824,3.329634189605713,3.2058064937591553
+"We used to do similar exercises for football and we would get the same ""wtf"" looks.",Self-Conscious,Disgust,False,3.245530128479004,2.9965341091156006,3.2489125728607178,3.0520312786102295,2.919905424118042
+You made eye contact. Or flinched. Or were just alive and walking down the street.,Fear,Disgust,False,3.1443192958831787,2.906604290008545,3.1478822231292725,2.987119674682617,2.8813273906707764
+"We *do* deserve animals if we give them lovings! Don’t talk so down about yourself, silly .. that’s what that kitty would say !",Self-Conscious,Disgust,False,4.4200968742370605,4.182422161102295,4.419425010681152,4.235359191894531,4.124220848083496
+"just realized the pic is unrelated kinda, whatever though. proud of me despite my anxiety about puttin myself or there ",Fear,Disgust,False,4.959147930145264,4.668798923492432,4.952038764953613,4.653689384460449,4.572798728942871
+Funding was never the problem of Mass Effect. EA is. You're confirming their bad business strategy.,Loss,Anger,False,4.008306980133057,3.706125259399414,4.033210754394531,3.8785738945007324,3.717470407485962
+"I cannot be more clear myself: If you do not have a comparable situation, you do not have a valid point to be making",Anger,Anger,True,2.8463268280029297,2.625462770462036,2.845561981201172,2.754239082336426,2.6489720344543457
+"I don't like it, simply because men never want to be just friends, and I have no interest in dating random dudes who message me.",Anger,Disgust,False,2.998149871826172,2.8048994541168213,2.983405590057373,2.9218811988830566,2.8036599159240723
+Anyone who fell for the Lonzo hype from the beginning should slap themselves.,Self-Conscious,Anger,False,3.3196821212768555,3.055121660232544,3.4715735912323,3.2456552982330322,3.0653812885284424
+"When it gushed out I caught myself saying ""ooof"" out loud",Fear,Disgust,False,3.3447682857513428,3.0453848838806152,3.3411054611206055,3.1770901679992676,2.9308040142059326
+"Disgusting, I bet you he will never even be inside that apartment condo ever.",Disgust,Disgust,True,3.506556510925293,3.228714942932129,3.492950677871704,3.3769266605377197,3.1358766555786133
+"Lol well if you see an awkward looking girl in a white car following at a safe distance, just know that’s little ole anxious me!",Fear,Disgust,False,4.2316060066223145,4.035416603088379,4.195302963256836,4.083829402923584,4.017335891723633
+"Had the item hit you, I would have asked security to hold them, for you to press charges for assault. No one should be entertaining that foolishness",Loss,Disgust,False,3.7909388542175293,3.563943862915039,3.7800772190093994,3.696744441986084,3.549129009246826
+Then something is very wrong and he needs reworks on the talents,Anger,Disgust,False,4.246574401855469,3.881315231323242,4.246079444885254,4.045787334442139,3.7989048957824707
+I really need to stop taking my guns fishing with me. I keep losing them!!! :(,Loss,Disgust,False,3.217134714126587,2.95499849319458,3.219388246536255,3.061152458190918,2.919203281402588
+Disgusting of you [NAME] you filthy who're you pedophilic scum trying to beguile our children it's not gonna work I got [NAME] castorated,Disgust,Disgust,True,3.800804853439331,3.5977485179901123,3.8035521507263184,3.7289013862609863,3.589930772781372
+I’m always reminded by my relatives on my birthday asking me if I have a girlfriend yet. Sorry bro ima yeet out of the social norm.,Loss,Disgust,False,3.774081230163574,3.599860191345215,3.7857847213745117,3.6354706287384033,3.5593700408935547
+"Don't ""neg"" the university (or any university) and don't write about doing illegal, unethical, or immoral activities. ",Self-Conscious,Disgust,False,3.51198148727417,3.281343698501587,3.4895858764648438,3.38447904586792,3.2778103351593018
+"Apparently she was doing the ""gasping fish face thing"" with a face full of mud when the cops arrived.",Self-Conscious,Disgust,False,3.4962332248687744,3.2625670433044434,3.46321964263916,3.346816062927246,3.147418260574341
+You're happy that survs DC when you play killer? I'd rather actually play the game. Legion mains are weird sometimes.,Self-Conscious,Disgust,False,4.956151485443115,4.725369930267334,4.985687255859375,4.774792671203613,4.639216899871826
+Ugh. That was not information anyone needed...,Anger,Disgust,False,3.1417574882507324,2.7314352989196777,3.1412816047668457,3.0427212715148926,2.725667953491211
+"Lmao ""guys I was *coerced* into sending her a picture of my junk"". That just sounds dumb as hell ",Anger,Anger,True,3.232609987258911,3.002687931060791,3.234346628189087,3.131303548812866,3.0309951305389404
+Furry and scaly damn,Anger,Disgust,False,3.9937446117401123,3.3079981803894043,3.765840768814087,3.633208990097046,3.2183682918548584
+Right? just like the shock I had in elementary school when I learned the KKK was started by [NAME],Self-Conscious,Disgust,False,3.40838360786438,3.2696173191070557,3.403290271759033,3.3546276092529297,3.1924262046813965
+Sloths are cute! Especially when they’re covered in moss,Anger,Disgust,False,2.8714799880981445,2.587338447570801,2.8611268997192383,2.71917462348938,2.478254795074463
+"I’d tell her nothing, that freaking weirdo would just never see my kid. The End. Disgusting.",Disgust,Disgust,True,4.015987873077393,3.823125123977661,3.979383707046509,3.8694539070129395,3.7110071182250977
+"I tried. [NAME] responded by taking the baby to see her without me, while I was at work. 😤",Loss,Anger,False,3.206543207168579,3.0114402770996094,3.230250358581543,3.217381715774536,3.028214454650879
+Being scratched by a cat is not self harming,Self-Conscious,Anger,False,3.341181516647339,2.902182102203369,3.3568084239959717,3.0152101516723633,2.9292163848876953
+"Yeah you're right, I mistyped it. Should have said after 1st and after the 2nd. There's none after the 3rd.",Anger,Disgust,False,2.4520299434661865,2.372893810272217,2.4729480743408203,2.4211416244506836,2.3496201038360596
+My First thought too! I get really bad stress knots in my neck and shoulders. I just don’t dare to ask every Damn day it hurts,Loss,Disgust,False,3.989304780960083,3.8452670574188232,3.962401866912842,3.8789210319519043,3.79372501373291
+Goddamn it Your username just started a song in my head 👶🦈,Loss,Disgust,False,4.568036079406738,4.253098011016846,4.617116451263428,4.3928608894348145,4.198157787322998
+I couldn't think of a better definition.,Self-Conscious,Disgust,False,2.3745157718658447,2.0298800468444824,2.3295912742614746,2.238961696624756,2.0038583278656006
+You also gotta be Japanese. If they were into interracial shit with white men that niche would already be filled.,Anger,Disgust,False,4.057613849639893,3.803697347640991,4.059434413909912,3.8824918270111084,3.751286745071411
+He gave his 20 year old ex herpies dumped her and she killed herself. He’s an awful person,Disgust,Disgust,True,3.507019519805908,3.293159008026123,3.566495656967163,3.4066731929779053,3.260389804840088
+I mean it would be borderline targeting in college football. It was a really egregious missed call.,Fear,Disgust,False,3.589608669281006,3.401622772216797,3.713108539581299,3.5090179443359375,3.3765060901641846
+it depends who i would murder and blame,Disgust,Disgust,True,4.357270240783691,3.793330669403076,4.331127643585205,4.017425537109375,3.7457711696624756
+"Ugh obviously that's not what I meant, what I meant is that *socially* if they have a sibling that they do not need humans *socially*. ",Anger,Disgust,False,3.2547645568847656,3.092756748199463,3.2548835277557373,3.196446657180786,3.07889461517334
+Nirvana is a great band but a good chunk of people in their fan base are just awful (underratedly awful),Fear,Disgust,False,3.17653489112854,2.994424819946289,3.1581146717071533,3.078254461288452,2.9304182529449463
+It was on a washed out road in the at 2am. Which makes it even worse. They never should have been towing that vic.,Disgust,Disgust,True,3.455427408218384,3.297563314437866,3.4954030513763428,3.3858954906463623,3.2430295944213867
+I see wat you did there.,Anger,Disgust,False,2.8438796997070312,2.436239242553711,2.863377094268799,2.6749181747436523,2.403618335723877
+"It’s time to stop lad, it’s getting a little embarrassing now...",Self-Conscious,Disgust,False,3.099452018737793,2.789001703262329,3.1046454906463623,2.8933792114257812,2.726710557937622
+Yea he messed around with a 33 year old man dating a 14 year old children. Alabama is one of the main stream media lies.,Anger,Anger,True,3.4509365558624268,3.270620584487915,3.5123069286346436,3.40596079826355,3.324739933013916
+"That’s ridiculous. I’ll read it, thanks.",Disgust,Disgust,True,2.6248579025268555,2.279632806777954,2.5787484645843506,2.521068811416626,2.2471582889556885
+"[NAME], like people making minimum wage are worried about 10% off at their Walmart.",Fear,Disgust,False,3.499501943588257,3.238539695739746,3.471829414367676,3.384854555130005,3.1891016960144043
+You should stop visiting it then no?,Anger,Disgust,False,3.4617919921875,3.048866033554077,3.473773956298828,3.1894114017486572,2.9492645263671875
+This is nasty NSFW,Self-Conscious,Disgust,False,3.147111415863037,2.490990400314331,3.0683302879333496,2.9078943729400635,2.4234707355499268
+"In Canada, we got rid of the penny a while ago.... I've heard few complaints. ",Loss,Disgust,False,3.5166561603546143,3.2379724979400635,3.488612174987793,3.3721213340759277,3.15411376953125
+"If you are not going to kick him out, then don't complain. It is all your choice",Anger,Anger,True,2.616603374481201,2.3700313568115234,2.6043269634246826,2.54967999458313,2.396662950515747
+Edgy bro.,Fear,Anger,False,3.2201225757598877,2.614309549331665,3.2941627502441406,2.9801933765411377,2.7009172439575195
+I’ve lived in Florida. Hurricanes are *much* worse.,Disgust,Disgust,True,3.193575382232666,2.9478230476379395,3.2063210010528564,3.14201283454895,2.8474903106689453
+There are far more bad ones than good ones. Stepparents that treat their stepchildren as their own are noteworthy for a reason.,Loss,Disgust,False,2.8690459728240967,2.677337646484375,2.892354726791382,2.7763476371765137,2.6666853427886963
+Everything that isn't harsh noise is normie trash,Disgust,Disgust,True,4.024669647216797,3.568439245223999,4.029046058654785,3.800299644470215,3.4843857288360596
+Damn this is dope,Anger,Anger,True,2.862962245941162,2.259164571762085,2.9324066638946533,2.6701819896698,2.3176686763763428
+Tell her youre sleeping with someone else. You're a jerk if you don't see why that's important information.,Anger,Anger,True,3.2243845462799072,2.9314005374908447,3.18125319480896,3.1205625534057617,2.9800198078155518
+"I swear, I don't know where the bombs are! Only the miners know that!",Fear,Disgust,False,3.0208842754364014,2.7332968711853027,2.9318952560424805,2.897136926651001,2.695432424545288
+"I am afraid to look, but my morbid curiosity draws me to ask.",Fear,Disgust,False,2.9783990383148193,2.8053994178771973,2.797455072402954,2.85770583152771,2.6619367599487305
+And look like big tracts of land.,Self-Conscious,Disgust,False,3.545504093170166,3.085376262664795,3.520601511001587,3.2527685165405273,2.992913246154785
+"Well I can feel it was mentally hard bringing myself to go full [NAME] and shit talking prior to the plate, but this is some cutting edge analysis.",Fear,Disgust,False,3.9758284091949463,3.870352029800415,4.026912689208984,3.8726394176483154,3.8126189708709717
+"I mean who cares, this show isn’t built for perfection. It’s built for comedy. ",Self-Conscious,Disgust,False,2.9804341793060303,2.7702314853668213,2.990774631500244,2.8895106315612793,2.748145580291748
+"color me embarrassed"" I wonder what colour he'd be if she showed that text exchange to his missus. ",Self-Conscious,Disgust,False,4.49379825592041,4.2203264236450195,4.502971649169922,4.237462043762207,4.121112823486328
+"It's ironic that those who most strongly embrace TSSC and other churches are so often utterly lacking in any level of true ""faith.""",Self-Conscious,Disgust,False,3.91768741607666,3.727139711380005,3.9114248752593994,3.764674186706543,3.683638334274292
+Disinfected or sanitized maybe. No way an entire exam table is sterilized.,Fear,Anger,False,3.87680983543396,3.543837785720825,3.9172415733337402,3.7952749729156494,3.5476367473602295
+i'm just making fun of how when moids say they like personality they dont really mean it,Anger,Disgust,False,3.6901276111602783,3.3943464756011963,3.7004332542419434,3.53106689453125,3.380455255508423
+>It is tailored to your viewing history. That's fairly common knowledge nowadays isn't it? Weird thing for the comic to point out.,Self-Conscious,Disgust,False,3.6277987957000732,3.3942384719848633,3.6280808448791504,3.5276756286621094,3.350268840789795
+"I mean, a lot of animals I've seen get terrified of regular stuffed animals, imagine having your fears super sized like that",Fear,Disgust,False,3.8557369709014893,3.6377334594726562,3.7667253017425537,3.675412654876709,3.5523974895477295
+That would be terrible. I liked the way private Practice ended (more or less) so hopefully [NAME] doesn’t go for something cliche.,Disgust,Disgust,True,3.4392290115356445,3.316683292388916,3.440398693084717,3.3736250400543213,3.2346091270446777
+The guy at the deli this morning when I went to get ham looked liable to collapse.,Fear,Disgust,False,3.5123114585876465,3.278459072113037,3.5195200443267822,3.3464932441711426,3.185004234313965
+Right? It was frustrating (and concerning) that he used such bad reasoning when his job is to curb phishing :/,Anger,Disgust,False,4.17504358291626,3.953399658203125,4.198164463043213,4.042128562927246,3.8865766525268555
+these [NAME] impersonators are getting terrible,Disgust,Disgust,True,3.3158414363861084,2.827507734298706,3.2995047569274902,3.0876576900482178,2.7968666553497314
+I hate this.,Fear,Disgust,False,2.351459503173828,1.7897700071334839,2.2835869789123535,2.231982469558716,1.7615890502929688
+"Oh they are. They just represent a large group of racist, willfully ignorant [NAME].",Disgust,Anger,False,3.2745721340179443,3.0323030948638916,3.2993173599243164,3.222043037414551,3.036648750305176
+"Why do I seem to hit 6/7, and can't go any deeper without throwing up. I wanna see and feel more shit FML lol.",Self-Conscious,Anger,False,4.064519882202148,3.8124141693115234,4.077432155609131,3.9517860412597656,3.8223884105682373
+"NOLA is a terrible place to live, ran by democrats forever and this is the result. ",Fear,Disgust,False,3.5399181842803955,3.2634778022766113,3.514970541000366,3.452483654022217,3.2315220832824707
+"Plus, thinking you know someone that you don't just weirds them out. It must be disturbing having people flock around your persona, ffs.",Self-Conscious,Disgust,False,3.845221519470215,3.631664276123047,3.870433807373047,3.719204902648926,3.616014242172241
+This only pushes me closer to the void,Fear,Anger,False,3.1647326946258545,2.667992115020752,3.1130731105804443,3.008141040802002,2.7159624099731445
+And they wonder why they don't seem trustworthy. Maybe someone should tweet about it and they'd notice.,Self-Conscious,Disgust,False,3.236768960952759,2.996659994125366,3.243544340133667,3.094465494155884,2.9248478412628174
+Shameless karma whoring.,Self-Conscious,Anger,False,3.0711612701416016,2.544964075088501,3.135838747024536,2.8993186950683594,2.5559744834899902
+They are probably waiting for his harasser to pull a [NAME]. Filthy men.,Anger,Disgust,False,3.6253044605255127,3.353444814682007,3.6395654678344727,3.523364543914795,3.2991626262664795
+A fucking centaur,Anger,Anger,True,3.46501088142395,2.752316474914551,3.4255728721618652,3.1605424880981445,2.7787044048309326
+He did all this road to find this coconut oil ! Are you ungrateful ? :( !,Self-Conscious,Disgust,False,4.719735145568848,4.381193161010742,4.760321140289307,4.531468391418457,4.3321943283081055
+Communism advocates a stateless society. They just got kicked in the head into believing Private Property is bad.,Disgust,Disgust,True,3.759533405303955,3.487032413482666,3.771300792694092,3.5798983573913574,3.4713385105133057
+I just have never found that area very attractive. Also from what I understand there is a lot of contaminated burial sites around there.,Disgust,Disgust,True,3.230818271636963,3.085330009460449,3.225320339202881,3.1330978870391846,3.003309726715088
+Taco Tuesdays after meatless Monday. I call it meatcycling,Disgust,Disgust,True,3.901240587234497,3.570152759552002,3.921435594558716,3.680410861968994,3.490809440612793
+"[NAME] is not fascist. Heck,she's not even alt-right",Disgust,Anger,False,2.963498830795288,2.6125030517578125,2.9507265090942383,2.8620188236236572,2.6211578845977783
+This is dangerous.,Fear,Anger,False,2.6597487926483154,1.9837816953659058,2.440657615661621,2.4543979167938232,2.010913133621216
+Please boycott them! I'd love some shorter queues.,Self-Conscious,Disgust,False,4.046203136444092,3.634561777114868,4.035501956939697,3.8348405361175537,3.5616743564605713
+"And yet [NAME] can't even get a pub gig, homeboy was born the wrong colour",Anger,Disgust,False,3.4014410972595215,3.1540868282318115,3.409742593765259,3.2587738037109375,3.1390974521636963
+"Aaaaand already at -1.5 @ BOL. I'm going to wait to see if it comes back down, or imma buy the hook.",Anger,Disgust,False,3.4509472846984863,3.3662471771240234,3.536655902862549,3.458845853805542,3.3467321395874023
+[NAME] looks so much better than she did at the premiere. Her lashes aren’t fucked up and the high pony is great.,Anger,Disgust,False,3.1095926761627197,2.982804775238037,3.150505304336548,3.0166947841644287,2.931629180908203
+"Deathly afraid, the undersides of boats too. I can't look if I see them in a picture or movie",Fear,Disgust,False,3.655282497406006,3.4083735942840576,3.5787088871002197,3.536616802215576,3.3862783908843994
+Yeah some kid in a BMW ran me off the road. I didnt just crash had some help.,Fear,Disgust,False,3.839343786239624,3.613515853881836,3.8250043392181396,3.7177348136901855,3.5858829021453857
+I wish people like this would die in massive flaming wrecks,Anger,Disgust,False,3.2745132446289062,2.8796494007110596,3.2544102668762207,3.0614657402038574,2.806605815887451
+"""Oh, when you were an infant you wanted to be around me ALL THE TIME! Your evil wife must be why you changed!"" ",Anger,Disgust,False,3.666670799255371,3.4180500507354736,3.6395392417907715,3.4752273559570312,3.3792219161987305
+"Me too, my sister and I thought we became idiots, we even googled shapes and their sides",Self-Conscious,Disgust,False,3.763631582260132,3.5417699813842773,3.7935004234313965,3.6055870056152344,3.508173704147339
+that was a horrible fix,Fear,Disgust,False,3.4241974353790283,2.852135419845581,3.3887953758239746,3.1605188846588135,2.8192105293273926
+>testing teenagers for four mystery roles Oh good lord. This is going to be even worse.,Disgust,Disgust,True,4.3644537925720215,3.953626871109009,4.283216953277588,4.080107688903809,3.885805130004883
+Imagine trying to step down from there after you're done and your legs feel like rubber,Self-Conscious,Disgust,False,3.2630486488342285,3.0093510150909424,3.2094168663024902,3.0513978004455566,2.8618829250335693
+[NAME] pissed off the establishment when ripped off the insurance company and pleaded the fifth.,Anger,Disgust,False,3.8668477535247803,3.561453342437744,3.873067855834961,3.6966629028320312,3.4836161136627197
+"i did, but it was at 3 am before i went to bed, so i’m gonna cheat and count it as 2018 LOL.",Fear,Anger,False,2.8337182998657227,2.72660493850708,2.8978466987609863,2.808262348175049,2.7374563217163086
+"People have gotten shot with legal means while breaking into someone's home, sued the home owner and won. ",Disgust,Disgust,True,3.761592388153076,3.4427599906921387,3.7248923778533936,3.6300954818725586,3.4068076610565186
+ITS TO THE POINT WHERE I LOVE AND I HATE YOU,Anger,Anger,True,3.257626533508301,2.8329200744628906,3.235741138458252,3.1180615425109863,2.8907933235168457
+How dare the russian government expose the DNC and its corrupt behavior!!!!!,Self-Conscious,Disgust,False,4.110104084014893,3.5856239795684814,4.0321431159973145,3.8587329387664795,3.578721523284912
+I love her face in the second one. Embrace your waiste!,Self-Conscious,Disgust,False,3.4424023628234863,3.0862085819244385,3.382993459701538,3.172173500061035,3.0499672889709473
+BOOO THIS WAS RIGGED,Anger,Anger,True,3.536778688430786,2.9649925231933594,3.5514864921569824,3.3492774963378906,3.0182948112487793
+"There are assholes who think that these are ""their trails"" and do this sort of thing.",Disgust,Disgust,True,3.0567121505737305,2.768266439437866,3.0252950191497803,2.9204025268554688,2.7296242713928223
+"Don’t regret the time, had it been sooner you might be absent a kid or three! ",Loss,Disgust,False,3.759096622467041,3.5572683811187744,3.8051528930664062,3.6102490425109863,3.5223641395568848
+Damn. Your bed must stink,Disgust,Disgust,True,3.074190616607666,2.57295560836792,3.049665689468384,2.877979040145874,2.4239938259124756
+"You know, I'm rather disappointed, but admire your cunning at the same time",Loss,Disgust,False,3.125063419342041,2.804678201675415,3.1008970737457275,2.9214837551116943,2.7247731685638428
+"Uhh speak for yourself. Maybe you're just too jittery, I've not had a problem. You simply dont move the stick and it wont move.",Fear,Anger,False,3.587434768676758,3.412139892578125,3.583115339279175,3.526291608810425,3.441783905029297
+I must be getting old. Much more likely to be horny at 2 pm.,Loss,Disgust,False,3.114794969558716,2.857891082763672,3.123950242996216,2.9833741188049316,2.8274946212768555
+I pray in the space I have inside my truck :),Fear,Disgust,False,3.927212953567505,3.5417449474334717,3.8742873668670654,3.6890130043029785,3.486280679702759
+Don't call this baby a jerk It just loves its humans too much,Anger,Disgust,False,3.8147270679473877,3.426314115524292,3.8341407775878906,3.652230978012085,3.3570127487182617
+"Well I got checked at the last Toulon game haha, so not the case.",Self-Conscious,Disgust,False,3.622735023498535,3.3452444076538086,3.5807878971099854,3.466064453125,3.281585693359375
+"Wow, you really missed the point, didn't you?",Anger,Anger,True,1.9692282676696777,1.673597812652588,1.9743077754974365,1.9401687383651733,1.6970911026000977
+Sorry for the bad formatting,Loss,Disgust,False,2.3745667934417725,1.9998897314071655,2.433102607727051,2.2722434997558594,1.981529951095581
+You're too ugly to even bully,Loss,Disgust,False,3.2995312213897705,2.7155706882476807,3.187037229537964,2.8832337856292725,2.6414694786071777
+I went out to my vehicle when changing tables were not available.,Loss,Disgust,False,4.059882640838623,3.657428026199341,4.06364107131958,3.794645071029663,3.631828784942627
+"Also, popcorn can't build ladders. At least, I don't think so...",Anger,Disgust,False,3.105807065963745,2.834293842315674,3.053351402282715,2.989131450653076,2.7872815132141113
+[NAME] hitting himself with the other guys stick. Palms with another 2 goal night!,Anger,Disgust,False,4.294955253601074,4.116687774658203,4.4454874992370605,4.2017822265625,4.062141418457031
+[NAME] that was me,Self-Conscious,Disgust,False,2.387600898742676,2.008958339691162,2.4310128688812256,2.2976362705230713,2.0080740451812744
+"More insults, [NAME] said my bit now all you have is a show that proves what I said to be the truth, nothing more nothing less.",Self-Conscious,Disgust,False,3.61270809173584,3.4100513458251953,3.6359846591949463,3.560711145401001,3.38079571723938
+Gungrabbers? You act like they're busting in your door and taking your guns. No one is forcing you to do this.,Fear,Anger,False,2.9156856536865234,2.6707215309143066,2.883925437927246,2.836714267730713,2.685821056365967
+Poor kitty! I’m sure she’ll feel okay again soon. Lots of TLC in order,Loss,Disgust,False,3.2156245708465576,3.14189076423645,3.279188394546509,3.2273459434509277,3.029580593109131
+I'm so sorry. Read about you getting kicked out at home. That must be devastating,Loss,Disgust,False,2.8852031230926514,2.700474739074707,2.9249637126922607,2.8519997596740723,2.6513209342956543
+No if we tell and kick and scream and have a tantrum that always works.,Fear,Disgust,False,3.7893776893615723,3.3989012241363525,3.717191696166992,3.555319309234619,3.372218132019043
+Disgusting making [NAME] talk to this fat moron,Disgust,Disgust,True,3.3022427558898926,2.9616262912750244,3.3357038497924805,3.2196621894836426,2.921765089035034
+"This is embarrassing, but while purging I wear a pad or don’t wear pants at all. Eating disorders are so beautiful /s",Self-Conscious,Disgust,False,3.8697872161865234,3.6522445678710938,3.8342678546905518,3.719585418701172,3.5569403171539307
+[NAME] is worse because he’s all of those things plus he took out my boi [NAME].,Anger,Disgust,False,3.128178834915161,2.907137155532837,3.1055662631988525,3.061023235321045,2.897768497467041
+"I apologize, that sincerely was meant for Askreddit. If you look at my history you'll see that's where I always post. My mistake.",Loss,Anger,False,3.29213547706604,3.103856325149536,3.297027111053467,3.219367265701294,3.1095736026763916
+[NAME] is soft as hell boi got bullied in Minnesota,Disgust,Disgust,True,3.844186782836914,3.5049338340759277,3.909329891204834,3.7162585258483887,3.48017954826355
+I mean he did murder someone and isn’t in jail...,Disgust,Disgust,True,3.1923110485076904,2.878964424133301,3.2091567516326904,3.1117730140686035,2.8345835208892822
+After all that i expected it to not look terrible. Oh well.,Fear,Disgust,False,3.0619616508483887,2.78198504447937,3.13682222366333,3.009503126144409,2.765678644180298
+FO need to pull the trigger ASAP. If he’s on this roster after the deadline... [NAME] help us,Fear,Disgust,False,3.874159336090088,3.6915664672851562,3.979912519454956,3.8732333183288574,3.691070556640625
+I spend a lot of time worrying about how and why that'll happen to me as I get older.,Fear,Disgust,False,2.5756592750549316,2.398792266845703,2.522427558898926,2.4943110942840576,2.371816396713257
+I'll take the Akot 3 but man that shot is ugly,Disgust,Disgust,True,3.98820424079895,3.6752243041992188,4.03304386138916,3.7823867797851562,3.5827720165252686
+"It was a terrible, terrible thing to do. He did every day of his time for it, has expressed regret, and has not repeated it.",Loss,Disgust,False,3.2574892044067383,3.110856294631958,3.2739546298980713,3.182119131088257,3.056094169616699
+I like to be scared actually!,Fear,Disgust,False,3.2569804191589355,2.713043212890625,2.8983280658721924,2.9344468116760254,2.657249927520752
+">Morality is always subjective because morality is decided by people/society. Congratulations, you’ve found the worst take ever. ",Disgust,Disgust,True,3.3926398754119873,3.170903205871582,3.387878894805908,3.278640031814575,3.131230115890503
+BITCOIN SEND MONEY INSTANTLY (waits 6 months to get money and still praises site),Anger,Disgust,False,4.337778568267822,4.00562047958374,4.332595348358154,4.1242780685424805,3.93569278717041
+"Because it's scary, and therefore thrilling to face your fear. Also the shrimp are easier to catch at night.",Fear,Disgust,False,3.664001703262329,3.5021488666534424,3.6006529331207275,3.5258524417877197,3.4128763675689697
+being a lady with a penis is a (bizarre) fetish with some men though. it's nothing to be jealous of.,Disgust,Anger,False,3.2651267051696777,2.9641635417938232,3.3593788146972656,3.203235626220703,3.0014779567718506
+Aw it’s the same user who was scared of breast feeding lmao,Fear,Disgust,False,3.7216734886169434,3.4458823204040527,3.6058406829833984,3.5640625953674316,3.32708477973938
+>I think any progressive would be against laws that force anyone to say anything. You thought wrong.,Anger,Disgust,False,3.4662325382232666,3.1864559650421143,3.4758377075195312,3.384143114089966,3.1806209087371826
+Id be pretty weary if a girl wouldn't talk about previous relationships.,Loss,Anger,False,3.5680549144744873,3.2675633430480957,3.606595993041992,3.401357412338257,3.306779384613037
+"[NAME] is amped, I'm excited that he's excited",Fear,Disgust,False,2.953338146209717,2.622995138168335,2.93291974067688,2.7854998111724854,2.5935094356536865
+"most issues with nervousness and anxiety can be eliminated by eliminating the bad habits that are causing them to begin with, instead of 'just exercising/meditating' more",Fear,Anger,False,3.527055025100708,3.358410358428955,3.570829391479492,3.4523048400878906,3.362083673477173
+That's only bad to some people. Being racist is bad to everyone.,Loss,Disgust,False,2.872046709060669,2.5020639896392822,2.7988109588623047,2.691967248916626,2.471545696258545
+"If many people truly see that as a consequence, I'd suggest SD's public [NAME] needs some work. Sad.",Loss,Disgust,False,3.96486496925354,3.7817938327789307,4.023077011108398,3.8792073726654053,3.7598190307617188
+"if the pain doesn't go away after 4 hours or so, it's broke.",Loss,Disgust,False,2.9277496337890625,2.66548228263855,2.927328109741211,2.793301582336426,2.661721706390381
+"If an AI projectile is your biggest problem you've got bigger issues, next. ",Fear,Disgust,False,4.066218376159668,3.701918363571167,4.101995944976807,3.859503746032715,3.638561725616455
+Says one of the two people who keeps on responding to each comment with a very poorly argued position lacking both in research and in common sense.,Self-Conscious,Disgust,False,4.026648044586182,3.7377572059631348,4.018850803375244,3.8219316005706787,3.687833070755005
+Thank you for the detailed response. It’s about time I worry about making myself happy rather than them.,Fear,Disgust,False,2.876910448074341,2.730720043182373,2.892453908920288,2.810405969619751,2.7239761352539062
+"As someone who went through school before the internet existed, yes, weird creepy kids existed. Although it was more in your face. ",Disgust,Disgust,True,3.401026487350464,3.252983808517456,3.3920469284057617,3.286999464035034,3.155750274658203
+"""This droid has a bad motivator.""",Loss,Disgust,False,3.833505153656006,3.322314977645874,3.767022132873535,3.476253032684326,3.223097801208496
+I was a little pissed off until I watched this loop 6 times. Now I'm happy! Weee!,Disgust,Disgust,True,3.213566303253174,2.9834258556365967,3.220224618911743,3.111480236053467,2.9584317207336426
+That creepy realization that everything [NAME] says is projection...,Fear,Disgust,False,3.553205728530884,3.1476967334747314,3.447814702987671,3.3776562213897705,3.0963621139526367
+Why is it that young girls seem to idolise serial killers? I had a friend like this and never understood the attraction. It's scary,Fear,Disgust,False,2.926964282989502,2.7529170513153076,2.8995914459228516,2.858860969543457,2.7002453804016113
+"I like [NAME] and would like to see him back, but he still makes me nervous at a high price too. ",Fear,Disgust,False,2.6885011196136475,2.5397467613220215,2.6349751949310303,2.6361641883850098,2.5313711166381836
+"I didnt realize wishing Liberty would open their wallet would make it happen... It sucks, but it's the reality. We need value.",Anger,Disgust,False,4.031800270080566,3.8424408435821533,4.1026997566223145,3.9759769439697266,3.8258872032165527
+I do not understand why everything in this script must inevitably explode.,Disgust,Disgust,True,3.6314327716827393,3.252999782562256,3.592451810836792,3.4390323162078857,3.2038280963897705
+Stop believing everything you’re told.,Anger,Anger,True,2.653808116912842,2.171536684036255,2.6709299087524414,2.5210843086242676,2.229865312576294
+I am so sorry for your loss. I lost my Brother a few years back. My thoughts and heart is with you.,Loss,Anger,False,2.117537260055542,2.0079822540283203,2.1654019355773926,2.1277449131011963,2.0091679096221924
+Haha and [NAME] is calling the Chicago crew the most triggered bunch. Then proceeds to scream at them like the little triggered bitch he is.,Anger,Disgust,False,3.965632915496826,3.718550443649292,3.973031759262085,3.8343024253845215,3.714261531829834
+"> [NAME] mother allegedly vandalized [NAME] grave, stating that she had ruined her son's life. No....",Anger,Disgust,False,3.133681058883667,2.948521852493286,3.17659592628479,3.1274123191833496,2.9146203994750977
+Well that isn't fucking creepy.,Disgust,Disgust,True,2.985858917236328,2.4607887268066406,2.8501620292663574,2.7484424114227295,2.41955828666687
+I cannot help but get a sense of schadenfreude when a seemingly shitty person ruins their own career right before my eyes. ☕️,Loss,Disgust,False,3.1500165462493896,2.97528076171875,3.179731607437134,3.07378888130188,2.9177329540252686
+It won't make them worse off. GDP is simply irrelevant. Rent and job conditions are what matters.,Self-Conscious,Disgust,False,3.6403987407684326,3.393947124481201,3.6034116744995117,3.5046944618225098,3.347533702850342
+My office has very few personal offices. Its awful. Managers need closed spaces so they can talk without everybody hearing,Disgust,Disgust,True,3.911133289337158,3.716031074523926,3.8946468830108643,3.768928050994873,3.648150682449341
+I perform nostril waxing. It is surprising hardly painful at all. Feels so much better too!,Loss,Disgust,False,4.334502220153809,4.080015182495117,4.31472110748291,4.122427463531494,3.982125997543335
+I'm jealous.,Self-Conscious,Disgust,False,2.5737128257751465,2.008199453353882,2.524514675140381,2.2343339920043945,1.9395586252212524
+Amen. Although sometimes you look up and have to look back down before you lose the wood,Loss,Disgust,False,3.491887331008911,3.2660837173461914,3.526862382888794,3.3665502071380615,3.249924659729004
+I’m not gonna be writing you a paper check!,Anger,Anger,True,3.4291577339172363,2.9496383666992188,3.403329849243164,3.2680506706237793,2.980921745300293
+I saw a slightly longer clip where a woman came and shooed them off.,Loss,Disgust,False,3.1950113773345947,2.9177801609039307,3.127229690551758,3.0752251148223877,2.8034026622772217
+The shading makes her face look like she has lumps under her skin.,Self-Conscious,Disgust,False,2.8522400856018066,2.531283378601074,2.8519318103790283,2.6780176162719727,2.499849796295166
+"This sounds like revenge, not karma.",Disgust,Disgust,True,2.9840734004974365,2.505819797515869,3.0147922039031982,2.8767199516296387,2.4797475337982178
+[NAME] (swt) does not need your worship. If you do good deeds and humble yourself and seek forgiveness He might guide you again.,Disgust,Disgust,True,3.7704238891601562,3.556252956390381,3.76145339012146,3.674140453338623,3.531550407409668
+One you don't like. It keeps messing up your contacts as well.,Fear,Disgust,False,3.507978916168213,3.169785261154175,3.458226442337036,3.3217945098876953,3.1436569690704346
+That ice is dangerously thin for such a hot take.,Fear,Disgust,False,3.7385990619659424,3.3198461532592773,3.67444109916687,3.4378092288970947,3.251227617263794
+"The snapchat news feed on the stories page is horrendous, its entirely just celebs, porn and hookup culture shit. ",Disgust,Disgust,True,4.501225471496582,4.198808193206787,4.474746227264404,4.271024703979492,4.1501593589782715
+"That's awful. If I were a celebrity, I would probably do the same.",Disgust,Disgust,True,2.405897617340088,2.1731464862823486,2.357290029525757,2.335707426071167,2.077364444732666
+"I play EVE and I’m a moron. If I can do it, anyone can. ",Self-Conscious,Disgust,False,2.9602320194244385,2.7320706844329834,2.9452977180480957,2.8077070713043213,2.7041897773742676
+Same! I don’t know how our elementary level colleagues do it. When I subbed in elementary a few times it was awful.,Fear,Disgust,False,3.4475064277648926,3.2591443061828613,3.4096357822418213,3.2957310676574707,3.2049756050109863
+Don’t worry! I was never convicted of anything!,Fear,Disgust,False,2.8814656734466553,2.5613279342651367,2.805447816848755,2.7050249576568604,2.5343017578125
+"Good, I need an hour to align my chakras for the impending stress ",Fear,Disgust,False,3.906755208969116,3.5589563846588135,3.8627870082855225,3.7091493606567383,3.551102876663208
+"In that case, I’m appalled. ",Fear,Disgust,False,2.764596462249756,2.431739330291748,2.747910261154175,2.637261390686035,2.3598086833953857
+We’re not upset. We’re disgusted. You’re disgusting.,Disgust,Disgust,True,2.6216166019439697,2.35369873046875,2.6957380771636963,2.5268077850341797,2.182584047317505
+I'm also scared.,Fear,Disgust,False,2.679409980773926,2.247305154800415,2.2730119228363037,2.4523885250091553,2.13956618309021
+Suddenly it’s gross,Disgust,Disgust,True,3.622623920440674,2.8827743530273438,3.5429844856262207,3.255716323852539,2.7256546020507812
+"at least give the penguin some scritches, as it said no matter what they do, it would head to the mountain anyways 😭",Disgust,Disgust,True,4.005460739135742,3.7934696674346924,3.991529703140259,3.8745484352111816,3.7242188453674316
+"You would think so, huh? Not the first dude who has tried to use that rationale. The first one I dated though.",Self-Conscious,Disgust,False,3.299030303955078,3.1448965072631836,3.3279519081115723,3.215514659881592,3.134601354598999
+Chilling to think people can kick others under the rug and consider them burdens to do something like THIS,Self-Conscious,Anger,False,4.379028797149658,4.042550086975098,4.410355091094971,4.286826133728027,4.050238609313965
+"you're right, it's all very murky",Fear,Disgust,False,3.045992136001587,2.627027988433838,3.0379557609558105,2.8678176403045654,2.5894062519073486
+Aren't they concerned about your weight now?,Fear,Disgust,False,2.9844236373901367,2.6186814308166504,2.943115711212158,2.7514476776123047,2.5154428482055664
+Big words coming from a guy who only talks about [NAME],Anger,Anger,True,2.6261134147644043,2.297788143157959,2.6463325023651123,2.5520665645599365,2.3482630252838135
+Oh no! He’s right!,Loss,Disgust,False,2.5730652809143066,2.240996837615967,2.5511281490325928,2.490666627883911,2.160463571548462
+"That's what I'm speaking purely about. We can only speculate. And oh, yeah, still quality cringe.",Fear,Disgust,False,3.5995116233825684,3.4180047512054443,3.602924108505249,3.4737439155578613,3.346599578857422
+[NAME]. Has a great bit about how negative everyone is about everything.,Disgust,Disgust,True,3.684593677520752,3.3915975093841553,3.7071025371551514,3.5175671577453613,3.323333740234375
+Georgia is $5.25?! Wtf? We don’t live in 1990!,Anger,Disgust,False,3.191282033920288,2.9579315185546875,3.182704210281372,3.1133041381835938,2.9254205226898193
+"i'm not that into shower sex tho. like it's fun sometimes, but it takes me so long to get off when i'm wet.",Self-Conscious,Disgust,False,2.9985177516937256,2.837658166885376,3.010172128677368,2.9414379596710205,2.8295493125915527
+There are some amazingly cringey compilations of terrible dialogue from this show on yt,Fear,Disgust,False,3.70658802986145,3.346987009048462,3.709770441055298,3.513110399246216,3.2769317626953125
+Very much a.... possibility. Save you a click. Damn you [NAME]!,Anger,Anger,True,4.064244747161865,3.7717578411102295,4.161215305328369,3.9121363162994385,3.8066906929016113
+"Nah man you need to have NEGATIVE IQ to enjoy that show, cuz the weed ain't working.",Loss,Disgust,False,3.761930465698242,3.465106248855591,3.7520639896392822,3.597496747970581,3.4113643169403076
+And a pretty bad [NAME] too.,Self-Conscious,Anger,False,2.6800451278686523,2.3775217533111572,2.8249826431274414,2.620394229888916,2.382622241973877
+I’m doing married. Sorry.,Loss,Disgust,False,3.685264825820923,3.23909592628479,3.6895551681518555,3.462067127227783,3.1613516807556152
+Something I just thought of... Can you email her or text her instead of call? I find it's easier to deal with difficult people that way.,Disgust,Anger,False,2.964906930923462,2.7996909618377686,2.976382255554199,2.9266791343688965,2.814345598220825
+This shirt is directly aimed at some very ugly individuals,Disgust,Disgust,True,4.000462055206299,3.5209877490997314,4.0364885330200195,3.7017529010772705,3.3878281116485596
+"Idk is this is a lie or something, but I’ve heard people say that over 1500 independent observers found the elections free and fair",Loss,Anger,False,3.0022435188293457,2.862370252609253,3.002323865890503,3.0320165157318115,2.8734941482543945
+"Emergency vehicle, lights on, no siren?",Disgust,Disgust,True,3.5052669048309326,3.0279486179351807,3.4708380699157715,3.3687007427215576,3.001530170440674
+The truly sad thing is she's getting burned to legitimize Russiagate. It's a shame she wasn't a legit whistleblower.,Loss,Disgust,False,3.557368040084839,3.364269971847534,3.596067428588867,3.452282190322876,3.3093037605285645
+Right :-) The rookie was so scared to show his hand and he thought his two pairs weren’t good and thought he had lost.,Fear,Disgust,False,4.02732515335083,3.803901433944702,3.9928925037384033,3.8684234619140625,3.7739126682281494
+As QA I can confirm that I have no idea what I'm doing,Loss,Disgust,False,2.865086793899536,2.580794095993042,2.9412355422973633,2.7564210891723633,2.575227975845337
+The faces in that drawing are kinda horrifying,Fear,Disgust,False,3.5770530700683594,3.0335373878479004,3.4571378231048584,3.2211599349975586,2.9199235439300537
+"Right. I'm gonna need to see some hog now, buddy.",Disgust,Disgust,True,3.648817777633667,3.261192798614502,3.6431803703308105,3.412543535232544,3.202562093734741
+Not relatable I am not cool in public,Self-Conscious,Disgust,False,3.649714708328247,3.1224660873413086,3.583571672439575,3.3112759590148926,3.1018335819244385
+"Yeh pretty rough. I mean we all know [NAME] won, but it was much closer than that ",Loss,Anger,False,3.0556135177612305,2.8884429931640625,3.053983211517334,3.030123233795166,2.928469657897949
+"Ey, yo. The perfect sassy black mum line.",Self-Conscious,Disgust,False,4.541736602783203,4.120845794677734,4.656536102294922,4.258826732635498,4.045472621917725
+So we should put all children in the school at risk?,Disgust,Disgust,True,3.3458666801452637,3.013364315032959,3.316202163696289,3.244513750076294,2.947671890258789
+What exactly was exposed? Are you just saying things to feel like you’ve achieved something?,Loss,Anger,False,3.0271880626678467,2.8332719802856445,3.0461063385009766,2.933119058609009,2.83632493019104
+Not complain. She could not complain since she made no effort in the beginning.,Self-Conscious,Disgust,False,3.4072797298431396,3.1125214099884033,3.4235646724700928,3.2603447437286377,3.110327959060669
+"Couldn't really fit this as a ""how to,"" does that mean I have to go to jail now? Source: ",Fear,Disgust,False,3.326570987701416,3.0896811485290527,3.308866262435913,3.222454309463501,3.056217908859253
+"My nightmares don't tend to be realistic, but many kid's toys can lose a piece and be swallowed. ",Fear,Disgust,False,4.072369575500488,3.8335676193237305,3.971386194229126,3.9011688232421875,3.731224775314331
+[NAME] has been doing everything great except for shooting. It will start falling eventually,Loss,Anger,False,3.2839763164520264,3.093441963195801,3.3550896644592285,3.191988468170166,3.099235773086548
+"I hate to say it, but it's never once failed me, I've never been asked to show it.",Self-Conscious,Disgust,False,2.672386884689331,2.4765102863311768,2.636460304260254,2.5634467601776123,2.436923027038574
+"I'm sorry that America funded a coup, but I get to have my Medicare. - AOC",Loss,Disgust,False,3.8488972187042236,3.508549928665161,3.8019843101501465,3.6623001098632812,3.46174955368042
+I took a marijuana doobie this evening around 5:00 p.m. after my dinner at Country Kitchen Buffett and I am now tripping.,Self-Conscious,Disgust,False,3.259617567062378,3.0809309482574463,3.2725741863250732,3.178375720977783,3.0558106899261475
+Absolutely horrible.,Fear,Disgust,False,2.689150810241699,2.1462478637695312,2.640237808227539,2.5278797149658203,1.9556782245635986
+I'm not even going to read all of that. It is not mindboggling AT ALL. [NAME] is a huge douchebag. The end.,Anger,Anger,True,2.5715417861938477,2.3628172874450684,2.557849407196045,2.515239715576172,2.3680152893066406
+[NAME] thinks [NAME] for [NAME] is a bad deal for the Bulls.,Self-Conscious,Disgust,False,2.513808012008667,2.301037073135376,2.5433549880981445,2.458667039871216,2.2987396717071533
+"Instead of dumped underground at a later date, just dumped into the sea earlier. Despicable",Disgust,Disgust,True,4.008856296539307,3.7046945095062256,4.040764331817627,3.861339807510376,3.5792958736419678
+"She's a person of color, they instantly hate her lol. ",Anger,Disgust,False,3.5322952270507812,3.1517105102539062,3.4999873638153076,3.327590227127075,3.0818586349487305
+I do the exact same. It typically does the job and most people are just mad at people who steal rather than me.,Self-Conscious,Disgust,False,3.5275986194610596,3.2872910499572754,3.4783754348754883,3.3979997634887695,3.227971315383911
+Because then if the wife gets pregnant it becomes difficult to find out which husband she is pregnant with,Disgust,Disgust,True,3.3120312690734863,3.1115007400512695,3.309480905532837,3.2154932022094727,3.0337088108062744
+Good to know you have such a strong opinion on someone you dont know or a situation you know nothing about. Good on you for being so arrogant.,Self-Conscious,Anger,False,2.6695196628570557,2.4634292125701904,2.6751163005828857,2.603900194168091,2.5237627029418945
+Talking about cats my lil Friend just jumped on the couch *pat pat from the nice people of reddit*,Fear,Anger,False,4.655632495880127,4.329373836517334,4.680190086364746,4.4558820724487305,4.334853649139404
+What a trainwreck,Loss,Disgust,False,2.3244543075561523,1.8798388242721558,2.41616153717041,2.2607836723327637,1.8451225757598877
+"Not having social media is such a blessing for me, it’s weird he messaged your mum though! I bet she loved hearing from him! ",Self-Conscious,Disgust,False,3.4920294284820557,3.3713912963867188,3.583432912826538,3.383350133895874,3.317965507507324
+"Hey, come on! You did me twice! ",Loss,Disgust,False,3.340900182723999,2.990367889404297,3.344945192337036,3.165990114212036,2.9491024017333984
+They have disagreed with a bunch of individual calls but not tied it together,Disgust,Disgust,True,3.900808811187744,3.48286509513855,3.921459197998047,3.669466972351074,3.4336845874786377
+"Someone had to ""strongly reccomend"" that he didnt take another shot at that..... The stupid is incredibly strong with this one.",Anger,Disgust,False,3.7919890880584717,3.5475172996520996,3.8255362510681152,3.71303653717041,3.5101318359375
+My mother did this. This isn't just a millennial thing.,Disgust,Disgust,True,2.832277774810791,2.54316782951355,2.8507823944091797,2.730252265930176,2.5356321334838867
+Very very very naive.,Anger,Anger,True,3.112239122390747,2.5799951553344727,3.2101385593414307,2.8920793533325195,2.6857948303222656
+Apparently we are tragedies!,Disgust,Disgust,True,3.875889778137207,3.3076980113983154,3.985429286956787,3.599623441696167,3.239802360534668
+I'm only saying it because I'm jealous :(,Anger,Disgust,False,2.8005433082580566,2.450845718383789,2.872619867324829,2.6462368965148926,2.414440393447876
+wat u fecker,Anger,Anger,True,4.673151969909668,3.759145975112915,4.780850410461426,4.247739791870117,3.78629994392395
+thanks this isn’t incredibly triggering for me (and a bunch of others) or anything,Loss,Anger,False,3.760411024093628,3.4844188690185547,3.810121536254883,3.688826084136963,3.486039400100708
+"Unfortunately, on the stupid official Reddit mobile app it doesn’t work. I miss my Android and Reddit Is Fun app",Loss,Disgust,False,4.0958380699157715,3.866978168487549,4.118782043457031,3.955980062484741,3.8292369842529297
+Old ladies are like the only ppl that are nice to me lmao. Kindered spirits with the ugly.,Self-Conscious,Disgust,False,4.157377243041992,3.9004757404327393,4.194484710693359,4.030512809753418,3.8629648685455322
+Tell that to r/Polygrumps (very *VERY* NSFW) dude. They scare me more than this sub.,Fear,Disgust,False,4.440494537353516,4.165428161621094,4.400208473205566,4.281101226806641,4.133808612823486
+"Oh [NAME], dont talk about clippers!",Fear,Anger,False,3.3572781085968018,2.943258047103882,3.3612279891967773,3.188765287399292,2.9622485637664795
+Must not hit opponents on the first frame then. My mistake,Loss,Disgust,False,4.286487579345703,3.896310806274414,4.29365873336792,3.998011827468872,3.8773281574249268
+Maybe we knew someone was going to sigh and this was all in the works. Just a thought idk. FUCK,Self-Conscious,Disgust,False,3.7404286861419678,3.5513672828674316,3.759408950805664,3.6560709476470947,3.4837944507598877
+He said “Guess he didn’t get the victory [NAME] :(“,Disgust,Anger,False,4.060582637786865,3.821587324142456,4.1740570068359375,4.017753601074219,3.8512957096099854
+I was linked the unarchived link and it has some important updates. Wish the OP wasn't so salty and linked the actual,Anger,Disgust,False,3.9138994216918945,3.6908435821533203,3.9084811210632324,3.7417871952056885,3.6663918495178223
+It bothers me that certain people praise him as an entertainer and could care unless about what he did. Look at [NAME]... Makes me question humanity🤔,Fear,Disgust,False,3.867131233215332,3.683204412460327,3.8766422271728516,3.7663772106170654,3.645139694213867
+I mean yeah but it still sucks. Hopefully you have better luck in the future.,Disgust,Anger,False,2.3397481441497803,2.1357061862945557,2.4096834659576416,2.347384214401245,2.1618638038635254
+Everyone who supports him knows. The [NAME] need educating.,Anger,Anger,True,3.9354329109191895,3.582653045654297,4.0156989097595215,3.811955690383911,3.6006290912628174
+"Oh man, you got me there with the image",Self-Conscious,Disgust,False,2.5699305534362793,2.277902841567993,2.5641534328460693,2.4407243728637695,2.195848226547241
+Ugh yes. And don’t even get me started about those conveniently placed guitars to calm a victims nerves beforehand,Fear,Disgust,False,3.819925546646118,3.5764365196228027,3.824841260910034,3.740032911300659,3.5617527961730957
+Ive just given up. Learning to become selfish.,Disgust,Anger,False,3.709969997406006,3.3746819496154785,3.850004196166992,3.603332996368408,3.445194959640503
+"I would start laughing, screaming seems inappropriate",Self-Conscious,Disgust,False,4.3396100997924805,3.7680323123931885,4.212675094604492,3.9443435668945312,3.6216788291931152
+"Oh, the horror! We must defend the honor of Lord [NAME] against the scum of r/NFL!!",Fear,Disgust,False,2.9384310245513916,2.7898833751678467,2.9388890266418457,2.8716111183166504,2.732497215270996
+Who are these women messaging [NAME]? He looks like a very average-looking teenager.,Self-Conscious,Disgust,False,3.3789496421813965,3.118162155151367,3.4070780277252197,3.255711078643799,3.068267583847046
+"Recognizing that [NAME] had a weakness for her and exploiting it, is part of politics. ",Anger,Disgust,False,3.524120807647705,3.206054210662842,3.5120065212249756,3.351789951324463,3.1713287830352783
+He uses it in every other post. It's not even ironic.,Anger,Anger,True,2.869910717010498,2.584177017211914,2.911639928817749,2.7671592235565186,2.599174737930298
+Pissed at you for not allowing them to live in ignorant bliss?,Anger,Anger,True,2.990499496459961,2.6568477153778076,3.0016262531280518,2.896224021911621,2.7228071689605713
+I did not know Donuts could be so complicated.,Self-Conscious,Disgust,False,3.016289234161377,2.718245267868042,2.995359420776367,2.8312995433807373,2.6020822525024414
+"No point trying to hang on to players who are not committed to the club. If this is true then good luck CHO, all the best. ",Loss,Disgust,False,3.256526470184326,3.090122938156128,3.293215751647949,3.170197010040283,3.053497791290283
+"Ah it's too complicated, I'll start dating dudes instead.",Self-Conscious,Disgust,False,3.4245879650115967,3.092573881149292,3.470283031463623,3.2489144802093506,3.0508251190185547
+a realization of the fact that you're not good enough and you have to work a lot harder and develop your taste?,Loss,Anger,False,3.0360209941864014,2.857267141342163,3.0631446838378906,2.933767318725586,2.8701720237731934
+Or he fetishizes about them. You never can tell.,Disgust,Disgust,True,3.5188381671905518,3.2233407497406006,3.562105417251587,3.3820793628692627,3.180452585220337
+"The ""dad"" in that Pizza Hut commercial looks weird af",Self-Conscious,Disgust,False,4.037450790405273,3.531881332397461,4.0196990966796875,3.683832883834839,3.430546283721924
+Confirmation sounds really scary and sketchy. I can not not think about cults and rituals everytime...,Fear,Disgust,False,4.40997838973999,4.063146114349365,4.287515640258789,4.192330837249756,4.005492687225342
+"Neverland is home to lost boys like me, and lost boys like me are free",Disgust,Anger,False,3.1890676021575928,2.9224860668182373,3.1604020595550537,3.0334441661834717,2.9484622478485107
+She's out on the town getting banged like a screen door in a storm. You might as well have the talk.,Anger,Disgust,False,3.392296552658081,3.1740610599517822,3.3520805835723877,3.2549684047698975,3.146595001220703
+"Thanks. Screw the cancellation rate, it’s worth denying <4.7. Good to know!",Disgust,Disgust,True,4.496044635772705,4.155990123748779,4.484066486358643,4.3268351554870605,4.105050086975098
+"You don't even provide a verifiable example, why should I accept your evidence.",Loss,Anger,False,3.127894639968872,2.757884979248047,3.11576247215271,2.9811899662017822,2.824375867843628
+[NAME] gettin angry!,Anger,Anger,True,2.9875874519348145,2.375638723373413,2.9730401039123535,2.8135383129119873,2.501962184906006
+"Is it just me, or do these children look really uncomfortable around the Duggars? The smiles look forced...",Loss,Disgust,False,2.9580078125,2.751246213912964,2.9586849212646484,2.8471291065216064,2.6808013916015625
+"Not bothered about the media, it’s you lot greeting about morelos bullying your team mate ",Anger,Disgust,False,5.246102333068848,4.910906791687012,5.305139064788818,4.991531848907471,4.890993118286133
+Yeah! Despite being from the east coast I've never been in the car when it's hailing so it was a full on argument. Thank you!,Fear,Anger,False,3.1966540813446045,3.0257201194763184,3.1929361820220947,3.116156578063965,3.035146951675415
+"> You have no shame. This is just more Ad Hominem FFS! You really can't help yourself, can you? ",Self-Conscious,Disgust,False,3.002650260925293,2.7712197303771973,2.9635257720947266,2.8745310306549072,2.754607677459717
+Its true. This week my family and I have found out that there is someone for everyone. I tell you there are some weird people out there.,Disgust,Disgust,True,2.9741218090057373,2.8145430088043213,2.96498966217041,2.9048595428466797,2.810910224914551
+"[NAME], just admit your were mad.",Anger,Disgust,False,3.8132760524749756,3.316538095474243,3.8496241569519043,3.557086944580078,3.3021371364593506

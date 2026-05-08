@@ -1,0 +1,36 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+thesis_env/
+
+# Hugging Face / model caches
+.hf_cache/
+.cache/
+
+# Trained checkpoints and generated model weights
+checkpoints/
+GPT 2 medium training/checkpoints/
+**/checkpoint-*/
+**/final/
+*.safetensors
+*.pt
+*.pth
+*.bin
+
+# Logs and temporary outputs
+*.log
+wandb/
+runs/
+tmp/
+temp/
+
+# Unrelated nested repositories / external reports
+Niki report 1/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

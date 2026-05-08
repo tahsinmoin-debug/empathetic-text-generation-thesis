@@ -1,0 +1,75 @@
+{
+  "total": 2243,
+  "correct": 319,
+  "accuracy": 0.1422202407489969,
+  "macro_f1": 0.08776054949442277,
+  "per_label": {
+    "Loss": {
+      "support": 1042,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "Anger": {
+      "support": 824,
+      "precision": 0.44324324324324327,
+      "recall": 0.29854368932038833,
+      "f1": 0.3567802755620015
+    },
+    "Fear": {
+      "support": 190,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "Self-Conscious": {
+      "support": 94,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "Disgust": {
+      "support": 93,
+      "precision": 0.043272080616478956,
+      "recall": 0.7849462365591398,
+      "f1": 0.08202247191011236
+    }
+  },
+  "confusion_matrix": {
+    "Loss": {
+      "Loss": 0,
+      "Anger": 238,
+      "Fear": 0,
+      "Self-Conscious": 0,
+      "Disgust": 804
+    },
+    "Anger": {
+      "Loss": 0,
+      "Anger": 246,
+      "Fear": 0,
+      "Self-Conscious": 1,
+      "Disgust": 577
+    },
+    "Fear": {
+      "Loss": 0,
+      "Anger": 33,
+      "Fear": 0,
+      "Self-Conscious": 0,
+      "Disgust": 157
+    },
+    "Self-Conscious": {
+      "Loss": 0,
+      "Anger": 18,
+      "Fear": 0,
+      "Self-Conscious": 0,
+      "Disgust": 76
+    },
+    "Disgust": {
+      "Loss": 0,
+      "Anger": 20,
+      "Fear": 0,
+      "Self-Conscious": 0,
+      "Disgust": 73
+    }
+  }
+}
