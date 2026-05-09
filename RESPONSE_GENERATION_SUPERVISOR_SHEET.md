@@ -209,6 +209,38 @@ Assistant: {assistant_response}
 
 The instruction was added because Qwen2.5 and Phi-2 often produced generic empathetic responses without clearly using the context cues.
 
+### What Was Extra in Gemma Compared With Qwen2.5 and Phi-2
+
+Qwen2.5 and Phi-2 used this simpler prompt:
+
+```text
+User: {text}
+Detected emotion: {predicted_emotion}
+Context cues: {context_cues}
+Assistant: {assistant_response}
+```
+
+Gemma added one extra instruction line:
+
+```text
+Instruction: Write an empathetic response that reflects the detected emotion and directly mentions or clearly paraphrases the context cues. Avoid generic support phrases.
+```
+
+The purpose of this extra instruction was:
+
+1. To make Gemma use the `d1` emotion instead of ignoring it.
+2. To force the response to mention or paraphrase the extracted context cues.
+3. To reduce generic/template-like empathetic responses.
+
+In short:
+
+```text
+Qwen2.5/Phi-2: emotion + context cues were provided.
+Gemma: emotion + context cues were provided, and the model was explicitly instructed to use both.
+```
+
+This made Gemma a grounded-context experiment rather than a completely identical baseline comparison.
+
 ## 7. Training Configuration
 
 All response-generation models were trained with QLoRA.
