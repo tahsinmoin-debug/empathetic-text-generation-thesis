@@ -7,6 +7,7 @@ Everything needed to write the final report sections listed in the course rubric
 | `WRITING_GUIDE.md` | What the rubric asks, what to cover, a **draft in the style of our reference papers**, and the traps to avoid |
 | `tables/` | CSV tables plus `TABLES.md` (the same tables formatted, with their source and caveats) |
 | `figures/` | 300-dpi PNG figures ready to insert into Word (only in folders that need them) |
+| **`FINAL_TEXT.docx` / `.md`** | **The complete section, written in final thesis form**: numbered headings, finished prose, numbered tables and figures inserted, IEEE in-text citations, and the reference list for that section at the end. Copy this into the thesis. |
 
 Folder names follow the rubric exactly, except that `:` became ` -` because Windows does not allow colons in folder names.
 
@@ -15,8 +16,11 @@ Folder names follow the rubric exactly, except that `:` became ` -` because Wind
 ```
 python writing/_scripts/build_writing_tables.py     # tables (CPU only, a few seconds)
 python writing/_scripts/build_writing_figures.py    # figures (run after the tables)
-python writing/_scripts/build_writing_docx.py       # Word versions with tables and figures embedded
+python writing/_scripts/build_writing_docx.py       # Word versions of the guides
+python writing/_scripts/build_final_text.py         # FINAL_TEXT files + REFERENCES_ALL
 ```
+
+**Citations.** All sections use IEEE numbered citations, numbered in order of first appearance across the thesis, so a paper has the same number in every section. The complete, numbered reference list is `REFERENCES_ALL.docx`. Every entry was checked against the publisher's page. To change wording, edit `writing/_scripts/final_text_src/<section>.md` (citations are written `{cite:key}`, keys in `references.py`) and rebuild. If you edit a FINAL_TEXT.docx directly, your edits will be overwritten the next time the build runs, so copy finished text into the thesis document first.
 
 When the AI-judge scores for the final system arrive, merge them into `llm_judge_evaluation/` as usual, re-run both scripts, and the judge tables fill themselves.
 

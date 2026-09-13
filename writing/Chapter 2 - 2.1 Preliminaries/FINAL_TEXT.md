@@ -1,0 +1,51 @@
+# 2.1 Preliminaries
+
+This section introduces the concepts on which the rest of the thesis builds: the task of empathetic response generation, the dataset used, the model families involved, and the evaluation and statistical methods applied in later chapters.
+
+**Empathetic Response Generation** is the task of producing a conversational reply that recognises and responds appropriately to the emotional state of the speaker. Rashkin et al. [1] established it as a benchmark task and showed that models trained on empathetic conversations are perceived as more empathetic by human evaluators. Later work distinguishes *affective* empathy, which reflects and validates what the speaker feels, from *cognitive* empathy, which understands why the speaker feels it [2]. In a mental-health support setting the aim is supportive listening rather than diagnosis or therapy.
+
+**EmpatheticDialogues (ED)** is a crowd-sourced corpus of 24,850 two-person English conversations [1]. For each conversation, a speaker chooses one of 32 fine-grained emotion labels, such as *afraid*, *terrified*, *lonely* or *proud*, writes a short description of a situation in which they felt that emotion, and then discusses the situation with a listener. The corpus is divided into 19,533 training, 2,770 validation and 2,547 test conversations, and all conversations started by the same speaker are kept within one partition so that similar situations do not appear in more than one split. The dataset is released under the CC BY-NC 4.0 licence [3].
+
+**Transformer** models [4] process text with self-attention: each token computes a set of weights over all tokens in the input, and these weights determine how much each token contributes to its updated representation. Because the weights are explicit, the attention of a trained model can be inspected to see which words most influenced its output. This property is used in our system to extract the words that drove an emotion prediction.
+
+**Encoder-only and Decoder-only Models** are the two main transformer families. Encoder-only models such as BERT [5] read the entire input in both directions at once and are well suited to classification. Decoder-only models such as GPT-2, Qwen and Phi process text from left to right and generate one token at a time, which suits response generation. The system in this thesis uses an encoder for emotion detection and a decoder for response generation.
+
+**RoBERTa** [6] is an encoder with the BERT architecture that is pre-trained for longer, on more data, with dynamic masking and without the next-sentence prediction objective. RoBERTa-base has 125 million parameters and RoBERTa-large 355 million. For classification, a linear layer is added on top of the representation of the first token, and the whole network is fine-tuned with a cross-entropy loss.
+
+**Instruction-tuned Language Models** are decoder-only models that have been further trained to follow natural-language instructions within a chat format. Phi-4-mini-instruct, with 3.8 billion parameters [7], and the Qwen2.5-Instruct models [8] are examples. Because they follow a *system prompt*, their behaviour can be shaped at inference time without changing their weights.
+
+**Prompt Engineering** is the design of the instructions given to a language model. A system prompt can include the detected emotion, explicit behavioural rules such as "ask exactly one question", and guidance specific to the situation. Prompting is far cheaper than fine-tuning and can change from one request to the next, but models do not always comply, so compliance must be measured rather than assumed.
+
+**Quantisation and Low-Rank Adaptation.** Four-bit NormalFloat (NF4) quantisation stores model weights in four bits, reducing memory use roughly fourfold, so that a model with several billion parameters fits in 8 GB of GPU memory [9]. Low-Rank Adaptation (LoRA) [10] fine-tunes a model by training small low-rank matrices added to its frozen weights. In this thesis LoRA is used only for a monolithic baseline.
+
+**Top-k Prediction** returns a classifier's *k* most probable labels rather than only the single most likely one. When the label set contains many closely related emotions, such as *angry* and *furious*, the correct label is frequently ranked second or third, so top-3 and top-5 accuracy indicate whether the correct emotion lies within a small set of candidates.
+
+**Retrieval-Augmented Generation (RAG)** [11] supplements a model's input with retrieved documents, in our case similar past conversations, so that the model can ground its output in them. Retrieval typically relies on sentence embeddings compared by cosine similarity [12].
+
+**LLM-as-a-Judge** evaluation uses a strong language model to score generated text against a rubric. Strong LLM judges agree with human preferences in over 80% of cases, but they exhibit position bias, a preference for longer answers and a tendency to favour their own outputs [13]. Judges should therefore be blind to the identity of the system being evaluated and should not share a model family with it.
+
+**WASSA Empathy Classifier.** WASSA is a long-running workshop on computational approaches to subjectivity, sentiment and social media analysis, held with the Association for Computational Linguistics. Its 2024 shared task included a track on predicting third-party human ratings of empathy for individual turns of a conversation [14]. We use a publicly released DeBERTa-based system from that track [15] as an automatic empathy signal that is independent of the AI judges.
+
+**Paired Significance Testing.** When two systems respond to the same conversations, their results form matched pairs. **McNemar's test** [16] compares paired binary outcomes, such as whether each reply followed all rules, using only the pairs on which the systems disagree. The **Wilcoxon signed-rank test** [17] compares paired continuous scores without assuming normality. A **bootstrap** confidence interval [18] is obtained by repeatedly resampling the conversations and recomputing the difference. Because running many tests increases the chance of a false positive, the **Holm-Bonferroni procedure** [19] adjusts p-values for multiple comparisons.
+
+## References
+
+[1] H. Rashkin, E. M. Smith, M. Li, and Y.-L. Boureau, "Towards empathetic open-domain conversation models: A new benchmark and dataset," in Proc. 57th Annu. Meeting Assoc. Comput. Linguistics (ACL), Florence, Italy, 2019, pp. 5370-5381, doi: 10.18653/v1/P19-1534.  
+[2] S. Sabour, C. Zheng, and M. Huang, "CEM: Commonsense-aware empathetic response generation," in Proc. AAAI Conf. Artificial Intelligence, vol. 36, no. 10, 2022, pp. 11229-11237.  
+[3] Facebook Research, "EmpatheticDialogues," GitHub repository (CC BY-NC 4.0 licence). [Online]. Available: https://github.com/facebookresearch/EmpatheticDialogues  
+[4] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, and I. Polosukhin, "Attention is all you need," in Advances in Neural Information Processing Systems (NeurIPS), vol. 30, 2017, pp. 5998-6008.  
+[5] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, "BERT: Pre-training of deep bidirectional transformers for language understanding," in Proc. 2019 Conf. North American Chapter Assoc. Comput. Linguistics (NAACL-HLT), 2019, pp. 4171-4186, doi: 10.18653/v1/N19-1423.  
+[6] Y. Liu, M. Ott, N. Goyal, J. Du, M. Joshi, D. Chen, O. Levy, M. Lewis, L. Zettlemoyer, and V. Stoyanov, "RoBERTa: A robustly optimized BERT pretraining approach," arXiv:1907.11692, 2019.  
+[7] A. Abouelenin, A. Ashfaq, A. Atkinson et al. (Microsoft), "Phi-4-Mini technical report: Compact yet powerful multimodal language models via Mixture-of-LoRAs," arXiv:2503.01743, 2025.  
+[8] A. Yang, B. Yang, B. Zhang, B. Hui et al. (Qwen Team), "Qwen2.5 technical report," arXiv:2412.15115, 2024.  
+[9] T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, "QLoRA: Efficient finetuning of quantized LLMs," in Advances in Neural Information Processing Systems (NeurIPS), vol. 36, 2023.  
+[10] E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen, "LoRA: Low-rank adaptation of large language models," in Proc. Int. Conf. Learning Representations (ICLR), 2022.  
+[11] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. Kuttler, M. Lewis, W. Yih, T. Rocktaschel, S. Riedel, and D. Kiela, "Retrieval-augmented generation for knowledge-intensive NLP tasks," in Advances in Neural Information Processing Systems (NeurIPS), vol. 33, 2020, pp. 9459-9474.  
+[12] N. Reimers and I. Gurevych, "Sentence-BERT: Sentence embeddings using Siamese BERT-networks," in Proc. 2019 Conf. Empirical Methods Natural Language Processing and 9th Int. Joint Conf. Natural Language Processing (EMNLP-IJCNLP), 2019, pp. 3982-3992, doi: 10.18653/v1/D19-1410.  
+[13] L. Zheng, W.-L. Chiang, Y. Sheng et al., "Judging LLM-as-a-judge with MT-Bench and Chatbot Arena," in Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track, vol. 36, 2023; arXiv:2306.05685.  
+[14] S. Giorgi, J. Sedoc, V. Barriere, and S. Tafreshi, "Findings of WASSA 2024 shared task on empathy and personality detection in interactions," in Proc. 14th Workshop Computational Approaches to Subjectivity, Sentiment, & Social Media Analysis (WASSA), 2024, pp. 369-379, doi: 10.18653/v1/2024.wassa-1.30.  
+[15] H. Yang, L. Huang, T. Li, N. Rusnachenko, and H. Liang, "hyy33 at WASSA 2024 empathy and personality shared task: Using the CombinedLoss and FGM for enhancing BERT-based models in emotion and empathy prediction from conversation turns," in Proc. 14th Workshop Computational Approaches to Subjectivity, Sentiment, & Social Media Analysis (WASSA), 2024, pp. 430-434, doi: 10.18653/v1/2024.wassa-1.39.  
+[16] Q. McNemar, "Note on the sampling error of the difference between correlated proportions or percentages," Psychometrika, vol. 12, no. 2, pp. 153-157, 1947.  
+[17] F. Wilcoxon, "Individual comparisons by ranking methods," Biometrics Bulletin, vol. 1, no. 6, pp. 80-83, 1945.  
+[18] B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York, NY, USA: Chapman & Hall, 1993.  
+[19] S. Holm, "A simple sequentially rejective multiple test procedure," Scandinavian J. Statistics, vol. 6, no. 2, pp. 65-70, 1979.  
