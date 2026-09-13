@@ -15,6 +15,7 @@ Folder names follow the rubric exactly, except that `:` became ` -` because Wind
 ```
 python writing/_scripts/build_writing_tables.py     # tables (CPU only, a few seconds)
 python writing/_scripts/build_writing_figures.py    # figures (run after the tables)
+python writing/_scripts/build_writing_docx.py       # Word versions with tables and figures embedded
 ```
 
 When the AI-judge scores for the final system arrive, merge them into `llm_judge_evaluation/` as usual, re-run both scripts, and the judge tables fill themselves.
@@ -37,7 +38,7 @@ When the AI-judge scores for the final system arrive, merge them into `llm_judge
 | CO6 | `Chapter 5 - 5.1 Performance Evaluation` | AI-judge and human-evaluation rows **pending** |
 | CO6 | `Chapter 5 - 5.2 Analysis of Design Solutions` | Ready to write |
 | CO7 | `Chapter 5 - 5.2 Final Design Adjustments` | Ready to write |
-| CO6 | `Chapter 5 - 5.3 Statistical Analysis` | Judge agreement **pending** |
+| CO6 | `Chapter 5 - 5.3 Statistical Analysis` | Ready; final-system judge rows **pending** |
 | CO6 | `Chapter 5 - 5.4 Comparisons and Relationships` | Human-evaluation row **pending** |
 | CO6 | `Chapter 5 - 5.6 Discussion` | Ready to write; final paragraph waits for pending results |
 | CO8 | `Presentation - Tools Used` | Ready |
@@ -88,6 +89,8 @@ The drafts copy the patterns used in COLING 2025 main.598 (Wu et al.), COLING 20
 | "d1 beats all published ED results" | Only true against joint generation models; Chirpy Cardinal's roberta-large reports 61.5% on validation | `Chapter 5 - 5.4/tables/emotion_accuracy_vs_literature.csv` |
 | "Decoupled design significantly beats a same-size single model on rule adherence" | True for the *initial* pipeline (p = 0.002). For the **final** system: 60.0% vs 51.3%, raw p = 0.032, **Holm-adjusted p = 0.095, not significant** | Claim significance on WASSA empathy and emotion validation instead, both significant after correction |
 | "Temperature 0.9" | The code uses **temperature 0.7, top-p 0.9** | `configuration_and_hyperparameters.csv` |
+| "WASSA was trained on reaction essays, not chat replies" | The model used is from **Track 2**, trained on human empathy ratings of **conversation turns** | `Chapter 5 - 5.3/tables/wassa_validity.csv` |
+| "hyy33 ranked 4th" | 4th is the authors' own claim; the findings table lists them **5th of 9** by average | same table |
 | 28-class GoEmotions results | Side research, not the thesis pipeline | Mention only as "initial dataset exploration" in 3.6 |
 
 ---
@@ -96,7 +99,7 @@ The drafts copy the patterns used in COLING 2025 main.598 (Wu et al.), COLING 20
 
 Keep these consistent in every chapter:
 
-1. **Detection accuracy is not the bottleneck.** A wrong d1 label does not reduce rule adherence (p = 0.40-0.55) or WASSA empathy (p = 0.72). Swapping GPT-2 for the more accurate RoBERTa while keeping d2 fixed changes neither emotion validation (p = 0.91) nor rule adherence (p = 0.09).
+1. **Detection accuracy is not the bottleneck.** A wrong d1 label does not reduce rule adherence (p = 0.40-0.55) or WASSA empathy (p = 0.72). Swapping GPT-2 for the more accurate RoBERTa while keeping d2 fixed changes neither emotion validation (p = 0.91) nor rule adherence (p = 0.09). **Tested directly in the final system:** replacing RoBERTa-base with RoBERTa-large (3.0 points more accurate on the same conversations) changed no reply-quality measure (all rules p = 0.16, WASSA p = 0.43, emotion validation p = 0.68), so RoBERTa-base is kept.
 2. **How the emotion is used matters more than how accurately it is detected.** The two-stage design (d2 picks from d1's top-3, then an emotion-specific prompt) raises emotion validation from 28.3% to 36.7% and WASSA from 4.89 to 5.05 over the same models with top-1 only. Both remain significant after Holm correction.
 3. **Honest caveat on (2):** d2's stage-1 pick matches the gold label *less* often than d1's top-1 (42.3% vs 50.3%, p = 0.005). The gain comes from emotion-specific guidance, not from better label selection.
 4. **Against baselines of the same size** the final system is significantly more empathetic (WASSA +0.21) and more emotionally faithful (+11.0 pp). It is not significantly better on rule adherence after correction.

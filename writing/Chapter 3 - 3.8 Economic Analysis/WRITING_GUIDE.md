@@ -13,6 +13,7 @@ Account for what the project cost to build and evaluate, what it would cost to r
 | `tables/cost_breakdown.csv` | Development cost items; BDT cells are `[[TEAM TO FILL]]` |
 | `tables/compute_usage.csv` | Measured training times; other rows marked as not logged |
 | `tables/d1_backbone_cost_benefit.csv` | Cost vs accuracy of detector sizes |
+| `tables/detector_sensitivity_robertalarge.csv` | The benefit side: what the larger detector changed in the final system (nothing significant) |
 | `tables/licences.csv` | Licence terms, including the commercial-use restriction |
 
 ## Checklist
@@ -45,7 +46,7 @@ where P_GPU = 0.115 kW is the RTX 4060's rated board power. This gives about 0.0
 
 ### 3.8.3 Cost-Benefit of Design Choices
 
-**Detector size.** RoBERTa-large improves top-1 accuracy by 2.9 percentage points (53.0% vs 50.1%) and top-5 by 2.2 points, both statistically significant, but it needs 2.8 times as many parameters and 7.4 times the training time (Table 3.x). Our error-propagation and controlled-swap analyses (Chapter 5) show that detector accuracy gains do not carry through to response quality. The benefit does not justify the cost, so RoBERTa-base was kept.
+**Detector size.** RoBERTa-large improves top-1 accuracy by 2.9 percentage points (53.0% vs 50.1%) and top-5 by 2.2 points, both statistically significant, but it needs 2.8 times as many parameters and 7.4 times the training time (Table 3.x). We measured the benefit directly by running the final system with RoBERTa-large (Table 3.x). Rule adherence (60.0% vs 54.7%), WASSA empathy (5.05 vs 5.01) and emotion validation (36.7% vs 38.0%) showed no significant change. The extra cost buys no measurable improvement in replies, so RoBERTa-base was kept.
 
 **Fine-tuning vs prompting the generator.** Fine-tuning the generator with LoRA consumed GPU time and produced the worst system tested: 0% of replies followed all rules and 98% asked more than one question. Prompting an off-the-shelf instruction-tuned model needs no training at all and reaches 60.0% for the final system. On this task, prompting dominates on both cost and quality.
 

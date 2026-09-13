@@ -1,0 +1,4 @@
+Judge,Developer,Size,Access,Why selected
+Nemotron 3 Ultra,NVIDIA,550B total / 55B active (mixture-of-experts),OpenRouter free tier (50 requests/day),Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)
+Mistral Large,Mistral AI,Flagship (size not published),Mistral free Experiment tier,Independent provider with a separate training lineage
+gpt-oss-120b,"OpenAI (open weights, Apache-2.0)",About 120B (mixture-of-experts),Groq free tier,Open weights make this judge reproducible; fast enough to score everything

@@ -196,7 +196,7 @@ def build_d1(per_reply):
                                                         "Top-5 acc (%)", "Train time (min)"]],
          "Cost vs benefit of a larger detector", "`evaluation_results_d1_model_comparison/*.json`",
          "roberta-large costs 2.8x the parameters and 7.4x the training time for +2.9 points top-1; "
-         "error-propagation analysis (Chapter 5.3) shows detection gains do not reach response quality.")
+         "inside the final pipeline, swapping it in changed no reply-quality measure (see detector_sensitivity table).")
 
     sig = pd.read_csv(comp_dir / "backbone_significance.csv")
     save("ch5_3", "d1_backbone_significance", sig, "d1 backbone differences - paired significance",
@@ -324,8 +324,10 @@ def build_rules_and_quality(per_reply):
     wassa.insert(1, "System", wassa["Setting ID"].map(LABEL))
     save("ch5_1", "wassa_empathy_all_systems", wassa.round(2), "WASSA 2024 empathy classifier - all systems",
          "`llm_judge_evaluation/wassa_empathy_scores.csv` (model `hyy-33/hyy33-WASSA-2024-Track-2`)",
-         "Scores cluster in a narrow 1-7 band because the classifier was trained on reaction essays, not chat "
-         "replies. Interpret differences between systems, not absolute values.")
+         "The model (WASSA 2024 Track 2, hyy33) was trained on third-party human empathy ratings of conversation "
+         "turns from peer discussions of news articles; it outputs one of 11 ordinal classes and our replies "
+         "receive classes 1-7. Use it to compare system averages, not individual replies - see the WASSA "
+         "validity table in 5.3.")
 
     div = pd.read_csv(ROOT / "evaluation_results_diversity" / "diversity_results.csv")
     save("ch5_1", "diversity_and_repetition", div, "Lexical diversity and boilerplate repetition",
@@ -516,11 +518,213 @@ def build_judges():
     save("ch5_1", "ai_judge_per_dimension", detail, "AI-judge scores per dimension (existing settings)",
          "`llm_judge_evaluation/judge_scores_detailed.csv`",
          f"Rows for the final system and RoBERTa + Phi (top-1) are {PENDING}.")
-    agree = pd.DataFrame([{"Judge pair": pair, "Spearman rho (overall score)": PENDING, "N pairs": PENDING}
-                          for pair in ["Nemotron vs Mistral", "Nemotron vs gpt-oss", "Mistral vs gpt-oss"]])
-    save("ch5_3", "ai_judge_agreement_PENDING", agree, "Inter-judge agreement (to compute once scores return)",
-         "to be computed", "Planned: per-example Spearman correlation per judge pair, plus z-score-normalised "
-                           "averaging to remove judge severity offsets.")
+    judge_agreement_and_selection()
+
+
+JUDGE_FILES_ALL = {"Nemotron 3 Ultra": "nemotron_openrouter_scores.csv",
+                   "Mistral Large": "mistral_large_scores.csv",
+                   "gpt-oss-120b": "gptoss_groq_scores.csv"}
+
+
+def load_judges_with_wassa():
+    df = pd.read_csv(JUDGE_DIR / "wassa_empathy_scores.csv")
+    for name, f in JUDGE_FILES_ALL.items():
+        j = pd.read_csv(JUDGE_DIR / f)
+        j = j[j["parse_ok"] == True].drop_duplicates(["conv_id", "setting"])
+        j["overall"] = j[["empathy", "relevance", "safety"]].mean(axis=1)
+        j = j[["conv_id", "setting", "empathy", "overall"]].rename(
+            columns={"empathy": f"{name}|empathy", "overall": f"{name}|overall"})
+        df = df.merge(j, on=["conv_id", "setting"], how="inner")
+    return df
+
+
+def judge_agreement_and_selection():
+    df = load_judges_with_wassa()
+    names = list(JUDGE_FILES_ALL)
+    rows = []
+    for dim in ("empathy", "overall"):
+        for a_i in range(3):
+            for b_i in range(a_i + 1, 3):
+                a, b = names[a_i], names[b_i]
+                r_all = spearmanr(df[f"{a}|{dim}"], df[f"{b}|{dim}"])
+                sub = df[df["setting"] != "fine_tuned"]
+                r_nf = spearmanr(sub[f"{a}|{dim}"], sub[f"{b}|{dim}"])
+                rows.append({"Dimension": dim, "Judge pair": f"{a} vs {b}", "N replies": len(df),
+                             "Spearman rho": round(r_all.statistic, 3), "p": f"{r_all.pvalue:.1e}",
+                             "rho without fine-tuned system": round(r_nf.statistic, 3)})
+    overall_cols = [f"{n}|overall" for n in names]
+    sys_means = df.groupby("setting")[overall_cols].mean()
+    ranks = sys_means.rank(ascending=False)
+    rows.append({"Dimension": "overall (system level)",
+                 "Judge pair": "Do all 3 judges rank the systems in the same order?",
+                 "N replies": len(sys_means), "Spearman rho": "", "p": "",
+                 "rho without fine-tuned system": "YES" if (ranks.nunique(axis=1) == 1).all() else "NO"})
+    z = df[overall_cols]
+    z = (z - z.mean()) / z.std()
+    z_rank = pd.concat([df["setting"], z.mean(axis=1).rename("z")], axis=1).groupby("setting")["z"].mean()
+    raw_rank = sys_means.mean(axis=1)
+    same = list(z_rank.sort_values().index) == list(raw_rank.sort_values().index)
+    rows.append({"Dimension": "severity check",
+                 "Judge pair": "System ranking unchanged after z-scoring each judge?",
+                 "N replies": len(df), "Spearman rho": "", "p": "",
+                 "rho without fine-tuned system": "YES" if same else "NO"})
+    note = (f"Computed on the {len(df)} replies scored by all three judges (5 systems x 64 conversations). "
+            "Rows for the final system are added automatically once its scores are merged and this script is re-run. "
+            "The last column removes the obviously broken fine-tuned system, which would otherwise inflate agreement.")
+    save("ch5_3", "ai_judge_agreement", pd.DataFrame(rows), "Inter-judge agreement (systems judged so far)",
+         "computed from `llm_judge_evaluation/*_scores.csv` by this script", note)
+    stale = W / SECTIONS["ch5_3"] / "tables" / "ai_judge_agreement_PENDING.csv"
+    if stale.exists():
+        stale.unlink()
+
+    panel = pd.DataFrame([
+        ["Nemotron 3 Ultra", "NVIDIA", "550B total / 55B active (mixture-of-experts)", "OpenRouter free tier (50 requests/day)",
+         "Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)"],
+        ["Mistral Large", "Mistral AI", "Flagship (size not published)", "Mistral free Experiment tier",
+         "Independent provider with a separate training lineage"],
+        ["gpt-oss-120b", "OpenAI (open weights, Apache-2.0)", "About 120B (mixture-of-experts)", "Groq free tier",
+         "Open weights make this judge reproducible; fast enough to score everything"],
+    ], columns=["Judge", "Developer", "Size", "Access", "Why selected"])
+    criteria = pd.DataFrame([
+        ["Flagship-tier capability",
+         "Required by the co-supervisor; small local judges (Gemma-2-2B, Phi-3-mini) were dropped from an earlier plan",
+         "Zheng et al. (2023): strong LLM judges agree with human preferences over 80% of the time"],
+        ["Three different developers, none related to our models",
+         "No judge shares a family with the generator (Phi, Microsoft) or the baselines (Qwen, Alibaba)",
+         "Panickssery et al. (2024): LLM evaluators recognise and favour their own generations"],
+        ["A panel instead of one judge", "Scores averaged over three judges",
+         "Verga et al. (2024): a panel from disjoint model families shows less intra-model bias than one large judge"],
+        ["Blind scoring", "Judges see only the user message and one reply - never the system name or the gold reply",
+         "Removes identity bias and any reward for word overlap with a reference reply"],
+        ["Anchored rubric, deterministic output",
+         "1-3 / 4-6 / 7-10 anchors for empathy, relevance and safety; temperature 0; JSON-only answer",
+         "Anchors keep judges on the same scale; temperature 0 removes sampling noise"],
+        ["Free API access", "No GPU needed, so non-coding teammates could run the judging", "Project resource constraint (Section 3.8)"],
+        ["Documented replacements",
+         "Gemini (repeated quota failures), DeepSeek (retired on GitHub Models, removed from OpenRouter free tier), Llama 3.3 70B (decommissioned on Groq)",
+         "Valid scores from retired judges were kept; see risk R7 in Section 3.7"],
+    ], columns=["Criterion", "How it was applied", "Evidence or reason"])
+    save("ch4_1", "ai_judge_panel", panel, "The AI-judge panel",
+         "model IDs in `llm_judge_evaluation/run_llm_judge.py`; provider documentation")
+    save("ch4_1", "ai_judge_selection_criteria", criteria, "Why these three AI judges",
+         "project records and cited literature (see WRITING_GUIDE.md in Chapter 4.1)")
+
+
+def build_wassa_validity():
+    df = load_judges_with_wassa()
+    df["judge_mean_empathy"] = df[[f"{n}|empathy" for n in JUDGE_FILES_ALL]].mean(axis=1)
+    wc = []
+    for sname in df["setting"].unique():
+        p = pd.read_csv(D2_DIR / f"{sname}_scored_predictions.csv")[["conv_id", "word_count"]]
+        p["setting"] = sname
+        wc.append(p)
+    df = df.merge(pd.concat(wc), on=["conv_id", "setting"])
+
+    def rank_resid(y, x):
+        ry, rx = y.rank(), x.rank()
+        coef = np.polyfit(rx, ry, 1)
+        return ry - (coef[0] * rx + coef[1])
+
+    pooled = spearmanr(df["wassa_empathy_0_10"], df["judge_mean_empathy"])
+    partial = spearmanr(rank_resid(df["wassa_empathy_0_10"], df["word_count"]),
+                        rank_resid(df["judge_mean_empathy"], df["word_count"]))
+    within = [spearmanr(g["wassa_empathy_0_10"], g["judge_mean_empathy"]) for _, g in df.groupby("setting")]
+    sys_means = df.groupby("setting")[["wassa_empathy_0_10", "judge_mean_empathy"]].mean()
+    sys_r = spearmanr(sys_means["wassa_empathy_0_10"], sys_means["judge_mean_empathy"]).statistic
+    pairs = [("Nemotron 3 Ultra", "Mistral Large"), ("Nemotron 3 Ultra", "gpt-oss-120b"), ("Mistral Large", "gpt-oss-120b")]
+    judge_r = [spearmanr(df[f"{a}|empathy"], df[f"{b}|empathy"]).statistic for a, b in pairs]
+    table = pd.DataFrame([
+        ["Recognition", "Where it comes from",
+         "WASSA 2024 shared task at ACL 2024 (14 teams); system paper hyy33, ACL Anthology 2024.wassa-1.39", "Findings paper 2024.wassa-1.30"],
+        ["Recognition", "What it was trained on",
+         "Third-party human empathy ratings (ordinal 1-5) of individual conversation turns (Track 2, CONV-Turn)", "Findings paper"],
+        ["Recognition", "Accuracy against humans on the task test set",
+         "Pearson r = .544 for empathy; 5th of 9 teams on the track average in the findings table (the authors report 4th)", "Findings paper, Table 3"],
+        ["Recognition", "Caveat",
+         "The organisers' RoBERTa-base baseline reached r = .694 on empathy; the best team reached .582", "Findings paper, Table 3"],
+        ["Recognition", "Output format",
+         "11 ordinal classes (argmax); our replies receive classes 1-7; the authors do not document how ratings map to classes",
+         "Checkpoint metadata; our scores"],
+        ["Our data", "System-level ranking vs AI judges (5 systems)", f"Spearman rho = {sys_r:.2f}", "computed"],
+        ["Our data", "Per-reply agreement with the judges' mean empathy",
+         f"rho = {pooled.statistic:.2f} (p = {pooled.pvalue:.1e}, N = {len(df)})", "computed"],
+        ["Our data", "Same, controlling for reply length",
+         f"partial rho = {partial.statistic:.2f} (p = {partial.pvalue:.1e})", "computed"],
+        ["Our data", "Agreement within a single system",
+         f"rho = {min(r.statistic for r in within):.2f} to {max(r.statistic for r in within):.2f}; "
+         f"{sum(r.pvalue < 0.05 for r in within)} of {len(within)} significant", "computed"],
+        ["Our data", "For reference: judge vs judge on empathy", f"rho = {min(judge_r):.2f} to {max(judge_r):.2f}", "computed"],
+        ["Reproducibility", "Re-implementation check after a library upgrade",
+         "1,800 of 1,800 pre-upgrade scores reproduced exactly", "`llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv`"],
+    ], columns=["Aspect", "Check", "Result", "Source"])
+    note = ("Conclusion: trustworthy for comparing system averages (same ranking as the AI judges), too noisy to rank "
+            "individual replies within one system. The thesis uses it only for the first purpose.")
+    for sec in ("ch5_3", "ch4_1"):
+        save(sec, "wassa_validity", table, "Is the WASSA empathy classifier trustworthy for this project?",
+             "WASSA 2024 findings paper, hyy33 model card, and our own scores", note)
+
+
+def build_detector_sensitivity():
+    import sys
+    sys.path.insert(0, str(ROOT / "d2_settings_comparison"))
+    import score_d2_settings_comparison as sc
+
+    base_name, large_name = FINAL, "two_stage_phi_robertalarge"
+    wassa = pd.read_csv(JUDGE_DIR / "wassa_empathy_scores.csv")
+    ctx = pd.read_csv(ROOT / "evaluation_results_context_awareness_new_d1" / "context_awareness_per_reply.csv")
+    frames = {}
+    for sname in (base_name, large_name):
+        d = pd.read_csv(ROOT / "evaluation_results_two_stage" / f"{sname}_generation_output.csv")
+        r = d["generated_response"].fillna("").map(sc.check_rule_adherence).apply(pd.Series)
+        d = pd.concat([d, r], axis=1)
+        d["all_rules"] = d["ack_present"] & d["exactly_one_question"] & d["length_ok"]
+        d["d1_top1_right"] = d["d1_top1"] == d["gold_emotion"]
+        d["pick_right"] = d["predicted_emotion"] == d["gold_emotion"]
+        d["gold_in_top3"] = [g in str(t).split("|") for g, t in zip(d["gold_emotion"], d["d1_top3"])]
+        d = d.merge(wassa[wassa["setting"] == sname][["conv_id", "wassa_empathy_0_10"]], on="conv_id")
+        d = d.merge(ctx[ctx["setting"] == sname][["conv_id", "validation_match"]], on="conv_id")
+        frames[sname] = d.set_index("conv_id")
+    a = frames[base_name]
+    b = frames[large_name].loc[a.index]
+
+    detection, quality = [], []
+    specs = [("d1_top1_right", "d1 top-1 correct", detection), ("gold_in_top3", "True emotion in d1 top-3", detection),
+             ("pick_right", "Stage-1 pick correct", detection), ("all_rules", "All rules", quality),
+             ("ack_present", "Acknowledgement", quality), ("exactly_one_question", "One question", quality),
+             ("validation_match", "Emotion validation", quality)]
+    for key, name, bucket in specs:
+        p, _, _ = mcnemar(a[key].astype(bool), b[key].astype(bool))
+        lo, hi = boot_ci(b[key].astype(float).values - a[key].astype(float).values)
+        bucket.append({"Group": "Detection" if bucket is detection else "Reply quality", "Measure": name,
+                       "RoBERTa-base d1 (%)": round(a[key].mean() * 100, 1),
+                       "RoBERTa-large d1 (%)": round(b[key].mean() * 100, 1),
+                       "Difference": round((b[key].mean() - a[key].mean()) * 100, 1),
+                       "95% CI": f"[{lo * 100:+.1f}, {hi * 100:+.1f}]", "Test": "McNemar exact", "p": round(p, 4),
+                       "_lo": lo, "_hi": hi})
+    x, y = a["wassa_empathy_0_10"].values, b["wassa_empathy_0_10"].values
+    lo, hi = boot_ci(y - x)
+    quality.append({"Group": "Reply quality", "Measure": "WASSA empathy (0-10 points, not %)",
+                    "RoBERTa-base d1 (%)": round(x.mean(), 2), "RoBERTa-large d1 (%)": round(y.mean(), 2),
+                    "Difference": round(y.mean() - x.mean(), 2), "95% CI": f"[{lo:+.2f}, {hi:+.2f}]",
+                    "Test": "Wilcoxon signed-rank", "p": round(wilcoxon(x, y).pvalue, 4), "_lo": lo, "_hi": hi})
+    for row, p_adj in zip(quality, holm([q["p"] for q in quality])):
+        row["p (Holm over reply-quality measures)"] = round(p_adj, 4)
+        row["Significant?"] = verdict(p_adj, row["_lo"], row["_hi"])
+    for row in detection:
+        row["p (Holm over reply-quality measures)"] = ""
+        row["Significant?"] = "YES" if (row["p"] < 0.05 and (row["_lo"] > 0 or row["_hi"] < 0)) else "no"
+    table = pd.DataFrame(detection + quality).drop(columns=["_lo", "_hi"])
+    same_pick = (a["predicted_emotion"].values == b["predicted_emotion"].values).mean()
+    note = (f"The final two-stage pipeline was run twice on the same 300 conversations, identical except for the detector "
+            f"(RoBERTa-base, 125M parameters, vs RoBERTa-large, 355M). Both runs chose the same emotion in {same_pick:.0%} of "
+            f"conversations. Mean reply length: {a['word_count'].mean():.1f} vs {b['word_count'].mean():.1f} words. "
+            "Holm correction is applied over the five reply-quality measures. The larger detector improves no reply-quality "
+            "measure, so the smaller detector is kept.")
+    for sec in ("ch5_3", "ch5_4", "ch3_8"):
+        save(sec, "detector_sensitivity_robertalarge", table,
+             "Does a larger detector improve the final system? (RoBERTa-large swapped into the final pipeline)",
+             "`evaluation_results_two_stage/two_stage_phi_robertalarge_generation_output.csv`, WASSA and emotion-validation files",
+             note)
 
 
 def build_human_eval_placeholder():
@@ -691,7 +895,7 @@ def build_project_tables():
     save("ch4_1", "tools_and_versions", tools, "Tools and technologies (implementation environment)", "same as Tools folder")
 
     hyper = pd.DataFrame([
-        ["d1", "Backbone", "RoBERTa-base (125M)", "Top-5 significantly above BERT/ELECTRA at equal top-1; pipeline uses top-3"],
+        ["d1", "Backbone", "RoBERTa-base (125M)", "Top-5 significantly above BERT/ELECTRA at equal top-1; pipeline uses top-3; RoBERTa-large tested in-pipeline with no reply gain"],
         ["d1", "Input text", "First user utterance, max 128 tokens", "Matches inference-time input (fixes mismatch)"],
         ["d1", "Learning rate / epochs", "2e-5 / 4 (early stopping, patience 1)", "Standard BERT-family fine-tuning range"],
         ["d1", "Batch", "8 x 2 accumulation = 16", "Fits 8 GB VRAM"],
@@ -722,6 +926,7 @@ def build_project_tables():
         ["A6", "Single message misread in conversation", "'I am okay. Well, not properly.' read as content (72%)", "d1 reads last 4 user turns", "Correctly read as angry with context"],
         ["A7", "Fixed one-question rule becomes interrogation over many turns", "Rule designed for single turn", "Question optional from turn 2; no repeated phrasing", "Keeps turn-1 comparability"],
         ["A8", "RAG suggested by P2 panel", "All rules 63.7% -> 43.7%", "Not adopted", "Documented negative result"],
+        ["A10", "Could a larger detector improve replies?", "RoBERTa-large: +2.9 pp top-1 on the test split", "Swapped RoBERTa-large into the final pipeline (same 300 conversations)", "No reply-quality measure improved (all rules p=0.16, WASSA p=0.43, validation p=0.68); not adopted"],
         ["A9", "Repetition in Phi replies", "Boilerplate 58.7% (two-stage)", "Deferred: repetition_penalty 1.1", "Future work - would invalidate in-progress judging"],
     ], columns=["ID", "Problem found", "Evidence", "Adjustment", "Measured effect"])
     save("ch5_2b", "design_adjustment_log", adjustments, "Design adjustment log", "result files referenced in each row")
@@ -736,6 +941,8 @@ def main():
     build_length_relationship(per_reply)
     build_rag_table(summary)
     build_judges()
+    build_wassa_validity()
+    build_detector_sensitivity()
     build_human_eval_placeholder()
     build_literature()
     build_project_tables()

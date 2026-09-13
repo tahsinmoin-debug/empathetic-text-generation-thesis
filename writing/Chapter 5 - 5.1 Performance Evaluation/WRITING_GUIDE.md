@@ -57,7 +57,7 @@ Table 5.1 and Figure 5.1 report how often each system's reply acknowledges the u
 
 ### 5.1.4 Empathy Classifier Score
 
-Figure 5.2 shows WASSA empathy scores with 95% confidence intervals. The final system scores **5.05**, the highest of all systems at or below Phi-4-mini's size and above the same-size single model (4.84), the initial pipeline (4.80), zero-shot (4.25) and the fine-tuned model (4.19). Gemma-3-4B (5.30) and the larger single model (5.76) score higher. Section 5.4 shows that Gemma's advantage is explained by reply length. Absolute WASSA values fall in a narrow band, because the classifier was trained on reaction essays rather than chat replies, so we interpret differences between systems rather than the scale itself.
+Figure 5.2 shows WASSA empathy scores with 95% confidence intervals. The final system scores **5.05**, the highest of all systems at or below Phi-4-mini's size and above the same-size single model (4.84), the initial pipeline (4.80), zero-shot (4.25) and the fine-tuned model (4.19). Gemma-3-4B (5.30) and the larger single model (5.76) score higher. Section 5.4 shows that Gemma's advantage is explained by reply length. The classifier outputs coarse ordinal classes (our replies fall in classes 1-7) and was trained on empathy ratings of turns in peer discussions of news articles, so we interpret differences between system averages rather than absolute values. Section 5.3.6 shows it ranks systems exactly as the AI judges do.
 
 [Figure: fig_wassa_empathy_ci.png] [Table: wassa_empathy_all_systems.csv]
 
@@ -81,7 +81,7 @@ Table 5.6 reports distinct-n diversity and a boilerplate rate: the share of repl
 
 ### 5.1.8 AI-Judge Evaluation
 
-Three AI judges, Nemotron 3 Ultra, Mistral Large and gpt-oss-120b, score each reply blind from 1 to 10 for empathy, relevance and safety, on a stratified sample of 64 conversations (two per emotion, the shortest and longest message). Table 5.7 reports the results. Among the systems already judged, the larger single model has the highest average (9.02), followed by the same-size single model (8.38), the initial pipeline (8.23), zero-shot (7.73) and the fine-tuned model (4.44). [[PENDING: final system and top-1 Phi configuration averages; one sentence on where the final system ranks and whether its empathy dimension differs from relevance and safety.]]
+Three AI judges, Nemotron 3 Ultra, Mistral Large and gpt-oss-120b (selection rationale in Section 4.1.5.1), score each reply blind from 1 to 10 for empathy, relevance and safety, on a stratified sample of 64 conversations (two per emotion, the shortest and longest message). Table 5.7 reports the results. Among the systems already judged, the larger single model has the highest average (9.02), followed by the same-size single model (8.38), the initial pipeline (8.23), zero-shot (7.73) and the fine-tuned model (4.44). [[PENDING: final system and top-1 Phi configuration averages; one sentence on where the final system ranks and whether its empathy dimension differs from relevance and safety.]]
 
 [Table: ai_judge_scores.csv] [Table: ai_judge_per_dimension.csv]
 

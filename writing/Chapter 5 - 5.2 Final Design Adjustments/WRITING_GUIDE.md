@@ -62,7 +62,7 @@ A web demonstration of the agent was prepared for Hugging Face Spaces, with disc
 
 ### 5.2.5 Rejected and Deferred Adjustments
 
-Not every candidate adjustment was adopted. **Retrieval augmentation (A8)**, suggested by the Pre-Thesis 2 panel, reduced all-rules adherence from 63.7% to 43.7% and was rejected (Section 5.2). Two further adjustments were **deferred to future work**. A repetition penalty (A9) could reduce the final system's boilerplate rate of 58.7%, but regenerating the final outputs would have invalidated AI-judge scores already being collected. A pre-generation crisis filter is needed before any public deployment (Section 3.4).
+Not every candidate adjustment was adopted. **Retrieval augmentation (A8)**, suggested by the Pre-Thesis 2 panel, reduced all-rules adherence from 63.7% to 43.7% and was rejected (Section 5.2). **A larger detector (A10)** was also tested: RoBERTa-large is 2.9 points more accurate on the test split, but swapped into the final pipeline it improved no reply-quality measure (all rules 60.0% to 54.7%, p = 0.16; WASSA 5.05 to 5.01, p = 0.43; emotion validation 36.7% to 38.0%, p = 0.68), so RoBERTa-base was kept and the conversational agent was not changed. Two further adjustments were **deferred to future work**. A repetition penalty (A9) could reduce the final system's boilerplate rate of 58.7%, but regenerating the final outputs would have invalidated AI-judge scores already being collected. A pre-generation crisis filter is needed before any public deployment (Section 3.4).
 
 ---
 

@@ -12,7 +12,8 @@ Two jobs. **(a) Compare against published work** on EmpatheticDialogues, honestl
 |---|---|
 | `tables/emotion_accuracy_vs_literature.csv` | Detector vs published ED emotion accuracy |
 | `tables/human_empathy_vs_literature.csv` | Human-evaluation protocols and results in the literature (our row pending) |
-| `tables/controlled_d1_swap_same_d2.csv` | Relationship: detector accuracy → reply quality |
+| `tables/controlled_d1_swap_same_d2.csv` | Relationship: detector accuracy → reply quality (initial pipeline) |
+| `tables/detector_sensitivity_robertalarge.csv` | Same relationship tested in the final system |
 | `tables/error_propagation.csv` | Relationship: label correctness → reply quality |
 | `tables/length_vs_wassa_correlation.csv` | Relationship: reply length → WASSA |
 | `tables/gemma_length_band_analysis.csv`, `figures/fig_wassa_by_length_band.png` | Length-matched comparison |
@@ -52,7 +53,9 @@ Human evaluation offers a qualitative comparison of direction. In the literature
 
 Detection accuracy and reply quality are only weakly related in this system. In the controlled comparison, where the generator (Qwen2.5-1.5B), prompt and conversations are held fixed and only the detector changes from GPT-2 (48.2% on real input) to RoBERTa (50.3%), neither emotion validation (26.0% vs 25.3%, p = 0.91) nor rule adherence (63.7% vs 57.7%, p = 0.09) improves. Within a single pipeline, replies built on a wrong emotion label follow the rules as often as those built on a correct label, and are rated as empathetic (Section 5.3.3). The replies are robust to label errors partly because most errors are between neighbouring emotions (5.4.6), whose appropriate responses are similar. By contrast, **how the emotion is used** matters. With the same detector and generator, emotion-specific two-stage prompting raises emotion validation by 8.3 points. Conditioning a small detector's output well matters more than squeezing out more detection accuracy.
 
-[Table: controlled_d1_swap_same_d2.csv] [Table: error_propagation.csv]
+The same relationship holds in the final system. Replacing RoBERTa-base with RoBERTa-large raised detector accuracy on the evaluation conversations from 50.3% to 53.3%, but the stage-1 pick changed in only 31% of conversations, and rule adherence, WASSA empathy and emotion validation did not change significantly (Table 5.x). Across three independent tests (label errors, a GPT-2 to RoBERTa swap and a RoBERTa-base to RoBERTa-large swap), gains in detection accuracy of 2-3 points never translated into better replies.
+
+[Table: controlled_d1_swap_same_d2.csv] [Table: error_propagation.csv] [Table: detector_sensitivity_robertalarge.csv]
 
 ### 5.4.4 Relationship between Reply Length and Measured Empathy
 

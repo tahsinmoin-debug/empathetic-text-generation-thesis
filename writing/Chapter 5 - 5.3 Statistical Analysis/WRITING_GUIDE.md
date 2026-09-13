@@ -17,7 +17,9 @@ Establish which differences reported in 5.1 and 5.2 are **real** and which could
 | `tables/length_vs_wassa_correlation.csv` | Spearman correlation of reply length with WASSA |
 | `tables/initial_pipeline_significance_incl_judges.csv` | Earlier tests, including the AI-judge overall score |
 | `tables/ai_judge_scores.csv` | Judge averages (final rows pending) |
-| `tables/ai_judge_agreement_PENDING.csv` | Inter-judge agreement, to compute |
+| `tables/detector_sensitivity_robertalarge.csv` | RoBERTa-large swapped into the final pipeline (5.3.3) |
+| `tables/wassa_validity.csv` | How far the WASSA classifier can be trusted (5.3.6) |
+| `tables/ai_judge_agreement.csv` | Inter-judge agreement for systems judged so far (5.3.7) |
 | `figures/fig_wassa_empathy_ci.png` | Confidence intervals, visual |
 
 ## Checklist
@@ -27,9 +29,10 @@ Establish which differences reported in 5.1 and 5.2 are **real** and which could
 - [ ] 5.3.3 Is the detector the bottleneck? (error propagation + backbone tests)
 - [ ] 5.3.4 Stage-1 emotion pick
 - [ ] 5.3.5 Confounding by reply length
-- [ ] 5.3.6 AI-judge reliability and agreement `[[PENDING]]`
-- [ ] 5.3.7 Human evaluation statistics `[[PENDING]]`
-- [ ] 5.3.8 Limitations of the analysis
+- [ ] 5.3.6 Validity of the WASSA classifier
+- [ ] 5.3.7 AI-judge reliability and agreement (final-system rows `[[PENDING]]`)
+- [ ] 5.3.8 Human evaluation statistics `[[PENDING]]`
+- [ ] 5.3.9 Limitations of the analysis
 
 ---
 
@@ -53,9 +56,9 @@ Table 5.x reports all comparisons. Three patterns emerge.
 
 ### 5.3.3 Is the Detector the Bottleneck?
 
-Two analyses test whether detection errors limit response quality. First, **error propagation**: we split each pipeline's replies by whether the detector's emotion matched the gold label and compare the groups (Table 5.x). In no pipeline does a wrong label significantly reduce rule adherence (for example, initial pipeline 61.2% when right vs 66.0% when wrong, p = 0.40; final system p = 0.096). For the initial pipeline, the one pipeline where WASSA was split this way, it does not reduce WASSA empathy either (4.83 vs 4.78, p = 0.72). Second, a **controlled detector swap**: keeping the generator fixed (Qwen2.5-1.5B) and replacing the GPT-2 detector with the more accurate RoBERTa detector changes neither emotion validation (25.3% vs 26.0%, p = 0.91) nor rule adherence (57.7% vs 63.7%, p = 0.09). By contrast, the detector backbones themselves do differ significantly: RoBERTa-large beats RoBERTa-base on top-1 (+2.9 points, p = 0.0002), and RoBERTa-base beats BERT and ELECTRA on top-5 (p <= 0.0001). Together these results indicate that, within the accuracy range studied, **detection accuracy is not the factor limiting reply quality**.
+Two analyses test whether detection errors limit response quality. First, **error propagation**: we split each pipeline's replies by whether the detector's emotion matched the gold label and compare the groups (Table 5.x). In no pipeline does a wrong label significantly reduce rule adherence (for example, initial pipeline 61.2% when right vs 66.0% when wrong, p = 0.40; final system p = 0.096). For the initial pipeline, the one pipeline where WASSA was split this way, it does not reduce WASSA empathy either (4.83 vs 4.78, p = 0.72). Second, a **controlled detector swap**: keeping the generator fixed (Qwen2.5-1.5B) and replacing the GPT-2 detector with the more accurate RoBERTa detector changes neither emotion validation (25.3% vs 26.0%, p = 0.91) nor rule adherence (57.7% vs 63.7%, p = 0.09). By contrast, the detector backbones themselves do differ significantly: RoBERTa-large beats RoBERTa-base on top-1 (+2.9 points, p = 0.0002), and RoBERTa-base beats BERT and ELECTRA on top-5 (p <= 0.0001). Third, and most directly, we **swapped RoBERTa-large into the final system** and regenerated the same 300 conversations, changing nothing else (Table 5.x). The larger detector was 3.0 points more accurate on these conversations (53.3% vs 50.3%, p = 0.21), but no reply-quality measure improved: all rules 60.0% vs 54.7% (Holm-adjusted p = 0.60), WASSA 5.05 vs 5.01 (p = 0.85), emotion validation 36.7% vs 38.0% (p = 0.85) and one question 92.7% vs 95.7% (p = 0.60). Acknowledgement was nominally lower with the larger detector (66.3% vs 57.7%, unadjusted p = 0.012) but not significantly after correction (p = 0.06). Together these results indicate that **detection accuracy is not the factor limiting reply quality**, which justifies the smaller detector.
 
-[Table: error_propagation.csv] [Table: d1_backbone_significance.csv]
+[Table: error_propagation.csv] [Table: d1_backbone_significance.csv] [Table: detector_sensitivity_robertalarge.csv]
 
 ### 5.3.4 The Stage-1 Emotion Pick
 
@@ -69,15 +72,25 @@ WASSA scores correlate positively with reply length within every system (Spearma
 
 [Table: length_vs_wassa_correlation.csv]
 
-### 5.3.6 AI-Judge Reliability and Agreement
+### 5.3.6 Validity of the WASSA Classifier
 
-For the systems judged before the final design, the initial pipeline's AI-judge overall score (8.23) was significantly higher than zero-shot (7.73; Wilcoxon p = 0.0004) and the fine-tuned model (4.44; p < 0.001), not significantly different from the same-size single model (8.38; p = 0.21), and significantly lower than the larger single model (9.02; p < 0.001), on 64 conversations (Table 5.x). [[PENDING: (1) the same tests for the final system once its scores return; (2) per-example Spearman correlation between each pair of judges; (3) judge averages after z-score normalisation per judge, to rule out a lenient or harsh judge driving the ranking.]]
+Because WASSA scores support several claims, we checked how far they can be trusted, on the 320 replies that were also scored by all three AI judges (Table 5.x). At the **system level**, WASSA ranks the five systems in exactly the same order as the judges' mean empathy score (Spearman rho = 1.00). At the **reply level**, agreement is moderate (rho = 0.41, p < 0.001) and remains after controlling for reply length (partial rho = 0.45). This shows the agreement is not merely a shared preference for longer replies. **Within a single system**, however, agreement is weak (rho = 0.13 to 0.24, none significant), compared with 0.75 to 0.79 between the judges themselves. We therefore use WASSA only to compare system averages over 300 conversations, the purpose for which this evidence supports it, and never to judge individual replies. The model's provenance (an ACL 2024 shared-task system trained on human ratings of conversation turns, r = .544 against humans) and its limitations are listed in the same table.
 
-### 5.3.7 Human Evaluation Statistics
+[Table: wassa_validity.csv]
+
+### 5.3.7 AI-Judge Reliability and Agreement
+
+For the systems judged before the final design, the initial pipeline's AI-judge overall score (8.23) was significantly higher than zero-shot (7.73; Wilcoxon p = 0.0004) and the fine-tuned model (4.44; p < 0.001), not significantly different from the same-size single model (8.38; p = 0.21), and significantly lower than the larger single model (9.02; p < 0.001), on 64 conversations (Table 5.x).
+
+The three judges agree closely with each other (Table 5.x). Per-reply Spearman correlations between pairs of judges are 0.75-0.79 for empathy and 0.78-0.80 for the overall score across 320 replies, and 0.57-0.63 when the clearly broken fine-tuned system is excluded. All three judges rank the five systems in the same order, and the ranking is unchanged after z-scoring each judge's scores, so no single lenient or harsh judge drives the result. [[PENDING: the same agreement statistics and significance tests including the final system, once its scores are merged and the table script is re-run.]]
+
+[Table: ai_judge_agreement.csv]
+
+### 5.3.8 Human Evaluation Statistics
 
 [[PENDING: (1) exclusions from attention checks; (2) selection rate per system with a two-sided binomial test against 1/3; (3) per-rater paired comparison of how often the final system was chosen over each baseline, using the Wilcoxon signed-rank test; (4) Fleiss' kappa for agreement between raters; (5) share of items where the human majority choice equals the AI judges' top-scored system.]]
 
-### 5.3.8 Limitations of the Analysis
+### 5.3.9 Limitations of the Analysis
 
 The generation sample has 300 conversations, which detects differences of a few percentage points on binary metrics but may miss smaller effects. The AI-judge comparisons use 64 conversations and are correspondingly less powerful. Emotion validation relies on our own detector reading replies it was not trained on. Holm correction was applied within each metric family, not across all metrics, and the choice of seven baselines as one family is a design decision that we report explicitly.
 

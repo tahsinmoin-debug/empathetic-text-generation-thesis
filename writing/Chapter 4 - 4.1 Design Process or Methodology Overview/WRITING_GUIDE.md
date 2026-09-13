@@ -13,6 +13,9 @@ Explain *how* the solution was designed, step by step, before 4.2 describes *wha
 | `figures/fig_design_process.png` | Design-process flow with the iteration loop (Figure 4.1) |
 | `figures/fig_final_architecture.png` | Final system overview (Figure 4.2; may instead open 4.2) |
 | `tables/tools_and_versions.csv` | Implementation environment (one short table or one paragraph) |
+| `tables/ai_judge_panel.csv` | The three AI judges (4.1.5.1) |
+| `tables/ai_judge_selection_criteria.csv` | Why these judges, with evidence (4.1.5.1) |
+| `tables/wassa_validity.csv` | Why the WASSA classifier is used and how far it can be trusted (4.1.5.2) |
 
 ## Checklist
 
@@ -50,6 +53,18 @@ Only the detector is trained. d1 candidates are fully fine-tuned with cross-entr
 ### 4.1.5 Model Evaluation and Interpretation
 
 No single automatic metric captures empathy, so each design is evaluated with **five independent signals**: (1) rule adherence, measuring whether a reply acknowledges the feeling, asks exactly one question and stays within 120 words; (2) the WASSA 2024 empathy classifier; (3) emotion validation, measuring whether the emotion expressed in the reply matches the true label as read by the final detector; (4) a blind panel of three AI judges from different providers scoring empathy, relevance and safety; and (5) a human forced-choice study. Detector candidates are evaluated with top-1, top-5 and macro-F1 on the full test split. Because all systems answer the same conversations, differences are tested with paired tests (McNemar's exact test for binary outcomes, the Wilcoxon signed-rank test for scores), 10,000-sample bootstrap confidence intervals and Holm correction for multiple comparisons. A difference is called significant only when the corrected p-value is below 0.05 and the confidence interval excludes zero. We additionally analyse error propagation, meaning whether a wrong detector label damages the final reply, to establish which component limits overall quality.
+
+#### 4.1.5.1 Selection of the AI-Judge Panel
+
+Using language models as evaluators is established practice: strong LLM judges agree with human preferences more than 80% of the time [[CITE: Zheng et al., 2023, Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena, NeurIPS]]. They also carry known biases, and the panel was designed around them. First, **LLM evaluators recognise and favour their own generations** [[CITE: Panickssery, Bowman and Feng, 2024, LLM Evaluators Recognize and Favor Their Own Generations, NeurIPS]]. We therefore chose judges from three developers with no relation to the models being evaluated: **Nemotron 3 Ultra** (NVIDIA, 550B-parameter mixture-of-experts), **Mistral Large** (Mistral AI) and **gpt-oss-120b** (OpenAI, open weights). None shares a model family with our generator (Phi-4-mini, Microsoft) or our baselines (Qwen, Alibaba). Second, **a panel of judges from disjoint model families shows less intra-model bias than a single large judge** [[CITE: Verga et al., 2024, Replacing Judges with Juries, arXiv 2404.18796]], so we average three judges rather than relying on one. Third, following the co-supervisor's requirement, all judges are flagship-tier; smaller local judges considered earlier were dropped. Each judge sees only the user's message and one reply, never the system's name or the gold reply, and scores empathy, relevance and safety from 1 to 10 against explicit anchors (1-3, 4-6, 7-10) at temperature 0. All three were accessible through free API tiers, so non-GPU team members could run the evaluation. Earlier candidates were replaced when they became unavailable (Gemini quota failures, the retirement of DeepSeek on GitHub Models and of Llama 3.3 on Groq); valid scores collected before a retirement were kept. Table 4.x lists the panel and Table 4.x the selection criteria.
+
+[Table: ai_judge_panel.csv] [Table: ai_judge_selection_criteria.csv]
+
+#### 4.1.5.2 Use of the WASSA Empathy Classifier
+
+As a signal independent of both our rules and the AI judges, we use the hyy33 system from the WASSA 2024 shared task, held at ACL 2024 [[CITE: hyy33 at WASSA 2024, ACL Anthology 2024.wassa-1.39]]. It suits this project for three reasons. It was trained on **third-party human ratings of empathy for individual conversation turns**, the same unit as our replies. It is a peer-reviewed, publicly released system whose predictions correlate with human empathy ratings at r = .544 on the task's test set. And it comes from a different model family, dataset and organisation than any component of our system, so it cannot favour our pipeline. Its limits are stated alongside: it was not the most accurate empathy predictor in its own task (the organisers' RoBERTa baseline reached r = .694), its training dialogues are peer discussions of news articles rather than supportive replies, and it outputs coarse ordinal classes. Section 5.3 shows that on our data it reproduces the AI judges' ranking of systems exactly but is too noisy to rank individual replies, so it is used **only to compare system averages** over 300 conversations.
+
+[Table: wassa_validity.csv]
 
 ### 4.1.6 Implementation Environment
 

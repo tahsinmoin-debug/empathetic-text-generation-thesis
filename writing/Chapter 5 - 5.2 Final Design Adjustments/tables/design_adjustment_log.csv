@@ -7,4 +7,5 @@ A5,Attention mechanism in original design not implemented,Default attention back
 A6,Single message misread in conversation,"'I am okay. Well, not properly.' read as content (72%)",d1 reads last 4 user turns,Correctly read as angry with context
 A7,Fixed one-question rule becomes interrogation over many turns,Rule designed for single turn,Question optional from turn 2; no repeated phrasing,Keeps turn-1 comparability
 A8,RAG suggested by P2 panel,All rules 63.7% -> 43.7%,Not adopted,Documented negative result
+A10,Could a larger detector improve replies?,RoBERTa-large: +2.9 pp top-1 on the test split,Swapped RoBERTa-large into the final pipeline (same 300 conversations),"No reply-quality measure improved (all rules p=0.16, WASSA p=0.43, validation p=0.68); not adopted"
 A9,Repetition in Phi replies,Boilerplate 58.7% (two-stage),Deferred: repetition_penalty 1.1,Future work - would invalidate in-progress judging
