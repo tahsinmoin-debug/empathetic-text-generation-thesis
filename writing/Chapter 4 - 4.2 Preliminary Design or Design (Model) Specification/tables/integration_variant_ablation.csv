@@ -1,0 +1,5 @@
+Variant,Ack%,OneQ%,LenOK%,AllRules%,LowConfHedge%
+argmax - top-1 emotion only (adopted),70.3,87.3,100.0,63.7,-
+confidence-gated - hedge when d1 is unsure,71.0,88.3,100.0,63.3,28.7
+distribution - list all emotions above p=0.05,72.7,83.7,100.0,62.0,-
+candidate-pick - d2 chooses AND generates in one pass,65.3,82.7,100.0,54.0,-

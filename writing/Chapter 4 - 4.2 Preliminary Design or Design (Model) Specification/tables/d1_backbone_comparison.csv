@@ -1,0 +1,5 @@
+Backbone,Parameters (M),Learning rate,Batch size,Top-1 acc (%),Top-5 acc (%),Macro-F1 (%),Train time (min)
+bert-base-uncased,110,2e-05,8,48.8,81.7,47.9,8.6
+google/electra-base-discriminator,110,2e-05,8,50.2,82.7,48.9,8.7
+roberta-base,125,2e-05,8,50.1,85.0,49.1,8.8
+roberta-large,355,1e-05,4,53.0,87.2,52.4,64.7

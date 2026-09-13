@@ -1,0 +1,17 @@
+Purpose,Tool,Version
+Language,Python,3.10.9
+Deep learning,PyTorch (CUDA 12.1),2.5.1
+Models and training,Hugging Face Transformers,5.16.1
+Parameter-efficient tuning,PEFT,0.18.1
+Quantisation,bitsandbytes (4-bit NF4),0.49.2
+Training utilities,Accelerate / Datasets,1.13.0 / 4.8.5
+Statistics,SciPy / scikit-learn,1.15.3 / 1.7.2
+Data handling,pandas / NumPy,2.3.3 / 2.2.6
+Retrieval,sentence-transformers,5.7.0
+Evaluation,bert-score,0.3.13
+AI-judge APIs,"openai SDK (OpenRouter), groq SDK, Mistral API",2.53.0 / 1.6.0 / -
+Demo interface,Gradio on Hugging Face Spaces,5.9.1 (planned)
+Human evaluation,Google Forms,-
+Documents,"python-docx, Microsoft Word",1.2.0
+Version control,Git,-
+Hardware,"NVIDIA RTX 4060 8 GB, 16 GB RAM, Windows 11 Pro",driver 616.56

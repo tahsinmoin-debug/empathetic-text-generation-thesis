@@ -1,0 +1,13 @@
+True emotion,Predicted as,Count,Share of all errors (%)
+sentimental,nostalgic,31,2.5
+afraid,terrified,29,2.3
+angry,furious,24,1.9
+sad,devastated,23,1.8
+prepared,confident,20,1.6
+ashamed,guilty,19,1.5
+apprehensive,anxious,18,1.4
+anticipating,excited,16,1.3
+terrified,afraid,16,1.3
+impressed,proud,14,1.1
+angry,annoyed,14,1.1
+hopeful,confident,14,1.1

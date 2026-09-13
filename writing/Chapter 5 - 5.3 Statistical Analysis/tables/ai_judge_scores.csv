@@ -1,0 +1,8 @@
+Setting,Nemotron 3 Ultra,Mistral Large,gpt-oss-120b,LLM-judge average,Agreement (std dev)
+Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,7.78,8.61,8.29,8.23,0.42
+"Single model, same size: Qwen2.5-1.5B detects + responds",8.02,8.67,8.46,8.38,0.33
+"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",8.87,9.28,8.92,9.02,0.22
+"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",6.79,8.18,8.23,7.73,0.82
+Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),3.21,4.42,5.68,4.44,1.23
+FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]]
+RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]]

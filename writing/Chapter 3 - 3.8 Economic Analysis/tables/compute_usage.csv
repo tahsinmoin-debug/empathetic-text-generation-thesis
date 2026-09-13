@@ -1,0 +1,8 @@
+Task,Hardware,Wall-clock minutes,Status
+d1 RoBERTa-base training,RTX 4060 8 GB,8.8,recorded (d1 comparison run)
+d1 BERT-base training,RTX 4060 8 GB,8.6,recorded
+d1 ELECTRA-base training,RTX 4060 8 GB,8.7,recorded
+d1 RoBERTa-large training,RTX 4060 8 GB,64.7,recorded
+"Response generation, 300 conversations per system (x11 systems)",RTX 4060 8 GB,[[TEAM TO FILL - not logged]],not recorded
+AI judging (3 judges),"Cloud API, free tier",network time only,free tier
+"WASSA scoring, 3,300 replies",RTX 4060 / CPU,[[TEAM TO FILL]],not recorded

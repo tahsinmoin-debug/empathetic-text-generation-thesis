@@ -1,0 +1,15 @@
+Metric,Final system
+Setting ID,two_stage_phi
+System,FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt
+Ack (%),66.33
+One question (%),92.67
+Length OK (%),100.0
+All rules (%),60.0
+Mean words,57.11
+Questions / reply,1.06
+>1 question (%),6.67
+WASSA empathy (0-10),5.05
+WASSA SD,1.16
+Emotion validation (%),36.67
+Context awareness (%),54.333333333333336
+N,300

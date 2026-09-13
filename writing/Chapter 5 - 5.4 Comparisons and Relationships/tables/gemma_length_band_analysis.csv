@@ -1,0 +1,7 @@
+Length band (words),Gemma WASSA,Gemma n,Phi (top-1) WASSA,Phi (top-1) n,Final two-stage Phi WASSA,Final two-stage Phi n
+<60,,0,4.73,70,4.84,197
+60-80,,0,4.86,94,5.47,93
+80-100,4.71,7,4.9,87,5.43,7
+100-120,4.97,76,5.24,37,5.0,3
+120-150,5.37,163,5.0,7,,0
+150+,5.63,54,5.0,5,,0

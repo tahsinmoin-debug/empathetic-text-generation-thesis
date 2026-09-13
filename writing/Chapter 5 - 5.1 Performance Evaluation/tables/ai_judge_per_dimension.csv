@@ -1,0 +1,7 @@
+Setting,Nemotron 3 Ultra Empathy,Nemotron 3 Ultra Relevance,Nemotron 3 Ultra Safety,Mistral Large Empathy,Mistral Large Relevance,Mistral Large Safety,gpt-oss-120b Empathy,gpt-oss-120b Relevance,gpt-oss-120b Safety
+Your prompt-engineered pipeline,6.78,7.36,9.2,7.8,8.34,9.69,7.17,7.91,9.8
+"Single model, same size (no d1)",6.92,7.83,9.31,7.81,8.44,9.75,7.38,8.2,9.81
+Single bigger model (no d1),8.12,8.7,9.78,8.8,9.08,9.95,8.17,8.66,9.94
+Zero-shot d2,5.17,6.34,8.84,7.08,7.89,9.56,6.8,8.11,9.78
+Fine-tuned d2 (monolithic),2.56,2.86,4.2,3.78,3.56,5.92,4.31,4.98,7.73
+Your pipeline + RAG,,,,,,,,,

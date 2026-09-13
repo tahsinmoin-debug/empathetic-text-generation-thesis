@@ -1,0 +1,18 @@
+Component,Setting,Value,Justification
+d1,Backbone,RoBERTa-base (125M),Top-5 significantly above BERT/ELECTRA at equal top-1; pipeline uses top-3
+d1,Input text,"First user utterance, max 128 tokens",Matches inference-time input (fixes mismatch)
+d1,Learning rate / epochs,"2e-5 / 4 (early stopping, patience 1)",Standard BERT-family fine-tuning range
+d1,Batch,8 x 2 accumulation = 16,Fits 8 GB VRAM
+d1,Warmup / weight decay / grad clip,0.06 / 0.01 / 1.0,Warmup 0.06 from RoBERTa paper; prevents large-model divergence
+"d1 (large, comparison only)",Learning rate / batch,1e-5 / 4,Base settings diverged
+Two-stage,Candidates passed to d2,Top-3,Gold in top-3 76.5% vs top-1 50.3%
+Two-stage,Stage-1 decoding,"Greedy, max 10 tokens","Classification decision, deterministic"
+d2,Model,"Phi-4-mini-instruct, 4-bit NF4, double quant, fp16 compute",Best rule adherence in bake-off; fits 8 GB
+d2,Sampling,"temperature 0.7, top-p 0.9, max 250 new tokens, seed 42",Same across every generation experiment for fairness
+d2,Prompt,"Per-emotion focus/avoid guidance (32) + 3 rules + attention cues, <= 100 words",Rules scored at 120 words (scorer tolerance)
+Attention cues,Source / amount,"d1 last-layer [CLS] attention, top 40% tokens, word-boundary expanded",Eager attention required
+Conversational agent,d1 history window,Last 4 user turns,Best or tied-best in 3 of 4 long scenarios; 6 turns degraded
+Conversational agent,d2 history window,"Last 10 exchanges, verbatim",Avoids repetition; no lossy summarisation
+AI judges,Decoding,"temperature 0, JSON output",Deterministic scoring
+Evaluation,Sample,300 test conversations (seed 42); judges: 64 stratified (2 per emotion),Same sample for every system
+Statistics,Tests,"McNemar exact, Wilcoxon, 10k paired bootstrap, Holm correction",Paired data; binary vs continuous metrics

@@ -1,0 +1,12 @@
+setting,metric,n_d1_correct,n_d1_wrong,mean_when_d1_correct,mean_when_d1_wrong,diff,ci_95_low,ci_95_high,test,p_value,significant_damage
+prompt_engineered_pipeline,rule_adherence_all_rules,147,153,0.6122,0.6601,-0.0479,-0.1546,0.0596,Fisher exact,0.403,False
+prompt_engineered_pipeline,wassa_empathy_0_10,147,153,4.8299,4.7778,0.0522,-0.2448,0.3537,Mann-Whitney U,0.7241,False
+prompt_engineered_pipeline,validation_match_vs_gold,147,153,0.381,0.1438,0.2372,0.1422,0.3319,Fisher exact,0.0,True
+bakeoff_qwen,rule_adherence_all_rules,151,149,0.6026,0.5503,0.0523,-0.0606,0.1655,Fisher exact,0.4135,False
+bakeoff_qwen,validation_match_vs_gold,151,149,0.3841,0.1208,0.2633,0.1701,0.3565,Fisher exact,0.0,True
+bakeoff_phi,rule_adherence_all_rules,151,149,0.6358,0.6711,-0.0354,-0.1421,0.0716,Fisher exact,0.5457,False
+bakeoff_phi,validation_match_vs_gold,151,149,0.4636,0.1007,0.3629,0.2696,0.4496,Fisher exact,0.0,True
+two_stage_qwen,rule_adherence_all_rules,110,190,0.3364,0.3842,-0.0478,-0.1598,0.0641,Fisher exact,0.4564,False
+two_stage_qwen,validation_match_vs_gold,110,190,0.4545,0.1632,0.2914,0.1847,0.3967,Fisher exact,0.0,True
+two_stage_phi,rule_adherence_all_rules,127,173,0.5433,0.6416,-0.0983,-0.2117,0.0114,Fisher exact,0.0956,False
+two_stage_phi,validation_match_vs_gold,127,173,0.6535,0.1561,0.4975,0.3967,0.5946,Fisher exact,0.0,True

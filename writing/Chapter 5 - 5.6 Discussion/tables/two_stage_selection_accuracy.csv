@@ -1,0 +1,10 @@
+Quantity,Value
+Stage-1 reply parsed to a valid candidate,100.0%
+True emotion inside d1's top-3,78.0%
+d1 top-1 equals true emotion,50.3%
+d2's pick equals true emotion,42.3%
+d2 overrode d1's top-1,40.7%
+Cases only d1 top-1 was right / only d2 pick was right,46 / 22
+"Pick minus top-1 accuracy, 95% bootstrap CI","-8.0% [-13.3%, -2.7%]"
+McNemar exact p (pick vs top-1),0.0049
+N,300

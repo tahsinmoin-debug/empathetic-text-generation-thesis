@@ -1,0 +1,13 @@
+comparison,metric,n,pipeline_mean,baseline_mean,diff,ci_95_low,ci_95_high,test,p_value,significant
+pipeline vs zero_shot,rule_adherence_all_rules_rate,300,0.6367,0.19,0.4467,0.3799,0.5133,McNemar exact,0.0,True
+pipeline vs zero_shot,wassa_empathy_0_10,300,4.8033,4.25,0.5533,0.4067,0.7033,Wilcoxon signed-rank,0.0,True
+pipeline vs zero_shot,ai_judge_overall_1_10,64,8.2274,7.7309,0.4965,0.2309,0.7569,Wilcoxon signed-rank,0.0004,True
+pipeline vs fine_tuned,rule_adherence_all_rules_rate,300,0.6367,0.0,0.6367,0.58,0.69,McNemar exact,0.0,True
+pipeline vs fine_tuned,wassa_empathy_0_10,300,4.8033,4.1933,0.61,0.46,0.76,Wilcoxon signed-rank,0.0,True
+pipeline vs fine_tuned,ai_judge_overall_1_10,64,8.2274,4.4358,3.7917,3.5156,4.066,Wilcoxon signed-rank,0.0,True
+pipeline vs single_model_same_size,rule_adherence_all_rules_rate,300,0.6367,0.5133,0.1233,0.0467,0.2,McNemar exact,0.002,True
+pipeline vs single_model_same_size,wassa_empathy_0_10,300,4.8033,4.84,-0.0367,-0.1734,0.1067,Wilcoxon signed-rank,0.6894,False
+pipeline vs single_model_same_size,ai_judge_overall_1_10,64,8.2274,8.3837,-0.1562,-0.4392,0.1302,Wilcoxon signed-rank,0.2056,False
+pipeline vs single_model_bigger,rule_adherence_all_rules_rate,300,0.6367,0.8233,-0.1867,-0.2567,-0.12,McNemar exact,0.0,True
+pipeline vs single_model_bigger,wassa_empathy_0_10,300,4.8033,5.7633,-0.96,-1.0933,-0.8267,Wilcoxon signed-rank,0.0,True
+pipeline vs single_model_bigger,ai_judge_overall_1_10,64,8.2274,9.0226,-0.7951,-1.0347,-0.5712,Wilcoxon signed-rank,0.0,True
