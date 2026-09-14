@@ -1,0 +1,3 @@
+Detector,Parameters (M),Training time (min),Top-1 on test (%),Top-5 on test (%),Final system: all rules (%),Final system: WASSA,Final system: emotion validation (%)
+roberta-base,125,8.8,50.1,85.0,60.0,5.05,36.7
+roberta-large,355,64.7,53.0,87.2,54.7,5.01,38.0

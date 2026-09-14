@@ -786,6 +786,58 @@ def build_detector_sensitivity():
              note)
 
 
+# Nominal parameter counts from the model cards (billions).
+PARAMS_B = {"single_model_same_size": 1.54, FINAL: 0.125 + 3.84, "single_model_bigger": 7.62}
+
+
+def build_parameter_efficiency(per_reply):
+    """Quality per parameter: final system vs single models, and detector size vs reply quality."""
+    judges = load_judges(PANEL)
+    for dim in ("empathy", "overall"):
+        judges[dim] = panel_mean(judges, PANEL, dim)
+    rows = {}
+    for s in ("single_model_same_size", FINAL, "single_model_bigger"):
+        d = per_reply[per_reply.setting == s]
+        j = judges[judges.setting == s]
+        rows[s] = {"System": LABEL[s], "Parameters (B)": round(PARAMS_B[s], 2),
+                   "All rules (%)": round(d["all_rules"].mean() * 100, 1),
+                   "WASSA empathy": round(d["wassa_empathy_0_10"].mean(), 2),
+                   "Emotion validation (%)": round(d["validation_match"].mean() * 100, 1),
+                   "AI-judge empathy": round(j["empathy"].mean(), 2),
+                   "AI-judge overall": round(j["overall"].mean(), 2)}
+    table = pd.DataFrame(rows.values())
+    f, b = rows[FINAL], rows["single_model_bigger"]
+    ratio = {"System": "Final system as % of Qwen2.5-7B"}
+    for c in list(f)[1:]:
+        ratio[c] = f"{f[c] / b[c] * 100:.1f}%"
+    table = pd.concat([table, pd.DataFrame([ratio])], ignore_index=True)
+    save("ch5_4", "parameter_efficiency_systems", table,
+         "Parameter efficiency: reply quality against total parameters",
+         "computed from per-reply result files and the two-judge panel by this script",
+         "Parameters are nominal model-card counts (final system = RoBERTa-base 0.125B + Phi-4-mini 3.84B). "
+         "AI-judge scores on the 64-conversation subset; other measures on 300 conversations. Significance of each "
+         "difference: Tables 5.13 and 5.19.")
+
+    backbone = pd.read_csv(W / SECTIONS["ch4_2"] / "tables" / "d1_backbone_comparison.csv").set_index("Backbone")
+    sens = pd.read_csv(W / SECTIONS["ch5_3"] / "tables" / "detector_sensitivity_robertalarge.csv").set_index("Measure")
+    wassa_key = [m for m in sens.index if m.startswith("WASSA")][0]
+    det = []
+    for name, col in (("roberta-base", "RoBERTa-base d1 (%)"), ("roberta-large", "RoBERTa-large d1 (%)")):
+        det.append({"Detector": name, "Parameters (M)": int(backbone.loc[name, "Parameters (M)"]),
+                    "Training time (min)": backbone.loc[name, "Train time (min)"],
+                    "Top-1 on test (%)": backbone.loc[name, "Top-1 acc (%)"],
+                    "Top-5 on test (%)": backbone.loc[name, "Top-5 acc (%)"],
+                    "Final system: all rules (%)": sens.loc["All rules", col],
+                    "Final system: WASSA": sens.loc[wassa_key, col],
+                    "Final system: emotion validation (%)": sens.loc["Emotion validation", col]})
+    save("ch5_4", "parameter_efficiency_detector", pd.DataFrame(det),
+         "Parameter efficiency of the detector: a 2.8x larger detector does not improve replies",
+         "`Chapter 4 - 4.2/tables/d1_backbone_comparison.csv` and `Chapter 5 - 5.3/tables/detector_sensitivity_robertalarge.csv`",
+         "Top-1/top-5 from the controlled backbone comparison (identical settings; the deployed RoBERTa-base checkpoint "
+         "scores 50.3% / 84.3%). Reply measures from substituting each detector into the final system on the same 300 "
+         "conversations; none of the reply differences is significant (Table 5.16).")
+
+
 def build_human_eval_placeholder():
     key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_do_not_share_with_raters.csv")
     items = (key.drop_duplicates("item_number")[["item_number", "gold_emotion", "is_attention_check",
@@ -1002,6 +1054,7 @@ def main():
     build_judges()
     build_wassa_validity()
     build_detector_sensitivity()
+    build_parameter_efficiency(per_reply)
     build_human_eval_placeholder()
     build_literature()
     build_project_tables()

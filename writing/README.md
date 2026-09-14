@@ -111,11 +111,22 @@ Keep these consistent in every chapter:
 
 ---
 
-## 6. AI-judge panel note
+## 6. Claims the thesis makes (agreed with the supervisor)
+
+| Claim | Wording to use | Evidence | Do NOT say |
+|---|---|---|---|
+| **Detector accuracy** | "Higher emotion accuracy (50.3%) than reported by joint empathetic-generation models on EmpatheticDialogues (30.6-48.3%), while reading only the first user message" | `Chapter 5 - 5.4/tables/emotion_accuracy_vs_literature.csv` | "best emotion detector on ED" (RoBERTa-GPT2 51.5%, Chirpy 61.5%, our own RoBERTa-large 53.0% are higher) |
+| **Parameter efficient** | "97.5% of Qwen2.5-7B's overall AI-judge score with 52% of its parameters"; "a 2.8x larger detector gives no reply gain" | `Chapter 5 - 5.4/tables/parameter_efficiency_systems.csv`, `parameter_efficiency_detector.csv` | "as good as 7B" (7B is significantly better on empathy, WASSA and rules) |
+| **More empathetic** | "Significantly more empathetic than the Qwen2.5-1.5B single model (WASSA, emotion validation, AI-judge empathy)" | Tables 5.13, 5.19 | "more empathetic than the 7B model" |
+| **Application oriented** | Local 8 GB GPU, multi-turn agent, per-turn audit trail, replaceable components | Section 5.2.4, 5.6.5 | "ready for deployment" (no crisis safeguard, no human-evaluation result yet) |
+| **Resource efficient** | **Not claimed yet** - waiting for `resource_benchmark/` results (GPU memory, seconds per reply) | - | any memory/speed claim before measuring |
+
+## 7. AI-judge panel note
 
 Mistral Large returned HTTP 403 ("not available in your subscription tier") on both team accounts, so it could not score the final system or top-1 Phi. All 7 systems are therefore compared on the **two judges that scored every system** (Nemotron 3 Ultra, gpt-oss-120b). On the 320 replies all three judges scored, the two- and three-judge averages correlate at rho 0.98 with identical rankings (`Chapter 5 - 5.3/tables/ai_judge_agreement.csv`). Never mix the old three-judge numbers (e.g. 9.02, 8.38, 8.23) with the two-judge numbers.
 
-## 7. Still pending (leave space)
+## 8. Still pending (leave space)
 
+- Resource benchmark (`resource_benchmark/`): GPU memory and time per reply. Affects 5.4.7 and the resource-efficiency claim.
 - Human evaluation (13-item Google Form, `human_evaluation/`). Affects 5.1, 5.3, 5.4 and 5.6.
 - Team facts: member roles, future dates, hardware price, electricity tariff.
