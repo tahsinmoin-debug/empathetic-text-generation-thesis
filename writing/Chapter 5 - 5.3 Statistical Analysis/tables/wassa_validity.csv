@@ -4,9 +4,9 @@ Recognition,What it was trained on,"Third-party human empathy ratings (ordinal 1
 Recognition,Accuracy against humans on the task test set,Pearson r = .544 for empathy; 5th of 9 teams on the track average in the findings table (the authors report 4th),"Findings paper, Table 3"
 Recognition,Caveat,The organisers' RoBERTa-base baseline reached r = .694 on empathy; the best team reached .582,"Findings paper, Table 3"
 Recognition,Output format,11 ordinal classes (argmax); our replies receive classes 1-7; the authors do not document how ratings map to classes,Checkpoint metadata; our scores
-Our data,System-level ranking vs AI judges (5 systems),Spearman rho = 1.00,computed
-Our data,Per-reply agreement with the judges' mean empathy,"rho = 0.41 (p = 4.2e-14, N = 320)",computed
-Our data,"Same, controlling for reply length",partial rho = 0.45 (p = 3.6e-17),computed
-Our data,Agreement within a single system,rho = 0.13 to 0.24; 0 of 5 significant,computed
-Our data,For reference: judge vs judge on empathy,rho = 0.75 to 0.79,computed
+Our data,System-level ranking vs AI-judge panel (7 systems),Spearman rho = 0.96,computed
+Our data,Per-reply agreement with the judges' mean empathy,"rho = 0.31 (p = 1.5e-11, N = 448)",computed
+Our data,"Same, controlling for reply length",partial rho = 0.34 (p = 2.9e-13),computed
+Our data,Agreement within a single system,rho = 0.05 to 0.26; 2 of 7 significant,computed
+Our data,For reference: judge vs judge on empathy,rho = 0.73,computed
 Reproducibility,Re-implementation check after a library upgrade,"1,800 of 1,800 pre-upgrade scores reproduced exactly",`llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv`

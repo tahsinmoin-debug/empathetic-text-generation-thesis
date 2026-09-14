@@ -1,5 +1,7 @@
 # Chapter 4 - 4.1 Design Process or Methodology Overview
 
+> **Update (14 Sep 2026): AI-judge scores for all 7 systems are in.** The panel is now two judges (Nemotron 3 Ultra + gpt-oss-120b) because Mistral Large became unavailable. Judge numbers in the draft below are from the earlier three-judge, five-system run and are superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
+
 **Rubric:** CO5, "Design multiple engineering/theoretical solutions ... to meet the desired objectives, need and requirements within the given constraints." Criterion: prepare the design process as per objectives, specifications, requirements and constraints. Marks: 5 from the Chapter 4 report + 10 from the defence panel.
 
 ## What this section must do
@@ -13,7 +15,7 @@ Explain *how* the solution was designed, step by step, before 4.2 describes *wha
 | `figures/fig_design_process.png` | Design-process flow with the iteration loop (Figure 4.1) |
 | `figures/fig_final_architecture.png` | Final system overview (Figure 4.2; may instead open 4.2) |
 | `tables/tools_and_versions.csv` | Implementation environment (one short table or one paragraph) |
-| `tables/ai_judge_panel.csv` | The three AI judges (4.1.5.1) |
+| `tables/ai_judge_panel.csv` | The AI-judge panel: two judges used, Mistral Large planned (4.1.5.1) |
 | `tables/ai_judge_selection_criteria.csv` | Why these judges, with evidence (4.1.5.1) |
 | `tables/wassa_validity.csv` | Why the WASSA classifier is used and how far it can be trusted (4.1.5.2) |
 
@@ -78,4 +80,4 @@ In summary, the design process treats the choice between a decoupled and a monol
 
 - Say **"first utterance"**, never "prompt", when describing d1's input. The distinction is the whole point of the mismatch fix.
 - Don't describe the attention mechanism as "cross-attention between d1 and d2". It is the detector's own self-attention, read out to extract cue words.
-- Human evaluation and AI-judge results are pending. This section only describes the *method*, so it can be written in full now.
+- Human evaluation results are pending (AI-judge results are complete). This section only describes the *method*, so it can be written in full now.

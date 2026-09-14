@@ -1,8 +1,8 @@
-Setting,Nemotron 3 Ultra,Mistral Large,gpt-oss-120b,LLM-judge average,Agreement (std dev)
-Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,7.78,8.61,8.29,8.23,0.42
-"Single model, same size: Qwen2.5-1.5B detects + responds",8.02,8.67,8.46,8.38,0.33
-"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",8.87,9.28,8.92,9.02,0.22
-"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",6.79,8.18,8.23,7.73,0.82
-Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),3.21,4.42,5.68,4.44,1.23
-FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]]
-RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]],[[PENDING - AI-judge scores not yet returned]]
+System,N,Nemotron 3 Ultra overall,gpt-oss-120b overall,Panel empathy,Panel relevance,Panel safety,Panel overall
+"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,8.87,8.92,8.15,8.68,9.86,8.9
+FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,64,8.58,8.79,7.84,8.45,9.76,8.68
+RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),64,8.42,8.88,7.84,8.29,9.81,8.65
+"Single model, same size: Qwen2.5-1.5B detects + responds",64,8.02,8.46,7.15,8.02,9.56,8.24
+Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,7.78,8.29,6.98,7.63,9.5,8.04
+"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",64,6.79,8.23,5.98,7.23,9.31,7.51
+Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),64,3.21,5.68,3.44,3.92,5.97,4.44

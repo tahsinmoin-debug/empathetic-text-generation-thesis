@@ -2,8 +2,7 @@
 
 Nothing in the writing folder is typed by hand: each CSV here is recomputed from the raw
 experiment outputs, so a number in a draft can always be traced back to a file. Re-run this
-script after the AI-judge scores for two_stage_phi / bakeoff_phi arrive and the judge tables
-refill themselves.
+script whenever a result file changes.
 
 CPU only (pandas + scipy). No model is loaded.
 
@@ -496,104 +495,164 @@ def build_rag_table(summary):
              "the highest WASSA spread of any system (least consistent).")
 
 
-def build_judges():
-    summ = pd.read_csv(JUDGE_DIR / "judge_scores_summary.csv")
-    summ = summ[summ["Setting"] != "Your pipeline + RAG"]
-    summ["Setting"] = summ["Setting"].replace({
-        "Your prompt-engineered pipeline": LABEL["prompt_engineered_pipeline"],
-        "Single model, same size (no d1)": LABEL["single_model_same_size"],
-        "Single bigger model (no d1)": LABEL["single_model_bigger"],
-        "Zero-shot d2": LABEL["zero_shot"], "Fine-tuned d2 (monolithic)": LABEL["fine_tuned"]})
-    pending = pd.DataFrame([{"Setting": LABEL[FINAL]}, {"Setting": LABEL["bakeoff_phi"]}])
-    for c in summ.columns[1:]:
-        pending[c] = PENDING
-    table = pd.concat([summ.astype(str), pending], ignore_index=True)
-    note = ("Judges: Nemotron 3 Ultra (OpenRouter), Mistral Large, gpt-oss-120b (Groq); temperature 0; blind "
-            "(never see system name or gold reply); 1-10 on empathy, relevance, safety; overall = mean of the three. "
-            "Stratified sample: 2 conversations per emotion (shortest + longest) = 64 conversations.")
-    for sec in ("ch5_1", "ch5_3"):
-        save(sec, "ai_judge_scores", table, "AI-judge panel scores (1-10)",
-             "`llm_judge_evaluation/judge_scores_summary.csv`", note)
-    detail = pd.read_csv(JUDGE_DIR / "judge_scores_detailed.csv")
-    save("ch5_1", "ai_judge_per_dimension", detail, "AI-judge scores per dimension (existing settings)",
-         "`llm_judge_evaluation/judge_scores_detailed.csv`",
-         f"Rows for the final system and RoBERTa + Phi (top-1) are {PENDING}.")
-    judge_agreement_and_selection()
+PANEL = {"Nemotron 3 Ultra": "nemotron_openrouter_scores.csv", "gpt-oss-120b": "gptoss_groq_scores.csv"}
+MISTRAL = {"Mistral Large": "mistral_large_scores.csv"}
+JUDGED = ["single_model_bigger", FINAL, "bakeoff_phi", "single_model_same_size",
+          "prompt_engineered_pipeline", "zero_shot", "fine_tuned"]
+DIMS = ["empathy", "relevance", "safety"]
 
 
-JUDGE_FILES_ALL = {"Nemotron 3 Ultra": "nemotron_openrouter_scores.csv",
-                   "Mistral Large": "mistral_large_scores.csv",
-                   "gpt-oss-120b": "gptoss_groq_scores.csv"}
+def load_judge(fname):
+    """One judge's valid scores, restricted to the current stratified target (64 conversations x system)."""
+    import sys
+    sys.path.insert(0, str(JUDGE_DIR))
+    from run_llm_judge import load_stratified_sample
+    target = load_stratified_sample(2, RNG_SEED)
+    keys = set(zip(target["conv_id"], target["setting"]))
+    j = pd.read_csv(JUDGE_DIR / fname)
+    j = j[j["parse_ok"] == True].drop_duplicates(["conv_id", "setting"])
+    j = j[[k in keys for k in zip(j["conv_id"], j["setting"])]].copy()
+    j["overall"] = j[DIMS].mean(axis=1)
+    return j[["conv_id", "setting"] + DIMS + ["overall"]]
 
 
-def load_judges_with_wassa():
-    df = pd.read_csv(JUDGE_DIR / "wassa_empathy_scores.csv")
-    for name, f in JUDGE_FILES_ALL.items():
-        j = pd.read_csv(JUDGE_DIR / f)
-        j = j[j["parse_ok"] == True].drop_duplicates(["conv_id", "setting"])
-        j["overall"] = j[["empathy", "relevance", "safety"]].mean(axis=1)
-        j = j[["conv_id", "setting", "empathy", "overall"]].rename(
-            columns={"empathy": f"{name}|empathy", "overall": f"{name}|overall"})
-        df = df.merge(j, on=["conv_id", "setting"], how="inner")
+def load_judges(judges):
+    """Wide table: one row per (conversation, system) scored by every judge in `judges`."""
+    df = None
+    for name, f in judges.items():
+        j = load_judge(f).rename(columns={c: f"{name}|{c}" for c in DIMS + ["overall"]})
+        df = j if df is None else df.merge(j, on=["conv_id", "setting"], how="inner")
     return df
 
 
-def judge_agreement_and_selection():
-    df = load_judges_with_wassa()
-    names = list(JUDGE_FILES_ALL)
+def panel_mean(df, judges, dim):
+    return df[[f"{n}|{dim}" for n in judges]].mean(axis=1)
+
+
+def build_judges():
+    df = load_judges(PANEL)
+    for dim in DIMS + ["overall"]:
+        df[dim] = panel_mean(df, PANEL, dim)
+    rows, detail = [], []
+    for s in JUDGED:
+        d = df[df["setting"] == s]
+        r = {"System": LABEL[s], "N": len(d)}
+        for n in PANEL:
+            r[f"{n} overall"] = round(d[f"{n}|overall"].mean(), 2)
+        for dim in DIMS + ["overall"]:
+            r[f"Panel {dim}"] = round(d[dim].mean(), 2)
+        rows.append(r)
+        dr = {"System": LABEL[s]}
+        for n in PANEL:
+            for dim in DIMS:
+                dr[f"{n} {dim}"] = round(d[f"{n}|{dim}"].mean(), 2)
+        detail.append(dr)
+    table = pd.DataFrame(rows).sort_values("Panel overall", ascending=False)
+    note = ("Two-judge panel: Nemotron 3 Ultra (OpenRouter) and gpt-oss-120b (Groq); temperature 0; blind (never see "
+            "the system name or the gold reply); 1-10 on empathy, relevance and safety; overall = mean of the three; "
+            "panel = mean of the two judges. Stratified sample: 2 conversations per emotion (shortest + longest) = 64 "
+            "conversations, identical for every system. Mistral Large was planned as a third judge but became "
+            "unavailable on both team accounts before the final systems were judged (see ai_judge_agreement.csv).")
+    for sec in ("ch5_1", "ch5_3"):
+        save(sec, "ai_judge_scores", table, "AI-judge panel scores (1-10)",
+             "`llm_judge_evaluation/nemotron_openrouter_scores.csv`, `gptoss_groq_scores.csv`", note)
+    save("ch5_1", "ai_judge_per_dimension", pd.DataFrame(detail), "AI-judge scores per judge and dimension",
+         "`llm_judge_evaluation/nemotron_openrouter_scores.csv`, `gptoss_groq_scores.csv`")
+    build_judge_significance(df)
+    judge_agreement_and_selection(df)
+
+
+def build_judge_significance(df):
+    baselines = ["single_model_same_size", "single_model_bigger", "bakeoff_phi",
+                 "prompt_engineered_pipeline", "zero_shot", "fine_tuned"]
+    wide = df.set_index(["conv_id", "setting"])
+    rows = []
+    for dim in ["empathy", "relevance", "safety", "overall"]:
+        block = []
+        for base in baselines:
+            both = pd.concat([wide.xs(FINAL, level="setting")[dim], wide.xs(base, level="setting")[dim]],
+                             axis=1, keys=["a", "b"]).dropna()
+            d = both["a"] - both["b"]
+            lo, hi = boot_ci(d)
+            block.append({"Dimension": dim, "Final system vs": LABEL[base], "N": len(both),
+                          "Final": round(both["a"].mean(), 2), "Baseline": round(both["b"].mean(), 2),
+                          "Difference": round(d.mean(), 2), "95% CI": f"[{lo:+.2f}, {hi:+.2f}]",
+                          "p": wilcoxon(both["a"], both["b"]).pvalue if d.abs().sum() else 1.0, "_lo": lo, "_hi": hi})
+        for r, pa in zip(block, holm([r["p"] for r in block])):
+            r["p (Holm-adjusted)"] = round(pa, 5)
+            r["Significant?"] = verdict(pa, r.pop("_lo"), r.pop("_hi"))
+            r["p"] = round(r["p"], 5)
+        rows += block
+    note = ("Paired on the same 64 conversations; panel score = mean of the two judges. Wilcoxon signed-rank test, "
+            "10,000-sample paired bootstrap CI (seed 42), Holm correction across the 6 comparisons within each "
+            "dimension. Significant only if Holm-adjusted p < 0.05 AND the CI excludes zero.")
+    save("ch5_3", "final_system_vs_baselines_judges", pd.DataFrame(rows),
+         "Final system vs every judged baseline - AI-judge panel, paired significance tests",
+         "computed from `llm_judge_evaluation/*_scores.csv` by this script", note)
+
+
+def judge_agreement_and_selection(df):
+    names = list(PANEL)
+    a, b = names
     rows = []
     for dim in ("empathy", "overall"):
-        for a_i in range(3):
-            for b_i in range(a_i + 1, 3):
-                a, b = names[a_i], names[b_i]
-                r_all = spearmanr(df[f"{a}|{dim}"], df[f"{b}|{dim}"])
-                sub = df[df["setting"] != "fine_tuned"]
-                r_nf = spearmanr(sub[f"{a}|{dim}"], sub[f"{b}|{dim}"])
-                rows.append({"Dimension": dim, "Judge pair": f"{a} vs {b}", "N replies": len(df),
-                             "Spearman rho": round(r_all.statistic, 3), "p": f"{r_all.pvalue:.1e}",
-                             "rho without fine-tuned system": round(r_nf.statistic, 3)})
-    overall_cols = [f"{n}|overall" for n in names]
-    sys_means = df.groupby("setting")[overall_cols].mean()
-    ranks = sys_means.rank(ascending=False)
-    rows.append({"Dimension": "overall (system level)",
-                 "Judge pair": "Do all 3 judges rank the systems in the same order?",
-                 "N replies": len(sys_means), "Spearman rho": "", "p": "",
-                 "rho without fine-tuned system": "YES" if (ranks.nunique(axis=1) == 1).all() else "NO"})
-    z = df[overall_cols]
-    z = (z - z.mean()) / z.std()
-    z_rank = pd.concat([df["setting"], z.mean(axis=1).rename("z")], axis=1).groupby("setting")["z"].mean()
-    raw_rank = sys_means.mean(axis=1)
-    same = list(z_rank.sort_values().index) == list(raw_rank.sort_values().index)
-    rows.append({"Dimension": "severity check",
-                 "Judge pair": "System ranking unchanged after z-scoring each judge?",
-                 "N replies": len(df), "Spearman rho": "", "p": "",
-                 "rho without fine-tuned system": "YES" if same else "NO"})
-    note = (f"Computed on the {len(df)} replies scored by all three judges (5 systems x 64 conversations). "
-            "Rows for the final system are added automatically once its scores are merged and this script is re-run. "
-            "The last column removes the obviously broken fine-tuned system, which would otherwise inflate agreement.")
-    save("ch5_3", "ai_judge_agreement", pd.DataFrame(rows), "Inter-judge agreement (systems judged so far)",
+        r_all = spearmanr(df[f"{a}|{dim}"], df[f"{b}|{dim}"])
+        sub = df[df["setting"] != "fine_tuned"]
+        r_nf = spearmanr(sub[f"{a}|{dim}"], sub[f"{b}|{dim}"])
+        rows.append({"Check": f"Per-reply agreement on {dim}: {a} vs {b}", "N": len(df),
+                     "Result": f"rho = {r_all.statistic:.3f} (p = {r_all.pvalue:.1e})",
+                     "Without fine-tuned system": f"rho = {r_nf.statistic:.3f}"})
+    sys_means = df.groupby("setting")[[f"{n}|overall" for n in names]].mean()
+    ranks = sys_means.rank(ascending=False).astype(int)
+    diff = [LABEL[s] for s in ranks.index if ranks.loc[s].nunique() > 1]
+    rows.append({"Check": "Do both judges rank the 7 systems in the same order (overall)?", "N": len(sys_means),
+                 "Result": "YES" if not diff else f"All but {len(diff)} systems; these swap places: " + " / ".join(diff),
+                 "Without fine-tuned system": f"rank rho = {spearmanr(sys_means.iloc[:, 0], sys_means.iloc[:, 1]).statistic:.2f}"})
+
+    # Does dropping Mistral change anything? Check on the 5 systems all three judges scored.
+    three = load_judges({**PANEL, **MISTRAL})
+    for dim in ("empathy", "overall"):
+        two_m, three_m = panel_mean(three, PANEL, dim), panel_mean(three, {**PANEL, **MISTRAL}, dim)
+        same = (list(two_m.groupby(three["setting"]).mean().sort_values().index)
+                == list(three_m.groupby(three["setting"]).mean().sort_values().index))
+        rows.append({"Check": f"Two-judge vs three-judge panel mean ({dim}), 5 systems judged by all three",
+                     "N": len(three), "Result": f"per-reply rho = {spearmanr(two_m, three_m).statistic:.3f}",
+                     "Without fine-tuned system": "identical system ranking" if same else "ranking CHANGES"})
+    all3 = list({**PANEL, **MISTRAL})
+    pair_r = [spearmanr(three[f"{x}|empathy"], three[f"{y}|empathy"]).statistic
+              for i, x in enumerate(all3) for y in all3[i + 1:]]
+    rows.append({"Check": "Three-judge agreement on empathy (all pairs), 5 systems", "N": len(three),
+                 "Result": f"rho = {min(pair_r):.2f} to {max(pair_r):.2f}", "Without fine-tuned system": ""})
+    note = ("Mistral Large returned HTTP 403 ('not available in your subscription tier') on both team accounts, so the "
+            "final systems could not be scored by it. To avoid mixing judge sets across systems, every system is "
+            "compared on the two judges that scored all of them. The last three rows show that dropping Mistral "
+            "leaves the result unchanged on the systems it did score.")
+    save("ch5_3", "ai_judge_agreement", pd.DataFrame(rows), "Inter-judge agreement and the two-judge panel check",
          "computed from `llm_judge_evaluation/*_scores.csv` by this script", note)
-    stale = W / SECTIONS["ch5_3"] / "tables" / "ai_judge_agreement_PENDING.csv"
-    if stale.exists():
-        stale.unlink()
+    for stale in ("ai_judge_agreement_PENDING.csv",):
+        p = W / SECTIONS["ch5_3"] / "tables" / stale
+        if p.exists():
+            p.unlink()
 
     panel = pd.DataFrame([
         ["Nemotron 3 Ultra", "NVIDIA", "550B total / 55B active (mixture-of-experts)", "OpenRouter free tier (50 requests/day)",
-         "Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)"],
-        ["Mistral Large", "Mistral AI", "Flagship (size not published)", "Mistral free Experiment tier",
-         "Independent provider with a separate training lineage"],
+         "Used - all 7 systems", "Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)"],
         ["gpt-oss-120b", "OpenAI (open weights, Apache-2.0)", "About 120B (mixture-of-experts)", "Groq free tier",
-         "Open weights make this judge reproducible; fast enough to score everything"],
-    ], columns=["Judge", "Developer", "Size", "Access", "Why selected"])
+         "Used - all 7 systems", "Open weights make this judge reproducible; fast enough to score everything"],
+        ["Mistral Large", "Mistral AI", "Flagship (size not published)", "Mistral free Experiment tier",
+         "Planned third judge - 5 systems only, then unavailable (HTTP 403)", "Kept only to check that the two-judge panel gives the same result"],
+    ], columns=["Judge", "Developer", "Size", "Access", "Role", "Why selected"])
     criteria = pd.DataFrame([
         ["Flagship-tier capability",
          "Required by the co-supervisor; small local judges (Gemma-2-2B, Phi-3-mini) were dropped from an earlier plan",
          "Zheng et al. (2023): strong LLM judges agree with human preferences over 80% of the time"],
-        ["Three different developers, none related to our models",
+        ["Different developers, none related to our models",
          "No judge shares a family with the generator (Phi, Microsoft) or the baselines (Qwen, Alibaba)",
          "Panickssery et al. (2024): LLM evaluators recognise and favour their own generations"],
-        ["A panel instead of one judge", "Scores averaged over three judges",
+        ["A panel instead of one judge", "Scores averaged over the two judges that scored every system",
          "Verga et al. (2024): a panel from disjoint model families shows less intra-model bias than one large judge"],
+        ["Same judges for every system", "Mistral Large dropped from the final panel because it could not score the final systems",
+         "Mixing judge sets across systems would make scores incomparable; two- and three-judge panels agree (rho 0.98)"],
         ["Blind scoring", "Judges see only the user message and one reply - never the system name or the gold reply",
          "Removes identity bias and any reward for word overlap with a reference reply"],
         ["Anchored rubric, deterministic output",
@@ -601,18 +660,18 @@ def judge_agreement_and_selection():
          "Anchors keep judges on the same scale; temperature 0 removes sampling noise"],
         ["Free API access", "No GPU needed, so non-coding teammates could run the judging", "Project resource constraint (Section 3.8)"],
         ["Documented replacements",
-         "Gemini (repeated quota failures), DeepSeek (retired on GitHub Models, removed from OpenRouter free tier), Llama 3.3 70B (decommissioned on Groq)",
-         "Valid scores from retired judges were kept; see risk R7 in Section 3.7"],
+         "Gemini (repeated quota failures), DeepSeek (retired on GitHub Models, removed from OpenRouter free tier), Llama 3.3 70B (decommissioned on Groq), Mistral Large (subscription tier)",
+         "See risk R7 in Section 3.7"],
     ], columns=["Criterion", "How it was applied", "Evidence or reason"])
     save("ch4_1", "ai_judge_panel", panel, "The AI-judge panel",
          "model IDs in `llm_judge_evaluation/run_llm_judge.py`; provider documentation")
-    save("ch4_1", "ai_judge_selection_criteria", criteria, "Why these three AI judges",
+    save("ch4_1", "ai_judge_selection_criteria", criteria, "Why these AI judges",
          "project records and cited literature (see WRITING_GUIDE.md in Chapter 4.1)")
 
 
 def build_wassa_validity():
-    df = load_judges_with_wassa()
-    df["judge_mean_empathy"] = df[[f"{n}|empathy" for n in JUDGE_FILES_ALL]].mean(axis=1)
+    df = pd.read_csv(JUDGE_DIR / "wassa_empathy_scores.csv").merge(load_judges(PANEL), on=["conv_id", "setting"])
+    df["judge_mean_empathy"] = panel_mean(df, PANEL, "empathy")
     wc = []
     for sname in df["setting"].unique():
         p = pd.read_csv(D2_DIR / f"{sname}_scored_predictions.csv")[["conv_id", "word_count"]]
@@ -631,8 +690,7 @@ def build_wassa_validity():
     within = [spearmanr(g["wassa_empathy_0_10"], g["judge_mean_empathy"]) for _, g in df.groupby("setting")]
     sys_means = df.groupby("setting")[["wassa_empathy_0_10", "judge_mean_empathy"]].mean()
     sys_r = spearmanr(sys_means["wassa_empathy_0_10"], sys_means["judge_mean_empathy"]).statistic
-    pairs = [("Nemotron 3 Ultra", "Mistral Large"), ("Nemotron 3 Ultra", "gpt-oss-120b"), ("Mistral Large", "gpt-oss-120b")]
-    judge_r = [spearmanr(df[f"{a}|empathy"], df[f"{b}|empathy"]).statistic for a, b in pairs]
+    judge_r = spearmanr(df["Nemotron 3 Ultra|empathy"], df["gpt-oss-120b|empathy"]).statistic
     table = pd.DataFrame([
         ["Recognition", "Where it comes from",
          "WASSA 2024 shared task at ACL 2024 (14 teams); system paper hyy33, ACL Anthology 2024.wassa-1.39", "Findings paper 2024.wassa-1.30"],
@@ -645,7 +703,7 @@ def build_wassa_validity():
         ["Recognition", "Output format",
          "11 ordinal classes (argmax); our replies receive classes 1-7; the authors do not document how ratings map to classes",
          "Checkpoint metadata; our scores"],
-        ["Our data", "System-level ranking vs AI judges (5 systems)", f"Spearman rho = {sys_r:.2f}", "computed"],
+        ["Our data", f"System-level ranking vs AI-judge panel ({len(sys_means)} systems)", f"Spearman rho = {sys_r:.2f}", "computed"],
         ["Our data", "Per-reply agreement with the judges' mean empathy",
          f"rho = {pooled.statistic:.2f} (p = {pooled.pvalue:.1e}, N = {len(df)})", "computed"],
         ["Our data", "Same, controlling for reply length",
@@ -653,11 +711,12 @@ def build_wassa_validity():
         ["Our data", "Agreement within a single system",
          f"rho = {min(r.statistic for r in within):.2f} to {max(r.statistic for r in within):.2f}; "
          f"{sum(r.pvalue < 0.05 for r in within)} of {len(within)} significant", "computed"],
-        ["Our data", "For reference: judge vs judge on empathy", f"rho = {min(judge_r):.2f} to {max(judge_r):.2f}", "computed"],
+        ["Our data", "For reference: judge vs judge on empathy", f"rho = {judge_r:.2f}", "computed"],
         ["Reproducibility", "Re-implementation check after a library upgrade",
          "1,800 of 1,800 pre-upgrade scores reproduced exactly", "`llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv`"],
     ], columns=["Aspect", "Check", "Result", "Source"])
-    note = ("Conclusion: trustworthy for comparing system averages (same ranking as the AI judges), too noisy to rank "
+    note = ("Judges = the two-judge panel (Nemotron 3 Ultra, gpt-oss-120b), 7 systems x 64 conversations. "
+            "Conclusion: trustworthy for comparing system averages (same ranking as the AI judges), too noisy to rank "
             "individual replies within one system. The thesis uses it only for the first purpose.")
     for sec in ("ch5_3", "ch4_1"):
         save(sec, "wassa_validity", table, "Is the WASSA empathy classifier trustworthy for this project?",
@@ -814,7 +873,7 @@ def build_project_tables():
         ["P5", "Design adjustment", "Aug 2026", "Sep 2026", "d1 mismatch fix (RoBERTa); d2 bake-off; two-stage + per-emotion prompts; attention cues", "`train_roberta_ed_d1/`, `emotion_prompts/`"],
         ["P6", "Conversational agent and deployment prep", "Sep 2026", "Sep 2026", "Context memory (4 / 10 turns); Hugging Face Space (not deployed)", "`conversational_agent/`, `huggingface_space/`"],
         ["P7", "Validation and robustness", "Sep 2026", "Sep 2026", "Backbone comparison; error propagation; diversity; literature comparison", "`d1_model_comparison/`, `evaluation_results_diversity/`"],
-        ["P8", "Human evaluation and final judging", "Sep 2026", "[[TEAM TO FILL]]", "Google Form (13 items); AI-judge scores for final system", "`human_evaluation/`, `teammate_judge_package/`"],
+        ["P8", "Human evaluation and final judging", "Sep 2026", "[[TEAM TO FILL]]", "Google Form (13 items); AI-judge scores for final system (completed, two-judge panel)", "`human_evaluation/`, `teammate_judge_package/`"],
         ["P9", "Thesis writing, defence preparation", "Sep 2026", "[[TEAM TO FILL - submission / defence date]]", "Chapters 2-5, final report, slides", "`writing/`"],
     ], columns=["Phase", "Work package", "Start", "End", "Main outputs", "Evidence in repository"])
     save("ch3_6", "project_timeline_from_repository", timeline, "Project phases reconstructed from repository file dates",
@@ -828,10 +887,10 @@ def build_project_tables():
         ["R4", "Methodological", "Train/inference mismatch in d1 (trained on situation text, fed user messages)", "Medium", "High", "Occurred", "Retrained on first user message; honest accuracy reported"],
         ["R5", "Methodological", "Unstable training of larger model (roberta-large diverged to 5.0%)", "Medium", "Medium", "Occurred", "Warmup 0.06 + lr 1e-5; failed run not reported as a result"],
         ["R6", "Methodological", "Non-reproducible generation (no fixed seed)", "Medium", "Medium", "Occurred", "Fixed seed 42 for sampling and data; earlier noisy numbers discarded"],
-        ["R7", "External", "Free API models retired mid-project (Llama 3.3 on Groq, DeepSeek on GitHub Models, Gemini quota)", "High", "Medium", "Occurred", "Judge panel from 3 providers; retired-judge data kept, replacement judge added"],
+        ["R7", "External", "Free API models retired or withdrawn mid-project (Llama 3.3 on Groq, DeepSeek on GitHub Models, Gemini quota, Mistral Large 403 on both team accounts)", "High", "Medium", "Occurred", "Judge panel from several providers; final comparison on the two judges that scored every system; two- vs three-judge panel checked (rho 0.98, same ranking)"],
         ["R8", "External", "API rate limits (OpenRouter 50 requests/day)", "High", "Medium", "Occurred", "Stratified short/long split across two teammates' accounts with dedup merge"],
         ["R9", "Schedule", "Late design changes invalidate in-progress judging", "Medium", "High", "Active", "Freeze the final system outputs while teammates judge; repetition penalty moved to future work"],
-        ["R10", "Evaluation", "Automatic metrics reward length or keywords, not empathy", "High", "Medium", "Identified", "Multiple independent signals: rules, WASSA, 3 AI judges, human study; length-matched analysis"],
+        ["R10", "Evaluation", "Automatic metrics reward length or keywords, not empathy", "High", "Medium", "Identified", "Multiple independent signals: rules, WASSA, AI-judge panel, human study; length-matched analysis"],
         ["R11", "Ethical", "Unsafe reply to crisis disclosure (no self-harm category in ED labels)", "Low", "Very high", "Identified", "Disclaimer and helplines in demo UI; stated as limitation; crisis gate listed as future work"],
         ["R12", "Team", "Only one member can run GPU work", "High", "Medium", "Active", "No-GPU tasks (judging, writing, human eval) assigned to teammates with written command guides"],
     ], columns=["ID", "Category", "Risk", "Likelihood", "Impact", "Status", "Mitigation"])
@@ -845,7 +904,7 @@ def build_project_tables():
         ["d1 ELECTRA-base training", "RTX 4060 8 GB", 8.7, "recorded"],
         ["d1 RoBERTa-large training", "RTX 4060 8 GB", 64.7, "recorded"],
         ["Response generation, 300 conversations per system (x11 systems)", "RTX 4060 8 GB", "[[TEAM TO FILL - not logged]]", "not recorded"],
-        ["AI judging (3 judges)", "Cloud API, free tier", "network time only", "free tier"],
+        ["AI judging (Nemotron, gpt-oss; Mistral for 5 systems)", "Cloud API, free tier", "network time only", "free tier"],
         ["WASSA scoring, 3,300 replies", "RTX 4060 / CPU", "[[TEAM TO FILL]]", "not recorded"],
     ], columns=["Task", "Hardware", "Wall-clock minutes", "Status"])
     save("ch3_8", "compute_usage", compute, "Compute used", "`evaluation_results_d1_model_comparison/*.json` (train_seconds)",

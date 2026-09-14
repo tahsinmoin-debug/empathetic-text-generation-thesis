@@ -1,5 +1,7 @@
 # Chapter 5 - 5.3 Statistical Analysis
 
+> **Update (14 Sep 2026): AI-judge scores for all 7 systems are in.** The panel is now two judges (Nemotron 3 Ultra + gpt-oss-120b) because Mistral Large became unavailable. Judge numbers in the draft below are from the earlier three-judge, five-system run and are superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
+
 **Rubric:** CO6 (Chapter 5: 5.3 Statistical Analysis). Assessed by the defence panel and the supervisor.
 
 ## What this section must do
@@ -16,7 +18,7 @@ Establish which differences reported in 5.1 and 5.2 are **real** and which could
 | `tables/d1_backbone_significance.csv` | Detector backbone differences |
 | `tables/length_vs_wassa_correlation.csv` | Spearman correlation of reply length with WASSA |
 | `tables/initial_pipeline_significance_incl_judges.csv` | Earlier tests, including the AI-judge overall score |
-| `tables/ai_judge_scores.csv` | Judge averages (final rows pending) |
+| `tables/ai_judge_scores.csv` | Judge averages, all 7 systems |
 | `tables/detector_sensitivity_robertalarge.csv` | RoBERTa-large swapped into the final pipeline (5.3.3) |
 | `tables/wassa_validity.csv` | How far the WASSA classifier can be trusted (5.3.6) |
 | `tables/ai_judge_agreement.csv` | Inter-judge agreement for systems judged so far (5.3.7) |
@@ -30,7 +32,7 @@ Establish which differences reported in 5.1 and 5.2 are **real** and which could
 - [ ] 5.3.4 Stage-1 emotion pick
 - [ ] 5.3.5 Confounding by reply length
 - [ ] 5.3.6 Validity of the WASSA classifier
-- [ ] 5.3.7 AI-judge reliability and agreement (final-system rows `[[PENDING]]`)
+- [x] 5.3.7 AI-judge results and agreement (complete - `final_system_vs_baselines_judges.csv`, `ai_judge_agreement.csv`)
 - [ ] 5.3.8 Human evaluation statistics `[[PENDING]]`
 - [ ] 5.3.9 Limitations of the analysis
 

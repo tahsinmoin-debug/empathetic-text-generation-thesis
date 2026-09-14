@@ -31,7 +31,7 @@ Table 3.2 divides the work into ten phases and Figure 3.1 presents them as a Gan
 | P5 | Design adjustment | Aug 2026 | Sep 2026 | d1 mismatch fix (RoBERTa); d2 bake-off; two-stage + per-emotion prompts; attention cues | `train_roberta_ed_d1/`, `emotion_prompts/` |
 | P6 | Conversational agent and deployment prep | Sep 2026 | Sep 2026 | Context memory (4 / 10 turns); Hugging Face Space (not deployed) | `conversational_agent/`, `huggingface_space/` |
 | P7 | Validation and robustness | Sep 2026 | Sep 2026 | Backbone comparison; error propagation; diversity; literature comparison | `d1_model_comparison/`, `evaluation_results_diversity/` |
-| P8 | Human evaluation and final judging | Sep 2026 | [[TEAM TO FILL]] | Google Form (13 items); AI-judge scores for final system | `human_evaluation/`, `teammate_judge_package/` |
+| P8 | Human evaluation and final judging | Sep 2026 | [[TEAM TO FILL]] | Google Form (13 items); AI-judge scores for final system (completed, two-judge panel) | `human_evaluation/`, `teammate_judge_package/` |
 | P9 | Thesis writing, defence preparation | Sep 2026 | [[TEAM TO FILL - submission / defence date]] | Chapters 2-5, final report, slides | `writing/` |
 
 *Table 3.2: Project phases, outputs and supporting evidence*
@@ -59,7 +59,7 @@ The plan was revised whenever evidence overturned an assumption. The five main r
 
 1. **Change of dataset (June 2026).** Early work used GoEmotions [39], a dataset of Reddit comments labelled with 28 emotions. Because these are isolated comments rather than conversations, the project moved to EmpatheticDialogues, and the detector and generator work was restarted on the new data.
 2. **Expanded evaluation (July-August 2026).** After the Pre-Thesis 2 panel questioned whether multiple models were needed, single-model baselines of equal and larger size, a retrieval-augmented variant and an AI-judge panel were added to the schedule before any further development.
-3. **Replacement of the judge panel (August 2026).** Several planned judges became unavailable because of quota limits and model retirements. The panel was rebuilt from three other providers, and judging was divided between two accounts to work within a daily limit of 50 requests.
+3. **Replacement of the judge panel (August 2026).** Several planned judges became unavailable because of quota limits and model retirements. The panel was rebuilt from other providers, and judging was divided between two accounts to work within a daily limit of 50 requests. In September 2026, Mistral Large also became unavailable on both team accounts, so the final comparison was completed on the two judges that had scored every system, after checking that removing the third judge did not change the ranking of the systems it had scored.
 4. **Redesign of the detector (late August 2026).** A mismatch was discovered between the text the detector was trained on and the text it received in use. The detector was retrained, and a comparison of generator models was added to the schedule, leading to the final two-stage design.
 5. **Scope control (September 2026).** A repetition-penalty improvement was deferred to future work and the final system's outputs were frozen, because regenerating them would have invalidated AI-judge scores that were already being collected.
 
@@ -69,7 +69,7 @@ Table 3.3 lists the milestones remaining at the time of writing.
 
 | Milestone | Target date | Status |
 |---|---|---|
-| AI-judge scores for the final system returned | [[TEAM TO FILL]] | In progress |
+| AI-judge scores for the final system returned | September 2026 | Completed |
 | Human evaluation questionnaire closed | [[TEAM TO FILL]] | In progress |
 | Complete draft submitted to supervisor | [[TEAM TO FILL]] | In progress |
 | Final report submitted | [[TEAM TO FILL]] | Planned |

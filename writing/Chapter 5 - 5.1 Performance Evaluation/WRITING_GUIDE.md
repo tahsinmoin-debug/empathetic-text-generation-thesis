@@ -1,5 +1,7 @@
 # Chapter 5 - 5.1 Performance Evaluation
 
+> **Update (14 Sep 2026): AI-judge scores for all 7 systems are in.** The panel is now two judges (Nemotron 3 Ultra + gpt-oss-120b) because Mistral Large became unavailable. Judge numbers in the draft below are from the earlier three-judge, five-system run and are superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
+
 **Rubric:** CO6, "Analyze and assess alternative design solutions ... considering factors such as cost, efficiency, usability ... and performance in relation to provided specifications, prerequisites, and benchmarks." Criterion: perform analysis of alternative designs to obtain the best suitable solution. Marks: 5 from the defence panel + 5 from supervisor evaluation of the final report.
 
 ## What this section must do
@@ -19,7 +21,7 @@ Report how the **final system** performs on every evaluation signal, with every 
 | `tables/wassa_empathy_all_systems.csv` + `figures/fig_wassa_empathy_ci.png` | Empathy classifier |
 | `tables/two_stage_selection_accuracy.csv` | Behaviour of the emotion-pick stage |
 | `tables/diversity_and_repetition.csv` | Diversity and boilerplate |
-| `tables/ai_judge_scores.csv`, `ai_judge_per_dimension.csv` | AI judges (**final-system rows pending**) |
+| `tables/ai_judge_scores.csv`, `ai_judge_per_dimension.csv` | AI-judge panel, all 7 systems (complete) |
 | `tables/human_eval_item_design.csv`, `human_eval_results_PENDING.csv` | Human study (**pending**) |
 
 ## Checklist
@@ -31,7 +33,7 @@ Report how the **final system** performs on every evaluation signal, with every 
 - [ ] 5.1.5 Emotion fidelity (validation, context awareness), **with the circularity caveat**
 - [ ] 5.1.6 Two-stage selection behaviour
 - [ ] 5.1.7 Diversity and repetition
-- [ ] 5.1.8 AI-judge evaluation `[[PENDING]]`
+- [x] 5.1.8 AI-judge evaluation (complete - see FINAL_TEXT)
 - [ ] 5.1.9 Human evaluation `[[PENDING]]`
 - [ ] 5.1.10 Case study (qualitative examples)
 

@@ -4,7 +4,7 @@ This section analyses the cost of developing and evaluating the system, the comp
 
 ## 3.8.1 Development Cost
 
-The project was designed to use hardware the team already owned together with free software, models and services (Table 3.5). All models are openly released and all software libraries are open source. The dataset is freely available for non-commercial research [3]. The three AI judges were accessed through free API tiers, the demonstration interface targets the free Hugging Face Spaces CPU tier, and the human study uses Google Forms with volunteer participants. Direct monetary cost is therefore limited to electricity, internet access and the GPU workstation, [[TEAM TO FILL: purchase price in BDT, or a statement that it is an existing personal asset with no additional cost]].
+The project was designed to use hardware the team already owned together with free software, models and services (Table 3.5). All models are openly released and all software libraries are open source. The dataset is freely available for non-commercial research [3]. The AI judges were accessed through free API tiers, the demonstration interface targets the free Hugging Face Spaces CPU tier, and the human study uses Google Forms with volunteer participants. Direct monetary cost is therefore limited to electricity, internet access and the GPU workstation, [[TEAM TO FILL: purchase price in BDT, or a statement that it is an existing personal asset with no additional cost]].
 
 
 | Item | Details | Cost (BDT) | Type |
@@ -37,7 +37,7 @@ where P = 0.115 kW is the rated board power of the RTX 4060 [38]. This gives abo
 | d1 ELECTRA-base training | RTX 4060 8 GB | 8.7 | recorded |
 | d1 RoBERTa-large training | RTX 4060 8 GB | 64.7 | recorded |
 | Response generation, 300 conversations per system (x11 systems) | RTX 4060 8 GB | [[TEAM TO FILL - not logged]] | not recorded |
-| AI judging (3 judges) | Cloud API, free tier | network time only | free tier |
+| AI judging (Nemotron, gpt-oss; Mistral for 5 systems) | Cloud API, free tier | network time only | free tier |
 | WASSA scoring, 3,300 replies | RTX 4060 / CPU | [[TEAM TO FILL]] | not recorded |
 
 *Table 3.6: Recorded compute usage*
@@ -60,7 +60,7 @@ where P = 0.115 kW is the rated board power of the RTX 4060 [38]. This gives abo
 
 **Fine-tuning compared with prompting the generator.** Fine-tuning the generator with LoRA [10] consumed GPU time and produced the weakest system tested: no reply followed all three rules and 98% of replies asked more than one question. Prompting an instruction-tuned model requires no training and achieves 60.0% for the final system. For this task, prompting is superior in both cost and quality.
 
-**Generator size.** Here the trade-off runs the other way. A single Qwen2.5-7B model [8], with 7.6 billion parameters and using about 5.6 GB of GPU memory in 4-bit form, outperforms our pipeline, whose generator has 3.8 billion parameters, on rule adherence (82.3% against 60.0%), WASSA empathy (5.76 against 5.05) and AI-judge scores. If output quality per unit of compute were the only objective, the larger single model would be preferred. The decoupled design is retained for its inspectability and controllability, since the candidate emotions, the chosen emotion and the words that drove the decision are all visible and can be acted upon. We therefore make no claim of a cost advantage over the larger model.
+**Generator size.** Here the trade-off runs the other way. A single Qwen2.5-7B model [8], with 7.6 billion parameters and using about 5.6 GB of GPU memory in 4-bit form, outperforms our pipeline, whose generator has 3.8 billion parameters, on rule adherence (82.3% against 60.0%), WASSA empathy (5.76 against 5.05) and AI-judge empathy (8.15 against 7.84). If output quality per unit of compute were the only objective, the larger single model would be preferred. The decoupled design is retained for its inspectability and controllability, since the candidate emotions, the chosen emotion and the words that drove the decision are all visible and can be acted upon. We therefore make no claim of a cost advantage over the larger model.
 
 **Evaluation method.** Human annotation in comparable research is paid; for example, Belay et al. report paying annotators about USD 6 per hour [33]. The free-tier AI judges in this project produced several hundred judgements each at no monetary cost, in exchange for rate limits and the need to replace unavailable judges (Section 3.7). The human study is used to validate these judges rather than to replace them.
 

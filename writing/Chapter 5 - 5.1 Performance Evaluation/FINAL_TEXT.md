@@ -111,7 +111,7 @@ Table 5.1 and Figure 5.1 show how often each system's replies acknowledge the us
 
 ## 5.1.4 Empathy Classifier Score
 
-Figure 5.2 shows the WASSA empathy scores [15] with 95% confidence intervals. The final system scores **5.05**, the highest of all systems no larger than Phi-4-mini, and above the same-size single model (4.84), the initial pipeline (4.80), zero-shot prompting (4.25) and the fine-tuned model (4.19). Gemma-3-4B (5.30) and the larger single model (5.76) score higher, and Section 5.4 shows that Gemma's advantage is explained by the length of its replies. The classifier outputs coarse ordinal classes, and our replies fall between classes 1 and 7. It was also trained on empathy ratings of turns in peer discussions of news articles [14]. We therefore interpret differences between system averages rather than absolute values; Section 5.3.6 shows that it ranks systems in exactly the same order as the AI judges.
+Figure 5.2 shows the WASSA empathy scores [15] with 95% confidence intervals. The final system scores **5.05**, the highest of all systems no larger than Phi-4-mini, and above the same-size single model (4.84), the initial pipeline (4.80), zero-shot prompting (4.25) and the fine-tuned model (4.19). Gemma-3-4B (5.30) and the larger single model (5.76) score higher, and Section 5.4 shows that Gemma's advantage is explained by the length of its replies. The classifier outputs coarse ordinal classes, and our replies fall between classes 1 and 7. It was also trained on empathy ratings of turns in peer discussions of news articles [14]. We therefore interpret differences between system averages rather than absolute values; Section 5.3.6 shows that it ranks the systems in nearly the same order as the AI judges.
 
 
 ![Figure 5.2](figures/fig_wassa_empathy_ci.png)
@@ -163,18 +163,18 @@ Table 5.6 reports distinct-n diversity together with a boilerplate rate, defined
 
 ## 5.1.8 AI-Judge Evaluation
 
-Three AI judges, Nemotron 3 Ultra, Mistral Large and gpt-oss-120b, selected as described in Section 4.1.5.1, score each reply blind from 1 to 10 for empathy, relevance and safety. They are applied to a stratified sample of 64 conversations, consisting of the shortest and longest message for each of the 32 emotions. Table 5.7 reports the results. Among the systems judged so far, the larger single model has the highest average score (9.02), followed by the same-size single model (8.38), the initial pipeline (8.23), zero-shot prompting (7.73) and the fine-tuned model (4.44). [[PENDING: average scores for the final system and the top-1 Phi-4-mini configuration, with one sentence on the final system's rank and on whether its empathy score differs from its relevance and safety scores.]]
+Two AI judges, Nemotron 3 Ultra and gpt-oss-120b, selected as described in Section 4.1.5.1, score each reply blind from 1 to 10 for empathy, relevance and safety, and the panel score is the mean of the two judges. They are applied to a stratified sample of 64 conversations, consisting of the shortest and longest message for each of the 32 emotions. Table 5.7 reports the results for all seven judged systems. The larger single model has the highest overall score (**8.90**), followed closely by the **final system (8.68)** and top-1 Phi-4-mini prompting (8.65), and then by the same-size single model (8.24), the initial pipeline (8.04), zero-shot prompting (7.51) and the fine-tuned model (4.44). The final system scores 7.84 for empathy, 8.45 for relevance and 9.76 for safety. Empathy is the lowest of the three dimensions for every system, which indicates that the judges treat it as the most demanding criterion. Safety scores are high for every system (9.31 to 9.86) except the fine-tuned model (5.97). The two judges differ in severity: Nemotron 3 Ultra gives a lower average score than gpt-oss-120b to every system. Section 5.3.7 tests which of these differences are statistically significant and how closely the judges agree.
 
 
-| Setting | Nemotron 3 Ultra | Mistral Large | gpt-oss-120b | LLM-judge average | Agreement (std dev) |
-|---|---|---|---|---|---|
-| Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 7.78 | 8.61 | 8.29 | 8.23 | 0.42 |
-| Single model, same size: Qwen2.5-1.5B detects + responds | 8.02 | 8.67 | 8.46 | 8.38 | 0.33 |
-| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 8.87 | 9.28 | 8.92 | 9.02 | 0.22 |
-| Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 6.79 | 8.18 | 8.23 | 7.73 | 0.82 |
-| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 3.21 | 4.42 | 5.68 | 4.44 | 1.23 |
-| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] |
-| RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] | [[PENDING - AI-judge scores not yet returned]] |
+| System | N | Nemotron 3 Ultra overall | gpt-oss-120b overall | Panel empathy | Panel relevance | Panel safety | Panel overall |
+|---|---|---|---|---|---|---|---|
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 8.87 | 8.92 | 8.15 | 8.68 | 9.86 | 8.9 |
+| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | 64 | 8.58 | 8.79 | 7.84 | 8.45 | 9.76 | 8.68 |
+| RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 8.42 | 8.88 | 7.84 | 8.29 | 9.81 | 8.65 |
+| Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.02 | 8.46 | 7.15 | 8.02 | 9.56 | 8.24 |
+| Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 7.78 | 8.29 | 6.98 | 7.63 | 9.5 | 8.04 |
+| Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 6.79 | 8.23 | 5.98 | 7.23 | 9.31 | 7.51 |
+| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 3.21 | 5.68 | 3.44 | 3.92 | 5.97 | 4.44 |
 
 *Table 5.7: Average AI-judge scores (1-10) by system*
 

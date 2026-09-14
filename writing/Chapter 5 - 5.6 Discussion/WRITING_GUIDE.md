@@ -21,7 +21,7 @@ Interpret the results as a whole: what they mean for the research question, why 
 - [ ] 5.6.4 When a larger single model is the better choice
 - [ ] 5.6.5 Limitations
 - [ ] 5.6.6 Future work
-- [ ] Closing paragraph `[[PENDING: final sentence depends on human evaluation and AI-judge results]]`
+- [ ] Closing paragraph `[[PENDING: final sentence depends on human evaluation results]]`
 
 ---
 

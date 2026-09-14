@@ -1,9 +1,7 @@
-Dimension,Judge pair,N replies,Spearman rho,p,rho without fine-tuned system
-empathy,Nemotron 3 Ultra vs Mistral Large,320,0.79,1.5e-69,0.63
-empathy,Nemotron 3 Ultra vs gpt-oss-120b,320,0.756,1.5e-60,0.589
-empathy,Mistral Large vs gpt-oss-120b,320,0.754,4.6e-60,0.571
-overall,Nemotron 3 Ultra vs Mistral Large,320,0.804,1.1e-73,0.632
-overall,Nemotron 3 Ultra vs gpt-oss-120b,320,0.775,2.9e-65,0.591
-overall,Mistral Large vs gpt-oss-120b,320,0.775,3.1e-65,0.592
-overall (system level),Do all 3 judges rank the systems in the same order?,5,,,YES
-severity check,System ranking unchanged after z-scoring each judge?,320,,,YES
+Check,N,Result,Without fine-tuned system
+Per-reply agreement on empathy: Nemotron 3 Ultra vs gpt-oss-120b,448,rho = 0.731 (p = 5.7e-76),rho = 0.596
+Per-reply agreement on overall: Nemotron 3 Ultra vs gpt-oss-120b,448,rho = 0.745 (p = 2.8e-80),rho = 0.604
+Do both judges rank the 7 systems in the same order (overall)?,7,All but 2 systems; these swap places: RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) / FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,rank rho = 0.96
+"Two-judge vs three-judge panel mean (empathy), 5 systems judged by all three",320,per-reply rho = 0.982,identical system ranking
+"Two-judge vs three-judge panel mean (overall), 5 systems judged by all three",320,per-reply rho = 0.985,identical system ranking
+"Three-judge agreement on empathy (all pairs), 5 systems",320,rho = 0.75 to 0.79,

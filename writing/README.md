@@ -22,7 +22,7 @@ python writing/_scripts/build_final_text.py         # FINAL_TEXT files + REFEREN
 
 **Citations.** All sections use IEEE numbered citations, numbered in order of first appearance across the thesis, so a paper has the same number in every section. The complete, numbered reference list is `REFERENCES_ALL.docx`. Every entry was checked against the publisher's page. To change wording, edit `writing/_scripts/final_text_src/<section>.md` (citations are written `{cite:key}`, keys in `references.py`) and rebuild. If you edit a FINAL_TEXT.docx directly, your edits will be overwritten the next time the build runs, so copy finished text into the thesis document first.
 
-When the AI-judge scores for the final system arrive, merge them into `llm_judge_evaluation/` as usual, re-run both scripts, and the judge tables fill themselves.
+AI-judge scores for all 7 systems are merged (two-judge panel: Nemotron 3 Ultra + gpt-oss-120b). If a result file changes, re-run the scripts and every table updates.
 
 ---
 
@@ -39,12 +39,12 @@ When the AI-judge scores for the final system arrive, merge them into `llm_judge
 | CO11 | `Chapter 3 - 3.8 Economic Analysis` | Needs prices (BDT) from the team |
 | CO5 | `Chapter 4 - 4.1 Design Process or Methodology Overview` | Ready to write |
 | CO5 | `Chapter 4 - 4.2 Preliminary Design or Design (Model) Specification` | Ready to write |
-| CO6 | `Chapter 5 - 5.1 Performance Evaluation` | AI-judge and human-evaluation rows **pending** |
+| CO6 | `Chapter 5 - 5.1 Performance Evaluation` | Human-evaluation rows **pending** (AI judges complete) |
 | CO6 | `Chapter 5 - 5.2 Analysis of Design Solutions` | Ready to write |
 | CO7 | `Chapter 5 - 5.2 Final Design Adjustments` | Ready to write |
-| CO6 | `Chapter 5 - 5.3 Statistical Analysis` | Ready; final-system judge rows **pending** |
+| CO6 | `Chapter 5 - 5.3 Statistical Analysis` | Ready; human-evaluation statistics **pending** |
 | CO6 | `Chapter 5 - 5.4 Comparisons and Relationships` | Human-evaluation row **pending** |
-| CO6 | `Chapter 5 - 5.6 Discussion` | Ready to write; final paragraph waits for pending results |
+| CO6 | `Chapter 5 - 5.6 Discussion` | Ready to write; final paragraph waits for human evaluation |
 | CO8 | `Presentation - Tools Used` | Ready |
 
 **Numbering conflict in the rubric:** it lists both "5.2 Analysis of Design Solutions" and "5.2 Final Design Adjustments", and there is no 5.5. Two folders are provided. Ask the supervisor which numbering to use. The simplest fix is 5.2 Analysis, 5.3 Final Design Adjustments, then renumber the rest.
@@ -55,7 +55,7 @@ When the AI-judge scores for the final system arrive, merge them into `llm_judge
 
 | Marker | Meaning |
 |---|---|
-| `[[PENDING: ...]]` | Result not collected yet (AI-judge scores for the final system, human evaluation). Leave the sentence and fill the value later. |
+| `[[PENDING: ...]]` | Result not collected yet (human evaluation). Leave the sentence and fill the value later. |
 | `[[TEAM TO FILL: ...]]` | A fact only the team knows (dates, prices, names, roles). Do not guess. |
 | `[[CITE: ...]]` | Insert the citation in the thesis's reference style. |
 | `[Table: file.csv]` / `[Figure: file.png]` | Insert the table or figure from this folder and give it a chapter number. |
@@ -104,16 +104,18 @@ The drafts copy the patterns used in COLING 2025 main.598 (Wu et al.), COLING 20
 Keep these consistent in every chapter:
 
 1. **Detection accuracy is not the bottleneck.** A wrong d1 label does not reduce rule adherence (p = 0.40-0.55) or WASSA empathy (p = 0.72). Swapping GPT-2 for the more accurate RoBERTa while keeping d2 fixed changes neither emotion validation (p = 0.91) nor rule adherence (p = 0.09). **Tested directly in the final system:** replacing RoBERTa-base with RoBERTa-large (3.0 points more accurate on the same conversations) changed no reply-quality measure (all rules p = 0.16, WASSA p = 0.43, emotion validation p = 0.68), so RoBERTa-base is kept.
-2. **How the emotion is used matters more than how accurately it is detected.** The two-stage design (d2 picks from d1's top-3, then an emotion-specific prompt) raises emotion validation from 28.3% to 36.7% and WASSA from 4.89 to 5.05 over the same models with top-1 only. Both remain significant after Holm correction.
+2. **How the emotion is used matters more than how accurately it is detected.** The two-stage design (d2 picks from d1's top-3, then an emotion-specific prompt) raises emotion validation from 28.3% to 36.7% and WASSA from 4.89 to 5.05 over the same models with top-1 only. Both remain significant after Holm correction. The AI judges, however, rate the two-stage and top-1 Phi configurations the same (overall 8.68 vs 8.65, p = 0.71), so do not claim a judge-rated advantage for two-stage over top-1.
 3. **Honest caveat on (2):** d2's stage-1 pick matches the gold label *less* often than d1's top-1 (42.3% vs 50.3%, p = 0.005). The gain comes from emotion-specific guidance, not from better label selection.
-4. **Against baselines of the same size** the final system is significantly more empathetic (WASSA +0.21) and more emotionally faithful (+11.0 pp). It is not significantly better on rule adherence after correction.
-5. **A 4.7x larger single model (Qwen2.5-7B) is still better** on rules, WASSA and AI-judge scores. The thesis argues for inspectability and controllability at small scale, not superiority over bigger models.
+4. **Against baselines of the same size** the final system is significantly more empathetic (WASSA +0.21; AI-judge empathy +0.70, overall +0.44) and more emotionally faithful (+11.0 pp). It is not significantly better on rule adherence after correction.
+5. **A 4.7x larger single model (Qwen2.5-7B) is still better** on rules, WASSA and AI-judge empathy (8.15 vs 7.84, Holm p = 0.048). Its AI-judge *overall* lead (8.90 vs 8.68) is not significant after correction (p = 0.073) - write "not significantly different", never "as good as". The thesis argues for inspectability and controllability at small scale, not superiority over bigger models.
 
 ---
 
-## 6. Still pending (leave space)
+## 6. AI-judge panel note
 
-- AI-judge scores for `two_stage_phi` and `bakeoff_phi` (teammates running). Affects 5.1, 5.3 and 5.6.
+Mistral Large returned HTTP 403 ("not available in your subscription tier") on both team accounts, so it could not score the final system or top-1 Phi. All 7 systems are therefore compared on the **two judges that scored every system** (Nemotron 3 Ultra, gpt-oss-120b). On the 320 replies all three judges scored, the two- and three-judge averages correlate at rho 0.98 with identical rankings (`Chapter 5 - 5.3/tables/ai_judge_agreement.csv`). Never mix the old three-judge numbers (e.g. 9.02, 8.38, 8.23) with the two-judge numbers.
+
+## 7. Still pending (leave space)
+
 - Human evaluation (13-item Google Form, `human_evaluation/`). Affects 5.1, 5.3, 5.4 and 5.6.
-- Inter-judge agreement statistics. Compute after the scores arrive.
 - Team facts: member roles, future dates, hardware price, electricity tariff.

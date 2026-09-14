@@ -1,5 +1,7 @@
 # Chapter 5 - 5.2 Analysis of Design Solutions
 
+> **Update (14 Sep 2026):** the AI-judge figure 9.02 in the draft below is from the earlier three-judge run. The final two-judge panel gives 8.90 for Qwen2.5-7B and 8.68 for the final system - use `FINAL_TEXT.docx`.
+
 **Rubric:** CO6. Assess the alternative designs "to determine the most appropriate one, considering factors such as cost, efficiency, usability, manufacturability, impact, sustainability, maintainability, and performance". Criterion: analyse the alternatives to obtain the best suitable solution.
 
 ## What this section must do
