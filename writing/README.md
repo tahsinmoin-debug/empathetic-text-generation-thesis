@@ -119,7 +119,7 @@ Keep these consistent in every chapter:
 | **Parameter efficient** | "97.5% of Qwen2.5-7B's overall AI-judge score with 52% of its parameters"; "a 2.8x larger detector gives no reply gain" | `Chapter 5 - 5.4/tables/parameter_efficiency_systems.csv`, `parameter_efficiency_detector.csv` | "as good as 7B" (7B is significantly better on empathy, WASSA and rules) |
 | **More empathetic** | "Significantly more empathetic than the Qwen2.5-1.5B single model (WASSA, emotion validation, AI-judge empathy)" | Tables 5.13, 5.19 | "more empathetic than the 7B model" |
 | **Application oriented** | Local 8 GB GPU, multi-turn agent, per-turn audit trail, replaceable components | Section 5.2.4, 5.6.5 | "ready for deployment" (no crisis safeguard, no human-evaluation result yet) |
-| **Resource efficient** | **Not claimed yet** - waiting for `resource_benchmark/` results (GPU memory, seconds per reply) | - | any memory/speed claim before measuring |
+| **Resource efficient** | "Compared with the Qwen2.5-7B single model: 38% less peak GPU memory (3.40 vs 5.47 GB) with no significant difference in response time (4.17 vs 3.91 s, p = 0.10)" | `Chapter 5 - 5.4/tables/resource_efficiency.csv`, `resource_paired_tests.csv`; raw runs in `resource_benchmark/results/` | "faster than 7B" (same speed); "more efficient than the 1.5B model" (1.5B is lighter and 2.6x faster) |
 
 ## 7. AI-judge panel note
 
@@ -127,6 +127,5 @@ Mistral Large returned HTTP 403 ("not available in your subscription tier") on b
 
 ## 8. Still pending (leave space)
 
-- Resource benchmark (`resource_benchmark/`): GPU memory and time per reply. Affects 5.4.7 and the resource-efficiency claim.
 - Human evaluation (13-item Google Form, `human_evaluation/`). Affects 5.1, 5.3, 5.4 and 5.6.
 - Team facts: member roles, future dates, hardware price, electricity tariff.

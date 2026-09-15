@@ -838,6 +838,58 @@ def build_parameter_efficiency(per_reply):
          "conversations; none of the reply differences is significant (Table 5.16).")
 
 
+def build_resource_efficiency():
+    """GPU memory and time per reply, measured by resource_benchmark/benchmark_resources.py."""
+    res = ROOT / "resource_benchmark" / "results"
+    order = [FINAL, "single_model_same_size", "single_model_bigger"]
+    summ = {sname: json.loads((res / f"{sname}_summary.json").read_text(encoding="utf-8")) for sname in order}
+    per = {sname: pd.read_csv(res / f"{sname}_per_message.csv") for sname in order}
+    rows = []
+    for sname in order:
+        m, d = summ[sname], per[sname]
+        rows.append({"System": LABEL[sname], "Parameters (B)": m["params_b"],
+                     "Peak GPU memory (GB)": round(m["peak_memory_allocated_mb"] / 1024, 2),
+                     "Mean s per reply": round(m["mean_s_per_reply"], 2),
+                     "Median s per reply": round(m["median_s_per_reply"], 2),
+                     "ms per generated token": round((d["total_s"] / d["reply_tokens"] * 1000).mean(), 1),
+                     "Mean reply tokens": m["mean_reply_tokens"], "Model load (s)": m["load_time_s"],
+                     "N messages": m["timed_messages"]})
+    f = summ[FINAL]
+    note = (f"Measured on one {f['gpu_name']} (torch {f['torch']}), the first {f['timed_messages']} conversations of the "
+            f"evaluation sample, {f['warmup_messages']} untimed warm-up messages, one system loaded per run, same decoding "
+            "settings as the evaluation. Peak memory = PyTorch peak allocated. Final-system time split: detector and cues "
+            f"{f['mean_d1_and_cues_s']:.3f} s, stage-1 pick {f['mean_stage1_pick_s']:.2f} s, stage-2 reply "
+            f"{f['mean_stage2_reply_s']:.2f} s. Qwen2.5-1.5B runs in fp16; the other two in 4-bit.")
+    save("ch5_4", "resource_efficiency", pd.DataFrame(rows), "Resource use: GPU memory and time per reply",
+         "`resource_benchmark/results/*_summary.json` and `*_per_message.csv`", note)
+
+    tests = []
+    for base in ("single_model_bigger", "single_model_same_size"):
+        x = per[FINAL].merge(per[base], on="conv_id", suffixes=("_f", "_b"))
+        for metric, fa, fb in (("Seconds per reply", x["total_s_f"], x["total_s_b"]),
+                               ("ms per generated token", x["total_s_f"] / x["reply_tokens_f"] * 1000,
+                                x["total_s_b"] / x["reply_tokens_b"] * 1000)):
+            d = fa - fb
+            lo, hi = boot_ci(d)
+            pv = wilcoxon(fa, fb).pvalue
+            tests.append({"Final system vs": LABEL[base], "Measure": metric, "N": len(x),
+                          "Final": round(fa.mean(), 2), "Baseline": round(fb.mean(), 2),
+                          "Difference": round(d.mean(), 2), "95% CI": f"[{lo:+.2f}, {hi:+.2f}]",
+                          "Wilcoxon p": round(pv, 5), "Significant?": verdict(pv, lo, hi)})
+        mem = (summ[FINAL]["peak_memory_allocated_mb"] - summ[base]["peak_memory_allocated_mb"]) / 1024
+        tests.append({"Final system vs": LABEL[base], "Measure": "Peak GPU memory (GB)", "N": 1,
+                      "Final": round(summ[FINAL]["peak_memory_allocated_mb"] / 1024, 2),
+                      "Baseline": round(summ[base]["peak_memory_allocated_mb"] / 1024, 2),
+                      "Difference": round(mem, 2),
+                      "95% CI": f"{mem / (summ[base]['peak_memory_allocated_mb'] / 1024) * 100:+.1f}% relative",
+                      "Wilcoxon p": "", "Significant?": "single measurement"})
+    save("ch5_4", "resource_paired_tests", pd.DataFrame(tests),
+         "Resource use: final system vs single models on the same messages",
+         "computed from `resource_benchmark/results/*_per_message.csv` by this script",
+         "Paired over the same 50 messages; Wilcoxon signed-rank and 10,000-sample paired bootstrap CI (seed 42). "
+         "Two tests per baseline, no multiple-comparison correction. Memory is one peak reading per system.")
+
+
 def build_human_eval_placeholder():
     key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_do_not_share_with_raters.csv")
     items = (key.drop_duplicates("item_number")[["item_number", "gold_emotion", "is_attention_check",
@@ -1055,6 +1107,7 @@ def main():
     build_wassa_validity()
     build_detector_sensitivity()
     build_parameter_efficiency(per_reply)
+    build_resource_efficiency()
     build_human_eval_placeholder()
     build_literature()
     build_project_tables()

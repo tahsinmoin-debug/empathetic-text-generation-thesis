@@ -79,11 +79,12 @@ Richer prompts help only generators with sufficient capacity to follow them. Wit
 
 Detection errors are concentrated among emotions that differ in intensity or nuance rather than in kind: *sentimental* is read as *nostalgic*, *afraid* as *terrified*, *angry* as *furious*, *sad* as *devastated*, and *apprehensive* as *anxious* (Table 5.4), a pattern also reported for a comparable classifier [32]. The weakest class, *angry* (F1 18.2%), is largely absorbed by its more intense neighbour *furious*. Because the correct label is usually a near neighbour, it lies within the three most probable candidates in 76.5% of cases, against 50.3% for the single most probable. This is the relationship the two-stage design exploits, and it helps to explain why label errors cause little damage to the final replies.
 
-## 5.4.7 Relationship between Model Size and Reply Quality: Parameter Efficiency
+## 5.4.7 Parameter and Resource Efficiency
 
 Table 5.24 relates reply quality to the total number of parameters. With 3.96 billion parameters, 52.0% of those of the Qwen2.5-7B single model, **the final system reaches 97.5% of its overall AI-judge score** (8.68 against 8.90, a difference that is not significant after correction; Section 5.3.7) and 96.2% of its judge-rated empathy, although this empathy difference is significant. It retains 87.7% of the larger model's WASSA score and 72.9% of its rule adherence, and its emotion validation is 4.3 points higher, a difference that is not significant. Compared with the 1.54-billion-parameter Qwen2.5-1.5B single model, the additional 2.4 billion parameters bring significant gains in WASSA empathy, emotion validation and AI-judge empathy (Tables 5.13 and 5.19). The final system therefore occupies an efficient middle point: most of the larger model's rated quality at about half its size, with a detector that accounts for only about 3% of its parameters.
 
-The detector shows the same pattern (Table 5.25). RoBERTa-large has 2.8 times as many parameters as RoBERTa-base, took 7.4 times as long to train and is 2.9 points more accurate on the test partition, yet substituting it into the final system improved neither rule adherence, WASSA empathy nor emotion validation (Section 5.3.3). **The smaller detector is therefore the parameter-efficient choice**: additional detector capacity buys accuracy that does not reach the user. This section concerns parameter counts only; memory use and inference time are reported separately. [[PENDING: resource benchmark - peak GPU memory and seconds per reply for the final system and the two single models, from resource_benchmark/results.]]
+The detector shows the same pattern (Table 5.25). RoBERTa-large has 2.8 times as many parameters as RoBERTa-base, took 7.4 times as long to train and is 2.9 points more accurate on the test partition, yet substituting it into the final system improved neither rule adherence, WASSA empathy nor emotion validation (Section 5.3.3). **The smaller detector is therefore the parameter-efficient choice**: additional detector capacity buys accuracy that does not reach the user.
+
 
 
 | System | Parameters (B) | All rules (%) | WASSA empathy | Emotion validation (%) | AI-judge empathy | AI-judge overall |
@@ -103,6 +104,31 @@ The detector shows the same pattern (Table 5.25). RoBERTa-large has 2.8 times as
 | roberta-large | 355 | 64.7 | 53 | 87.2 | 54.7 | 5.01 | 38 |
 
 *Table 5.25: Detector size, detection accuracy and final-system reply quality for RoBERTa-base and RoBERTa-large*
+
+
+**Resource use.** Parameter counts do not determine running cost on their own: the final system loads two models and calls its generator twice per reply. We therefore measured peak GPU memory and response time for the final system and both single models on the same 50 conversations, on the RTX 4060 used throughout, with the evaluation's decoding settings (Tables 5.26 and 5.27). **Compared with the Qwen2.5-7B single model, the final system needs 38% less peak GPU memory** (3.40 GB against 5.47 GB) **with no significant difference in response time** (4.17 s against 3.91 s per reply, 95% CI of the difference [-0.03, +0.56] s, Wilcoxon p = 0.10). Per generated token the two are practically identical (65.7 ms against 65.4 ms, p = 0.91); the small difference per reply reflects the final system's slightly longer replies. The additional steps of the decoupled design are inexpensive: the detector and cue extraction take 0.016 s and the stage-1 emotion selection 0.29 s, together about 7% of the time per reply. The Qwen2.5-1.5B single model, by contrast, is lighter (2.90 GB) and 2.6 times faster than the final system, so the final system is resource-efficient relative to the larger model it approaches in quality, not relative to the smallest baseline, whose replies are significantly less empathetic. These measurements come from a single GPU and 50 messages and should be read as indicative.
+
+
+| System | Parameters (B) | Peak GPU memory (GB) | Mean s per reply | Median s per reply | ms per generated token | Mean reply tokens | Model load (s) | N messages |
+|---|---|---|---|---|---|---|---|---|
+| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | 3.96 | 3.4 | 4.17 | 4.07 | 65.7 | 63.9 | 15.9 | 50 |
+| Single model, same size: Qwen2.5-1.5B detects + responds | 1.54 | 2.9 | 1.58 | 1.49 | 32.7 | 48.8 | 5.4 | 50 |
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 7.62 | 5.47 | 3.91 | 3.75 | 65.4 | 59.8 | 21.4 | 50 |
+
+*Table 5.26: GPU memory and response time of the final system and the single models*
+
+
+
+| Final system vs | Measure | N | Final | Baseline | Difference | 95% CI | Wilcoxon p | Significant? |
+|---|---|---|---|---|---|---|---|---|
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | Seconds per reply | 50 | 4.17 | 3.91 | 0.27 | [-0.03, +0.56] | 0.1 | no |
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | ms per generated token | 50 | 65.68 | 65.44 | 0.24 | [-1.88, +2.39] | 0.91 | no |
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | Peak GPU memory (GB) | 1 | 3.4 | 5.47 | -2.07 | -37.9% relative |  | single measurement |
+| Single model, same size: Qwen2.5-1.5B detects + responds | Seconds per reply | 50 | 4.17 | 1.58 | 2.6 | [+2.36, +2.83] | 0 | YES |
+| Single model, same size: Qwen2.5-1.5B detects + responds | ms per generated token | 50 | 65.68 | 32.65 | 33.03 | [+31.04, +35.03] | 0 | YES |
+| Single model, same size: Qwen2.5-1.5B detects + responds | Peak GPU memory (GB) | 1 | 3.4 | 2.9 | 0.5 | +17.1% relative |  | single measurement |
+
+*Table 5.27: Paired comparison of response time and memory between the final system and each single model*
 
 
 ## References

@@ -1,0 +1,4 @@
+System,Params (B),Model memory (GB),Peak GPU memory (GB),Mean s / reply,Median s / reply,Mean reply tokens,Tokens / s,Load time (s),N
+"Final system: RoBERTa-base + Phi-4-mini (4-bit), two-stage",3.96,3.17,3.4,4.173,4.074,63.9,16.6,15.9,50
+Single model: Qwen2.5-1.5B-Instruct (fp16),1.54,2.88,2.9,1.576,1.489,48.8,31.01,5.4,50
+Single model: Qwen2.5-7B-Instruct (4-bit),7.62,5.18,5.47,3.907,3.754,59.8,15.39,21.4,50
