@@ -5,4 +5,3 @@ RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),7.58,8.0,9.67,8.09,8.58,9.95
 "Single model, same size: Qwen2.5-1.5B detects + responds",6.92,7.83,9.31,7.38,8.2,9.81
 Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,6.78,7.36,9.2,7.17,7.91,9.8
 "Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",5.17,6.34,8.84,6.8,8.11,9.78
-Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),2.56,2.86,4.2,4.31,4.98,7.73

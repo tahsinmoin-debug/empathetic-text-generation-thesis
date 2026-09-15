@@ -46,5 +46,6 @@
 [42] P. Virtanen, R. Gommers, T. E. Oliphant et al., "SciPy 1.0: Fundamental algorithms for scientific computing in Python," Nature Methods, vol. 17, pp. 261-272, 2020, doi: 10.1038/s41592-019-0686-2.  
 [43] F. Pedregosa, G. Varoquaux, A. Gramfort et al., "Scikit-learn: Machine learning in Python," J. Machine Learning Research, vol. 12, pp. 2825-2830, 2011.  
 [44] S. Poria, N. Majumder, R. Mihalcea, and E. Hovy, "Emotion recognition in conversation: Research challenges, datasets, and recent advances," IEEE Access, vol. 7, pp. 100943-100953, 2019, doi: 10.1109/ACCESS.2019.2929050.  
-[45] Y. Liu, W. Maier, W. Minker, and S. Ultes, "Empathetic dialogue generation with pre-trained RoBERTa-GPT2 and external knowledge," in Proc. Int. Workshop Spoken Dialogue System Technology (IWSDS), 2021; arXiv:2109.03004.  
-[46] A. Welivita and P. Pu, "A taxonomy of empathetic response intents in human social conversations," in Proc. 28th Int. Conf. Computational Linguistics (COLING), 2020, pp. 4886-4899, doi: 10.18653/v1/2020.coling-main.429.  
+[45] A. Holtzman, J. Buys, L. Du, C. Fang, and Y. Choi, "The curious case of neural text degeneration," in Proc. Int. Conf. Learning Representations (ICLR), 2020.  
+[46] Y. Liu, W. Maier, W. Minker, and S. Ultes, "Empathetic dialogue generation with pre-trained RoBERTa-GPT2 and external knowledge," in Proc. Int. Workshop Spoken Dialogue System Technology (IWSDS), 2021; arXiv:2109.03004.  
+[47] A. Welivita and P. Pu, "A taxonomy of empathetic response intents in human social conversations," in Proc. 28th Int. Conf. Computational Linguistics (COLING), 2020, pp. 4886-4899, doi: 10.18653/v1/2020.coling-main.429.  

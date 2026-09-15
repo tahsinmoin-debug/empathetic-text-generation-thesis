@@ -95,6 +95,7 @@ The drafts copy the patterns used in COLING 2025 main.598 (Wu et al.), COLING 20
 | "Temperature 0.9" | The code uses **temperature 0.7, top-p 0.9** | `configuration_and_hyperparameters.csv` |
 | "WASSA was trained on reaction essays, not chat replies" | The model used is from **Track 2**, trained on human empathy ratings of **conversation turns** | `Chapter 5 - 5.3/tables/wassa_validity.csv` |
 | "hyy33 ranked 4th" | 4th is the authors' own claim; the findings table lists them **5th of 9** by average | same table |
+| "The LoRA fine-tuned model imitated ED's habit of asking many questions and failed every rule (0%)" | The original run had a padding bug: the end-of-turn token was masked, so it never learned to stop (99% of replies hit the token limit). Real ED listener replies ask >1 question only 4.7% of the time | Corrected baseline `fine_tuned_fixed`: 22.3% all rules, 10-word casual replies, 30% acknowledgement (adjustment A11, `train_qwen2_5_monolithic_d2_fixed/`) |
 | 28-class GoEmotions results | Side research, not the thesis pipeline | Mention only as "initial dataset exploration" in 3.6 |
 
 ---

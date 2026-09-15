@@ -1,6 +1,6 @@
 System,Mean words,Length OK (%),WASSA mean,Spearman rho (length vs WASSA),p
 "Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",75.9,83.7,4.25,0.541,0.0
-Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),200.7,1.3,4.19,0.232,5e-05
+Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),10.0,100.0,3.36,0.57,0.0
 "Single model, same size: Qwen2.5-1.5B detects + responds",42.0,100.0,4.84,0.196,0.00064
 "Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",52.9,100.0,5.76,0.194,0.00073
 Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,35.2,100.0,4.8,0.327,0.0

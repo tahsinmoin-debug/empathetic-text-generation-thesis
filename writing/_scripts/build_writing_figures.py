@@ -33,7 +33,7 @@ plt.rcParams.update({
 })
 
 SHORT = {
-    "zero_shot": "Zero-shot Qwen-1.5B", "fine_tuned": "Monolithic fine-tuned Qwen-1.5B",
+    "zero_shot": "Zero-shot Qwen-1.5B", "fine_tuned_fixed": "Monolithic fine-tuned Qwen-1.5B",
     "single_model_same_size": "Single model Qwen-1.5B", "single_model_bigger": "Single model Qwen-7B",
     "prompt_engineered_pipeline": "Initial pipeline (GPT-2 + Qwen)", "rag_pipeline": "Initial pipeline + RAG",
     "bakeoff_qwen": "RoBERTa + Qwen (top-1)", "bakeoff_gemma": "RoBERTa + Gemma-4B (top-1)",

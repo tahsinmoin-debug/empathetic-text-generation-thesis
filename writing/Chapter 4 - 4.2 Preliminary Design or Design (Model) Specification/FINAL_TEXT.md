@@ -78,7 +78,7 @@ This analysis motivated the **two-stage** design adopted in the final system. Th
 
 ## 4.2.5 Monolithic and Retrieval Alternatives
 
-To test whether a separate detector is needed at all, four monolithic alternatives were simulated using the same rules and conversations. In the *zero-shot* alternative, Qwen2.5-1.5B receives a generic caring prompt and no detected emotion. In the *monolithic fine-tuned* alternative, Qwen2.5-1.5B is fine-tuned with LoRA [10] directly on pairs of user messages and human replies. In the *single model of the same size*, Qwen2.5-1.5B is instructed to identify the emotion silently and then respond under the three rules. In the *larger single model*, the same prompt is given to Qwen2.5-7B in 4-bit form. Their results are analysed in Section 5.2. In brief, the fine-tuned model failed every rule, the zero-shot model rarely asked the single required question, the same-size single model trailed the decoupled designs, and the larger single model performed best overall.
+To test whether a separate detector is needed at all, four monolithic alternatives were simulated using the same rules and conversations. In the *zero-shot* alternative, Qwen2.5-1.5B receives a generic caring prompt and no detected emotion. In the *monolithic fine-tuned* alternative, Qwen2.5-1.5B is fine-tuned with LoRA [10] directly on pairs of user messages and human replies. In the *single model of the same size*, Qwen2.5-1.5B is instructed to identify the emotion silently and then respond under the three rules. In the *larger single model*, the same prompt is given to Qwen2.5-7B in 4-bit form. Their results are analysed in Section 5.2. In brief, the fine-tuned model adopted the dataset's short, casual listener style and rarely acknowledged the user's feeling, the zero-shot model rarely asked the single required question, the same-size single model trailed the decoupled designs, and the larger single model performed best overall.
 
 Following the Pre-Thesis 2 panel's suggestion, we also simulated a **retrieval-augmented** variant [11] that retrieves one or two similar training conversations with the same detected emotion, using all-MiniLM-L6-v2 sentence embeddings [12], and shows them to the generator as examples. Across two versions, retrieval reduced rule adherence from 63.7% to 54.3% and then to 43.7%, so it was not adopted (Table 4.8).
 
@@ -104,33 +104,71 @@ Following the Pre-Thesis 2 panel's suggestion, we also simulated a **retrieval-a
 
 **Conversation memory.** The generator receives the last ten exchanges verbatim. From the second turn onward, the question becomes optional and the model is asked not to reuse earlier phrasing, so that a multi-turn conversation does not become an interrogation. The first turn keeps the original rules, so single-turn results remain comparable.
 
-Table 4.9 lists every setting of the selected design together with its justification.
+Section 4.2.7 justifies each of these settings.
+
+## 4.2.7 Justification of Parameter Choices
+
+Every parameter of the final design, the baselines and the evaluation was fixed before the final comparison and is justified in Table 4.9 by one of three kinds of evidence: published practice, a measurement on our own data, or an explicit design or hardware constraint. Settings that were not tuned are identified as such.
+
+**Detector.** The learning rate of 2e-5, effective batch size of 16 and limit of four epochs lie within the fine-tuning ranges recommended for BERT [5] and used for RoBERTa [6], and the 6% linear warm-up follows RoBERTa's fine-tuning setting; without warm-up, our RoBERTa-large run diverged to 5.0% accuracy. The best checkpoint is selected by validation accuracy with early stopping, which prevents over-fitting. The maximum input length of 128 tokens covers 99.7% of first utterances, whose mean length is 46.5 tokens.
+
+**Generator.** Four-bit NF4 quantisation preserves the quality of 16-bit models while reducing memory about fourfold [9]; the final system's measured peak use is 3.40 GB. Sampling uses nucleus sampling with top-p 0.9, which avoids the repetitive, degenerate text produced by greedy or beam decoding [45], and a temperature of 0.7, the developer's default for Qwen2.5-Instruct. These values are identical for every system, so that differences between systems arise from their design rather than from decoding. The limit of 250 new tokens is well above the prompt's request for under 100 words: the longest final-system reply is 119 tokens, so no reply is truncated. Passing the three most probable emotions to stage 1 is justified by the detector's accuracy: the true emotion is among the top three in 76.5% of messages, against 50.3% for the top prediction.
+
+**Conversational agent.** The detector reads the last four user turns because conversational context matters for emotion recognition [44], and four turns performed best or joint best in three of four long test scenarios. The generator keeps the last ten exchanges verbatim, a design choice that avoids losing emotional detail through summarisation.
+
+**LoRA baseline.** The corrected monolithic baseline uses rank 16 and alpha 32 on the attention projections, following the observation that low ranks suffice to adapt attention weights [10], together with a learning rate of 2e-4, dropout of 0.1 and weight decay of 0.01, the values used for LoRA fine-tuning of GPT-2 and for QLoRA on models of up to 13 billion parameters [10], [9]. Its padding token is Qwen's own end-of-text token: using the end-of-turn token as padding, as in the original run, removes that token from the loss and the model never learns to stop (Section 5.2.5).
+
+**Evaluation.** AI judges score at temperature 0 on 64 conversations, the shortest and longest message for each emotion, which covers every emotion within the free tier's daily limit; the judges come from developers unrelated to our models [34], [35]. Paired comparisons use McNemar's exact test [16] and the Wilcoxon signed-rank test [17], confidence intervals use 10,000 bootstrap resamples, above the 1,000 recommended for percentile intervals [18], and the Holm procedure controls the family-wise error rate with more power than a Bonferroni correction [19].
 
 
-| Component | Setting | Value | Justification |
-|---|---|---|---|
-| d1 | Backbone | RoBERTa-base (125M) | Top-5 significantly above BERT/ELECTRA at equal top-1; pipeline uses top-3; RoBERTa-large tested in-pipeline with no reply gain |
-| d1 | Input text | First user utterance, max 128 tokens | Matches inference-time input (fixes mismatch) |
-| d1 | Learning rate / epochs | 2e-5 / 4 (early stopping, patience 1) | Standard BERT-family fine-tuning range |
-| d1 | Batch | 8 x 2 accumulation = 16 | Fits 8 GB VRAM |
-| d1 | Warmup / weight decay / grad clip | 0.06 / 0.01 / 1.0 | Warmup 0.06 from RoBERTa paper; prevents large-model divergence |
-| d1 (large, comparison only) | Learning rate / batch | 1e-5 / 4 | Base settings diverged |
-| Two-stage | Candidates passed to d2 | Top-3 | Gold in top-3 76.5% vs top-1 50.3% |
-| Two-stage | Stage-1 decoding | Greedy, max 10 tokens | Classification decision, deterministic |
-| d2 | Model | Phi-4-mini-instruct, 4-bit NF4, double quant, fp16 compute | Best rule adherence in bake-off; fits 8 GB |
-| d2 | Sampling | temperature 0.7, top-p 0.9, max 250 new tokens, seed 42 | Same across every generation experiment for fairness |
-| d2 | Prompt | Per-emotion focus/avoid guidance (32) + 3 rules + attention cues, <= 100 words | Rules scored at 120 words (scorer tolerance) |
-| Attention cues | Source / amount | d1 last-layer [CLS] attention, top 40% tokens, word-boundary expanded | Eager attention required |
-| Conversational agent | d1 history window | Last 4 user turns | Best or tied-best in 3 of 4 long scenarios; 6 turns degraded |
-| Conversational agent | d2 history window | Last 10 exchanges, verbatim | Avoids repetition; no lossy summarisation |
-| AI judges | Decoding | temperature 0, JSON output | Deterministic scoring |
-| Evaluation | Sample | 300 test conversations (seed 42); judges: 64 stratified (2 per emotion) | Same sample for every system |
-| Statistics | Tests | McNemar exact, Wilcoxon, 10k paired bootstrap, Holm correction | Paired data; binary vs continuous metrics |
+| Component | Parameter | Value | Justification | Evidence |
+|---|---|---|---|---|
+| d1 detector | Backbone | RoBERTa-base (125M) | Highest top-5 accuracy (85.0%) of the base-size encoders at equal top-1; RoBERTa-large adds 2.9 pp but has 2.8x the parameters, 7.4x the training time and gives no reply gain | Our measurement (Tables 4.5, 5.16, 5.25) |
+| d1 detector | Training input | First user utterance | A detector trained on situation descriptions fell from 56.9% to 48.2% on the user messages it actually receives | Our measurement (Table 4.4) |
+| d1 detector | Maximum input length | 128 tokens | 99.7% of training first utterances fit (mean 46.5 tokens) | Our measurement |
+| d1 detector | Learning rate | 2e-5 | Inside the fine-tuning ranges recommended for BERT (2e-5 to 5e-5) and used for RoBERTa (1e-5 to 3e-5) | Devlin et al. (2019); Liu et al. (2019) |
+| d1 detector | Effective batch size | 16 (8 per step x 2 accumulation) | Batch size recommended for BERT/RoBERTa fine-tuning; 8 per step fits in 8 GB | Devlin et al. (2019); Liu et al. (2019); hardware limit |
+| d1 detector | Epochs and selection | Up to 4, early stopping (patience 1), best checkpoint by validation accuracy | BERT recommends 2-4 fine-tuning epochs; keeping the best validation checkpoint prevents over-fitting | Devlin et al. (2019) |
+| d1 detector | Warm-up | Linear, 6% of steps | RoBERTa's fine-tuning setting; without warm-up our RoBERTa-large run diverged to 5.0% accuracy | Liu et al. (2019); our observation |
+| d1 detector | Weight decay / gradient clipping | 0.01 / 1.0 | Weight decay as used for BERT; clipping at 1.0 is the Transformers default and keeps updates stable | Devlin et al. (2019); library default |
+| d1 detector | Precision / seed | fp16 mixed precision / 42 | Fits the 8 GB GPU and trains faster; fixed seed for reproducibility | Hardware limit; convention |
+| d1 detector (comparison only) | RoBERTa-large learning rate / batch | 1e-5 / 4 | The base settings diverged; 1e-5 is the lowest value of RoBERTa's fine-tuning range and batch 4 fits in memory | Liu et al. (2019); our observation |
+| Two-stage selection | Candidates passed to d2 | Top-3 emotions | The true emotion is in the top-3 for 76.5% of messages against 50.3% for top-1, and most errors are neighbouring emotions | Our measurement (Tables 5.2, 5.4) |
+| Two-stage selection | Stage-1 decoding | Greedy, at most 10 new tokens, fall back to d1 top-1 | A classification decision should be deterministic; 100% of stage-1 outputs named a valid candidate | Our measurement (Table 5.5) |
+| Attention cues | Attention source | Final-layer attention from the [CLS] token, eager attention | RoBERTa classifies from [CLS]; the default sdpa attention returns no weights, so eager attention is required | Liu et al. (2019); our verification |
+| Attention cues | Amount | Top 40% of tokens, at most 3 phrases | Design choice to keep the prompt short; not tuned (listed as a limitation) | Design choice |
+| d2 generator | Model | Phi-4-mini-instruct (3.8B) | Highest rule adherence in the bake-off with detector and prompt fixed (65.3% vs 57.7% Qwen2.5-1.5B, 22.0% Gemma-3-4B) | Our measurement (Table 4.6) |
+| d2 generator | Quantisation | 4-bit NF4, double quantisation, fp16 compute | NF4 preserves 16-bit quality while cutting memory about fourfold; measured peak use 3.40 GB on the 8 GB GPU | Dettmers et al. (2023); our measurement (Table 5.26) |
+| d2 generator | Temperature | 0.7 | The developer's default for Qwen2.5-Instruct; identical for every system so differences come from design, not decoding | Qwen2.5 generation_config; fairness |
+| d2 generator | Top-p (nucleus sampling) | 0.9 | Nucleus sampling avoids the repetitive, degenerate text of pure greedy or beam decoding; identical for every system | Holtzman et al. (2020) |
+| d2 generator | Maximum new tokens | 250 | The prompt asks for under 100 words (about 130 tokens); the longest final reply is 119 tokens, so no reply is cut off | Our measurement |
+| d2 generator | Word limit | Under 100 words in the prompt, scored at 120 | Short replies reduce burden on a distressed user; the 20-word margin tolerates small overshoots | Design choice |
+| d2 generator | Repetition penalty |  | Kept identical for all systems; a penalty of 1.1 is deferred because it would change the judged outputs | Fairness; future work |
+| Conversational agent | d1 context window | Last 4 user turns | Context matters for emotion recognition in conversation; 4 turns was best or joint best in 3 of 4 long scenarios, 6 turns degraded 2 | Poria et al. (2019); our scenario tests |
+| Conversational agent | d2 memory | Last 10 exchanges, verbatim | Support conversations are short; verbatim history avoids losing emotional detail through summarisation | Design choice |
+| Conversational agent | Question rule | Mandatory on turn 1, optional afterwards | A question in every reply turns a long conversation into an interrogation; turn 1 keeps the evaluated rules | Design choice |
+| LoRA baseline | Rank / alpha | 16 / 32 | Low ranks are sufficient to adapt attention weights; alpha = 2 x rank scales the update | Hu et al. (2022) |
+| LoRA baseline | Target modules | q, k, v, o attention projections | The weight matrices studied for adaptation in LoRA | Hu et al. (2022) |
+| LoRA baseline | Learning rate / dropout / weight decay | 2e-4 / 0.1 / 0.01 | LoRA's GPT-2 settings; QLoRA uses 2e-4 and dropout 0.1 for models up to 13B | Hu et al. (2022); Dettmers et al. (2023) |
+| LoRA baseline | Warm-up / effective batch / optimiser | 6% linear / 16 (2 x 8) / paged AdamW 32-bit | Same warm-up rule as the detector; batch fits 8 GB; paged optimisers avoid memory spikes | Liu et al. (2019); Dettmers et al. (2023) |
+| LoRA baseline | Epochs and selection | Up to 3, best epoch by validation loss, early stopping (patience 1) | Validation loss rose after epoch 1 (1.4607 to 1.4626), so epoch 1 was kept | Our training log |
+| LoRA baseline | Maximum length | 256 tokens | The longest training pair is 177 tokens, so nothing is truncated | Our measurement |
+| LoRA baseline | Padding token | Qwen end-of-text token (endoftext) | Using the end-of-turn token as padding masked it from the loss: the original run never learned to stop (99% of replies hit the token limit) | Our finding (adjustment A11) |
+| AI judges | Decoding | Temperature 0, JSON-only answer | Removes sampling noise so the same reply always gets the same score | Design choice |
+| AI judges | Sample | 64 conversations: shortest and longest per emotion | Covers all 32 emotions and both short and long messages within the 50-requests-per-day limit | Design choice; resource limit |
+| AI judges | Panel | Nemotron 3 Ultra + gpt-oss-120b, blind | Different developers from our models avoid self-preference; a panel reduces single-judge bias | Panickssery et al. (2024); Verga et al. (2024) |
+| WASSA classifier | Model | hyy33, WASSA 2024 Track 2 | Trained on human empathy ratings of conversation turns; r = 0.544 with human ratings | Giorgi et al. (2024); Yang et al. (2024) |
+| Statistics | Evaluation sample | 300 test conversations, seed 42 | Fixed before any experiment and identical for every system, so all comparisons are paired | Design choice |
+| Statistics | Tests | McNemar exact (binary), Wilcoxon signed-rank (scores) | Paired tests matched to the data type; Wilcoxon does not assume normal differences | McNemar (1947); Wilcoxon (1945) |
+| Statistics | Confidence intervals | Paired bootstrap, 10,000 resamples | More than the 1,000 resamples recommended for percentile intervals, giving stable limits | Efron and Tibshirani (1993) |
+| Statistics | Multiple comparisons | Holm correction; significant only if adjusted p < 0.05 and CI excludes zero | Controls the family-wise error rate with more power than Bonferroni | Holm (1979) |
+| Human evaluation | Design | 13 items (11 scored + 2 attention checks), 3-way forced choice | Keeps the form short enough to avoid rater fatigue; preference judgements follow comparable studies | Cao et al. (2025); Wu et al. (2025) |
+| Resource benchmark | Protocol | 50 messages, 3 warm-up, one system per run | Warm-up removes first-call overhead; separate runs keep memory readings clean | Design choice |
 
-*Table 4.9: Configuration of the selected design and the justification for each setting*
+*Table 4.9: Every parameter used in this work, its value, justification and evidence*
 
 
-## 4.2.7 Simulation and Verification
+## 4.2.8 Simulation and Verification
 
 Each alternative was functionally verified before full evaluation. Small trial runs confirmed that outputs were well formed and that model-specific details were handled correctly: Phi-4-mini uses an end-of-turn token different from its end-of-text token, Gemma's chat template has no system role, and Phi-4-mini combines its attention projections into a single layer. Every generation design was then simulated on the same 300 held-out conversations with identical decoding settings, and every detector candidate on the full test partition of 2,542 conversations. Two automatic safeguards protect the selected design: execution stops if the detector returns no attention weights, and the outcome of every stage-1 decision is recorded, all of which parsed successfully. The results of these simulations determined the selections described above and are analysed in full in Chapter 5.
 
@@ -145,5 +183,12 @@ Each alternative was functionally verified before full evaluation. Small trial r
 [10] E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen, "LoRA: Low-rank adaptation of large language models," in Proc. Int. Conf. Learning Representations (ICLR), 2022.  
 [11] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. Kuttler, M. Lewis, W. Yih, T. Rocktaschel, S. Riedel, and D. Kiela, "Retrieval-augmented generation for knowledge-intensive NLP tasks," in Advances in Neural Information Processing Systems (NeurIPS), vol. 33, 2020, pp. 9459-9474.  
 [12] N. Reimers and I. Gurevych, "Sentence-BERT: Sentence embeddings using Siamese BERT-networks," in Proc. 2019 Conf. Empirical Methods Natural Language Processing and 9th Int. Joint Conf. Natural Language Processing (EMNLP-IJCNLP), 2019, pp. 3982-3992, doi: 10.18653/v1/D19-1410.  
+[16] Q. McNemar, "Note on the sampling error of the difference between correlated proportions or percentages," Psychometrika, vol. 12, no. 2, pp. 153-157, 1947.  
+[17] F. Wilcoxon, "Individual comparisons by ranking methods," Biometrics Bulletin, vol. 1, no. 6, pp. 80-83, 1945.  
+[18] B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York, NY, USA: Chapman & Hall, 1993.  
+[19] S. Holm, "A simple sequentially rejective multiple test procedure," Scandinavian J. Statistics, vol. 6, no. 2, pp. 65-70, 1979.  
+[34] A. Panickssery, S. R. Bowman, and S. Feng, "LLM evaluators recognize and favor their own generations," in Advances in Neural Information Processing Systems (NeurIPS), vol. 37, 2024; arXiv:2404.13076.  
+[35] P. Verga, S. Hofstatter, S. Althammer, Y. Su, A. Piktus, A. Arkhangorodsky, M. Xu, N. White, and P. Lewis, "Replacing judges with juries: Evaluating LLM generations with a panel of diverse models," arXiv:2404.18796, 2024.  
 [40] T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue, A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz et al., "Transformers: State-of-the-art natural language processing," in Proc. 2020 Conf. Empirical Methods Natural Language Processing: System Demonstrations, 2020, pp. 38-45, doi: 10.18653/v1/2020.emnlp-demos.6.  
 [44] S. Poria, N. Majumder, R. Mihalcea, and E. Hovy, "Emotion recognition in conversation: Research challenges, datasets, and recent advances," IEEE Access, vol. 7, pp. 100943-100953, 2019, doi: 10.1109/ACCESS.2019.2929050.  
+[45] A. Holtzman, J. Buys, L. Du, C. Fang, and Y. Choi, "The curious case of neural text degeneration," in Proc. Int. Conf. Learning Representations (ICLR), 2020.  

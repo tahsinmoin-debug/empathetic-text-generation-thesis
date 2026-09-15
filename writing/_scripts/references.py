@@ -55,6 +55,7 @@ REFS = {
     "efron1993": 'B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York, NY, USA: Chapman & Hall, 1993.',
 
     # ---------------------------------------------------------------- tools, hardware, guidance
+    "holtzman2020": 'A. Holtzman, J. Buys, L. Du, C. Fang, and Y. Choi, "The curious case of neural text degeneration," in Proc. Int. Conf. Learning Representations (ICLR), 2020.',
     "wolf2020transformers": 'T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue, A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz et al., "Transformers: State-of-the-art natural language processing," in Proc. 2020 Conf. Empirical Methods Natural Language Processing: System Demonstrations, 2020, pp. 38-45, doi: 10.18653/v1/2020.emnlp-demos.6.',
     "paszke2019pytorch": 'A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan et al., "PyTorch: An imperative style, high-performance deep learning library," in Advances in Neural Information Processing Systems (NeurIPS), vol. 32, 2019, pp. 8024-8035.',
     "virtanen2020scipy": 'P. Virtanen, R. Gommers, T. E. Oliphant et al., "SciPy 1.0: Fundamental algorithms for scientific computing in Python," Nature Methods, vol. 17, pp. 261-272, 2020, doi: 10.1038/s41592-019-0686-2.',

@@ -35,7 +35,7 @@ We answer these questions with a controlled comparison in which data, decoding a
 
 ### A. Task and Data
 
-Given a user's message, the system must produce a reply that satisfies three rules derived from supportive-listening practice: it (R1) acknowledges the feeling, (R2) asks exactly one question and (R3) stays within 120 words. The rules make over-questioning measurable: a model fine-tuned end to end on ED listener replies asks 7.07 questions per reply (Section V). We use the official ED train, validation and test partitions. Each conversation contributes its *first user utterance* labelled with the conversation's emotion, which gives 2,542 test examples. We deliberately do not use the situation descriptions, because they are written after the fact and state the feeling explicitly: a GPT-2 detector trained on them scored 56.9% on situation text but only 48.2% on the user messages that a deployed system actually receives.
+Given a user's message, the system must produce a reply that satisfies three rules derived from supportive-listening practice: it (R1) acknowledges the feeling, (R2) asks exactly one question and (R3) stays within 120 words. The rules are not satisfied by imitating the data: real ED listener replies acknowledge the feeling in only 10.6% of cases and meet all three rules in 4.3%. We use the official ED train, validation and test partitions. Each conversation contributes its *first user utterance* labelled with the conversation's emotion, which gives 2,542 test examples. We deliberately do not use the situation descriptions, because they are written after the fact and state the feeling explicitly: a GPT-2 detector trained on them scored 56.9% on situation text but only 48.2% on the user messages that a deployed system actually receives.
 
 ### B. Emotion Detector (d1)
 
@@ -49,7 +49,7 @@ Fig. {ref:fig:arch} shows the pipeline. The generator is Phi-4-mini-instruct {ci
 
 ### D. Baselines
 
-All baselines respond to the same conversations with the same decoding settings. *Zero-shot*: Qwen2.5-1.5B with a generic empathetic prompt and no detector. *Fine-tuned*: Qwen2.5-1.5B fine-tuned end to end on ED replies with LoRA {cite:hu2022lora}. *Single model (1.5B)* and *single model (7.6B)*: Qwen2.5-1.5B and Qwen2.5-7B (4-bit), each prompted with the same rules to first name the emotion and then respond in one pass. *Initial pipeline*: a GPT-2 Medium detector with a Qwen2.5-1.5B generator and a generic emotion-conditioned prompt. *Top-1 Phi*: our detector and generator, passing only the top-1 emotion with a generic prompt. We also tested retrieval augmentation {cite:lewis2020rag} of the initial pipeline with similar ED conversations.
+All baselines respond to the same conversations with the same decoding settings. *Zero-shot*: Qwen2.5-1.5B with a generic empathetic prompt and no detector. *Fine-tuned*: Qwen2.5-1.5B fine-tuned end to end on ED replies with LoRA {cite:hu2022lora} (rank 16, alpha 32, learning rate 2e-4, dropout 0.1, best epoch by validation loss). *Single model (1.5B)* and *single model (7.6B)*: Qwen2.5-1.5B and Qwen2.5-7B (4-bit), each prompted with the same rules to first name the emotion and then respond in one pass. *Initial pipeline*: a GPT-2 Medium detector with a Qwen2.5-1.5B generator and a generic emotion-conditioned prompt. *Top-1 Phi*: our detector and generator, passing only the top-1 emotion with a generic prompt. We also tested retrieval augmentation {cite:lewis2020rag} of the initial pipeline with similar ED conversations.
 
 ## IV. Experimental Setup
 
@@ -69,7 +69,7 @@ All baselines respond to the same conversations with the same decoding settings.
 | System | Params | Rules (%) | 1 Q (%) | Words | WASSA | Val. (%) | Emp. | All |
 |---|---|---|---|---|---|---|---|---|
 | Zero-shot Qwen2.5-1.5B | 1.5 | 19.0 | 22.7 | 75.9 | 4.25 | 24.7 | 5.98 | 7.51 |
-| Fine-tuned Qwen2.5-1.5B | 1.5 | 0.0 | 1.7 | 200.7 | 4.19 | 20.0 | 3.44 | 4.44 |
+| Fine-tuned Qwen2.5-1.5B | 1.5 | 22.3 | 74.0 | 10.0 | 3.36 | 18.3 | [[PENDING: judge]] | [[PENDING: judge]] |
 | Single model Qwen2.5-1.5B | 1.5 | 51.3 | 73.7 | 42.0 | 4.84 | 25.7 | 7.15 | 8.24 |
 | Single model Qwen2.5-7B | 7.6 | **82.3** | **99.0** | 53.0 | **5.76** | 32.3 | **8.15** | **8.90** |
 | Initial pipeline (GPT-2 + Qwen-1.5B) | 1.9 | 63.7 | 87.3 | 35.2 | 4.80 | 26.0 | 6.98 | 8.04 |
@@ -78,7 +78,7 @@ All baselines respond to the same conversations with the same decoding settings.
 | **Ours: two-stage RoBERTa + Phi-4-mini** | 4.0 | 60.0 | 92.7 | 57.1 | 5.05 | **36.7** | 7.84 | 8.68 |
 [[/TABLE]]
 
-Table {ref:tab:main} summarises all systems. Our system achieves the highest emotion validation (36.7%) and the second-highest WASSA and AI-judge scores, behind only the 7.6B single model. The fine-tuned model reproduces the questioning habit of ED listeners, averaging 7.07 questions and 200.7 words per reply, and fails every rule. Retrieval augmentation lowered the initial pipeline's rule adherence from 63.7% to 43.7%, likely because the retrieved human replies model the multi-question behaviour that the rules prohibit.
+Table {ref:tab:main} summarises all systems. Our system achieves the highest emotion validation (36.7%) and the second-highest WASSA and AI-judge scores, behind only the 7.6B single model. The fine-tuned model learns the style of ED listeners: 10-word replies that usually ask a question but rarely acknowledge the feeling (30.0%), meeting all rules in 22.3% of cases. Retrieval augmentation lowered the initial pipeline's rule adherence from 63.7% to 43.7%, as the retrieved listener replies model the same style.
 
 ### B. Significance Against Key Baselines
 
@@ -119,7 +119,7 @@ For reference, our detector reads only the first user message yet exceeds the em
 
 ### E. Judge Agreement and Human Evaluation
 
-The two judges agree with each other at Spearman rho = 0.73 for empathy and 0.74 overall across 448 replies, and rank the seven systems identically except for exchanging our system and top-1 Phi, whose scores differ by 0.03. At the system level, WASSA ranks the seven systems in nearly the same order as the judges (rho = 0.96). [[PENDING: human evaluation results: number of valid participants after attention checks; selection rate of each system against chance (33.3%) with binomial tests; Fleiss' kappa; agreement between the human majority choice and the judges' top system.]]
+The two judges agree with each other at Spearman rho = 0.60 for empathy and overall across 384 replies of six systems, and rank them identically except for exchanging our system and top-1 Phi, whose scores differ by 0.03. At the system level, WASSA ranks the systems in nearly the same order as the judges (rho = 0.94). [[PENDING: human evaluation results: number of valid participants after attention checks; selection rate of each system against chance (33.3%) with binomial tests; Fleiss' kappa; agreement between the human majority choice and the judges' top system.]]
 
 ## VI. Discussion and Limitations
 

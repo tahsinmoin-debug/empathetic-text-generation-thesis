@@ -47,7 +47,7 @@ SECTIONS = {
 
 # Order = how the thesis tells the story: baselines first, then the design iterations, final last.
 SETTINGS = [
-    "zero_shot", "fine_tuned", "single_model_same_size", "single_model_bigger",
+    "zero_shot", "fine_tuned_fixed", "single_model_same_size", "single_model_bigger",
     "prompt_engineered_pipeline", "rag_pipeline",
     "bakeoff_qwen", "bakeoff_gemma", "bakeoff_phi",
     "two_stage_qwen", "two_stage_phi",
@@ -55,7 +55,8 @@ SETTINGS = [
 
 LABEL = {
     "zero_shot": "Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",
-    "fine_tuned": "Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector)",
+    "fine_tuned_fixed": "Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector)",
+    "fine_tuned": "Original LoRA baseline with end-of-turn bug (superseded)",
     "single_model_same_size": "Single model, same size: Qwen2.5-1.5B detects + responds",
     "single_model_bigger": "Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",
     "prompt_engineered_pipeline": "Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2",
@@ -67,6 +68,7 @@ LABEL = {
     "two_stage_phi": "FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt",
 }
 FINAL = "two_stage_phi"
+FT = "fine_tuned_fixed"
 
 PENDING = "[[PENDING - AI-judge scores not yet returned]]"
 
@@ -277,7 +279,7 @@ def build_rules_and_quality(per_reply):
     summary.insert(0, "System", [LABEL[s] for s in summary.index])
     summary.insert(0, "Setting ID", summary.index)
     summary = summary.reset_index(drop=True)
-    no_d1 = summary["Setting ID"].isin(["zero_shot", "fine_tuned", "single_model_same_size", "single_model_bigger"])
+    no_d1 = summary["Setting ID"].isin(["zero_shot", FT, "single_model_same_size", "single_model_bigger"])
     summary.loc[no_d1, "Context awareness (%)"] = np.nan
     summary = summary.round(2)
 
@@ -363,7 +365,7 @@ def build_two_stage(per_reply):
 
 
 def build_final_significance(per_reply):
-    baselines = ["single_model_same_size", "single_model_bigger", "zero_shot", "fine_tuned",
+    baselines = ["single_model_same_size", "single_model_bigger", "zero_shot", FT,
                  "prompt_engineered_pipeline", "rag_pipeline", "bakeoff_phi"]
     binary = {"all_rules": "All rules", "ack_present": "Acknowledgement", "exactly_one_question": "One question",
               "validation_match": "Emotion validation"}
@@ -497,8 +499,9 @@ def build_rag_table(summary):
 
 PANEL = {"Nemotron 3 Ultra": "nemotron_openrouter_scores.csv", "gpt-oss-120b": "gptoss_groq_scores.csv"}
 MISTRAL = {"Mistral Large": "mistral_large_scores.csv"}
-JUDGED = ["single_model_bigger", FINAL, "bakeoff_phi", "single_model_same_size",
-          "prompt_engineered_pipeline", "zero_shot", "fine_tuned"]
+JUDGED_ALL = ["single_model_bigger", FINAL, "bakeoff_phi", "single_model_same_size",
+              "prompt_engineered_pipeline", "zero_shot", FT]
+JUDGED = list(JUDGED_ALL)  # set in build_judges(): FT only when fully judged
 DIMS = ["empathy", "relevance", "safety"]
 
 
@@ -529,8 +532,16 @@ def panel_mean(df, judges, dim):
     return df[[f"{n}|{dim}" for n in judges]].mean(axis=1)
 
 
-def build_judges():
+def ft_fully_judged():
     df = load_judges(PANEL)
+    return int((df["setting"] == FT).sum()) >= 64
+
+
+def build_judges():
+    global JUDGED
+    JUDGED = [x for x in JUDGED_ALL if x != FT or ft_fully_judged()]
+    df = load_judges(PANEL)
+    df = df[df["setting"].isin(JUDGED)].copy()
     for dim in DIMS + ["overall"]:
         df[dim] = panel_mean(df, PANEL, dim)
     rows, detail = [], []
@@ -548,6 +559,10 @@ def build_judges():
                 dr[f"{n} {dim}"] = round(d[f"{n}|{dim}"].mean(), 2)
         detail.append(dr)
     table = pd.DataFrame(rows).sort_values("Panel overall", ascending=False)
+    if FT not in JUDGED:
+        pending = {c: "[[PENDING - AI-judge scores for the corrected fine-tuned baseline]]" for c in table.columns}
+        pending["System"] = LABEL[FT]
+        table = pd.concat([table, pd.DataFrame([pending])], ignore_index=True)
     note = ("Two-judge panel: Nemotron 3 Ultra (OpenRouter) and gpt-oss-120b (Groq); temperature 0; blind (never see "
             "the system name or the gold reply); 1-10 on empathy, relevance and safety; overall = mean of the three; "
             "panel = mean of the two judges. Stratified sample: 2 conversations per emotion (shortest + longest) = 64 "
@@ -563,8 +578,7 @@ def build_judges():
 
 
 def build_judge_significance(df):
-    baselines = ["single_model_same_size", "single_model_bigger", "bakeoff_phi",
-                 "prompt_engineered_pipeline", "zero_shot", "fine_tuned"]
+    baselines = [x for x in JUDGED if x != FINAL]
     wide = df.set_index(["conv_id", "setting"])
     rows = []
     for dim in ["empathy", "relevance", "safety", "overall"]:
@@ -584,7 +598,7 @@ def build_judge_significance(df):
             r["p"] = round(r["p"], 5)
         rows += block
     note = ("Paired on the same 64 conversations; panel score = mean of the two judges. Wilcoxon signed-rank test, "
-            "10,000-sample paired bootstrap CI (seed 42), Holm correction across the 6 comparisons within each "
+            f"10,000-sample paired bootstrap CI (seed 42), Holm correction across the {len(baselines)} comparisons within each "
             "dimension. Significant only if Holm-adjusted p < 0.05 AND the CI excludes zero.")
     save("ch5_3", "final_system_vs_baselines_judges", pd.DataFrame(rows),
          "Final system vs every judged baseline - AI-judge panel, paired significance tests",
@@ -597,7 +611,7 @@ def judge_agreement_and_selection(df):
     rows = []
     for dim in ("empathy", "overall"):
         r_all = spearmanr(df[f"{a}|{dim}"], df[f"{b}|{dim}"])
-        sub = df[df["setting"] != "fine_tuned"]
+        sub = df[df["setting"] != FT]
         r_nf = spearmanr(sub[f"{a}|{dim}"], sub[f"{b}|{dim}"])
         rows.append({"Check": f"Per-reply agreement on {dim}: {a} vs {b}", "N": len(df),
                      "Result": f"rho = {r_all.statistic:.3f} (p = {r_all.pvalue:.1e})",
@@ -605,23 +619,24 @@ def judge_agreement_and_selection(df):
     sys_means = df.groupby("setting")[[f"{n}|overall" for n in names]].mean()
     ranks = sys_means.rank(ascending=False).astype(int)
     diff = [LABEL[s] for s in ranks.index if ranks.loc[s].nunique() > 1]
-    rows.append({"Check": "Do both judges rank the 7 systems in the same order (overall)?", "N": len(sys_means),
+    rows.append({"Check": f"Do both judges rank the {len(sys_means)} systems in the same order (overall)?", "N": len(sys_means),
                  "Result": "YES" if not diff else f"All but {len(diff)} systems; these swap places: " + " / ".join(diff),
                  "Without fine-tuned system": f"rank rho = {spearmanr(sys_means.iloc[:, 0], sys_means.iloc[:, 1]).statistic:.2f}"})
 
     # Does dropping Mistral change anything? Check on the 5 systems all three judges scored.
     three = load_judges({**PANEL, **MISTRAL})
+    three = three[three["setting"].isin(JUDGED)]  # the original buggy fine-tuned outputs are not used
     for dim in ("empathy", "overall"):
         two_m, three_m = panel_mean(three, PANEL, dim), panel_mean(three, {**PANEL, **MISTRAL}, dim)
         same = (list(two_m.groupby(three["setting"]).mean().sort_values().index)
                 == list(three_m.groupby(three["setting"]).mean().sort_values().index))
-        rows.append({"Check": f"Two-judge vs three-judge panel mean ({dim}), 5 systems judged by all three",
+        rows.append({"Check": f"Two-judge vs three-judge panel mean ({dim}), {three['setting'].nunique()} systems judged by all three",
                      "N": len(three), "Result": f"per-reply rho = {spearmanr(two_m, three_m).statistic:.3f}",
                      "Without fine-tuned system": "identical system ranking" if same else "ranking CHANGES"})
     all3 = list({**PANEL, **MISTRAL})
     pair_r = [spearmanr(three[f"{x}|empathy"], three[f"{y}|empathy"]).statistic
               for i, x in enumerate(all3) for y in all3[i + 1:]]
-    rows.append({"Check": "Three-judge agreement on empathy (all pairs), 5 systems", "N": len(three),
+    rows.append({"Check": f"Three-judge agreement on empathy (all pairs), {three['setting'].nunique()} systems", "N": len(three),
                  "Result": f"rho = {min(pair_r):.2f} to {max(pair_r):.2f}", "Without fine-tuned system": ""})
     note = ("Mistral Large returned HTTP 403 ('not available in your subscription tier') on both team accounts, so the "
             "final systems could not be scored by it. To avoid mixing judge sets across systems, every system is "
@@ -636,9 +651,9 @@ def judge_agreement_and_selection(df):
 
     panel = pd.DataFrame([
         ["Nemotron 3 Ultra", "NVIDIA", "550B total / 55B active (mixture-of-experts)", "OpenRouter free tier (50 requests/day)",
-         "Used - all 7 systems", "Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)"],
+         "Used - every judged system", "Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)"],
         ["gpt-oss-120b", "OpenAI (open weights, Apache-2.0)", "About 120B (mixture-of-experts)", "Groq free tier",
-         "Used - all 7 systems", "Open weights make this judge reproducible; fast enough to score everything"],
+         "Used - every judged system", "Open weights make this judge reproducible; fast enough to score everything"],
         ["Mistral Large", "Mistral AI", "Flagship (size not published)", "Mistral free Experiment tier",
          "Planned third judge - 5 systems only, then unavailable (HTTP 403)", "Kept only to check that the two-judge panel gives the same result"],
     ], columns=["Judge", "Developer", "Size", "Access", "Role", "Why selected"])
@@ -671,6 +686,7 @@ def judge_agreement_and_selection(df):
 
 def build_wassa_validity():
     df = pd.read_csv(JUDGE_DIR / "wassa_empathy_scores.csv").merge(load_judges(PANEL), on=["conv_id", "setting"])
+    df = df[df["setting"].isin(JUDGED)]
     df["judge_mean_empathy"] = panel_mean(df, PANEL, "empathy")
     wc = []
     for sname in df["setting"].unique():
@@ -715,7 +731,7 @@ def build_wassa_validity():
         ["Reproducibility", "Re-implementation check after a library upgrade",
          "1,800 of 1,800 pre-upgrade scores reproduced exactly", "`llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv`"],
     ], columns=["Aspect", "Check", "Result", "Source"])
-    note = ("Judges = the two-judge panel (Nemotron 3 Ultra, gpt-oss-120b), 7 systems x 64 conversations. "
+    note = (f"Judges = the two-judge panel (Nemotron 3 Ultra, gpt-oss-120b), {df['setting'].nunique()} systems x 64 conversations. "
             "Conclusion: trustworthy for comparing system averages (same ranking as the AI judges), too noisy to rank "
             "individual replies within one system. The thesis uses it only for the first purpose.")
     for sec in ("ch5_3", "ch4_1"):
@@ -1058,26 +1074,56 @@ def build_project_tables():
     save("ch4_1", "tools_and_versions", tools, "Tools and technologies (implementation environment)", "same as Tools folder")
 
     hyper = pd.DataFrame([
-        ["d1", "Backbone", "RoBERTa-base (125M)", "Top-5 significantly above BERT/ELECTRA at equal top-1; pipeline uses top-3; RoBERTa-large tested in-pipeline with no reply gain"],
-        ["d1", "Input text", "First user utterance, max 128 tokens", "Matches inference-time input (fixes mismatch)"],
-        ["d1", "Learning rate / epochs", "2e-5 / 4 (early stopping, patience 1)", "Standard BERT-family fine-tuning range"],
-        ["d1", "Batch", "8 x 2 accumulation = 16", "Fits 8 GB VRAM"],
-        ["d1", "Warmup / weight decay / grad clip", "0.06 / 0.01 / 1.0", "Warmup 0.06 from RoBERTa paper; prevents large-model divergence"],
-        ["d1 (large, comparison only)", "Learning rate / batch", "1e-5 / 4", "Base settings diverged"],
-        ["Two-stage", "Candidates passed to d2", "Top-3", "Gold in top-3 76.5% vs top-1 50.3%"],
-        ["Two-stage", "Stage-1 decoding", "Greedy, max 10 tokens", "Classification decision, deterministic"],
-        ["d2", "Model", "Phi-4-mini-instruct, 4-bit NF4, double quant, fp16 compute", "Best rule adherence in bake-off; fits 8 GB"],
-        ["d2", "Sampling", "temperature 0.7, top-p 0.9, max 250 new tokens, seed 42", "Same across every generation experiment for fairness"],
-        ["d2", "Prompt", "Per-emotion focus/avoid guidance (32) + 3 rules + attention cues, <= 100 words", "Rules scored at 120 words (scorer tolerance)"],
-        ["Attention cues", "Source / amount", "d1 last-layer [CLS] attention, top 40% tokens, word-boundary expanded", "Eager attention required"],
-        ["Conversational agent", "d1 history window", "Last 4 user turns", "Best or tied-best in 3 of 4 long scenarios; 6 turns degraded"],
-        ["Conversational agent", "d2 history window", "Last 10 exchanges, verbatim", "Avoids repetition; no lossy summarisation"],
-        ["AI judges", "Decoding", "temperature 0, JSON output", "Deterministic scoring"],
-        ["Evaluation", "Sample", "300 test conversations (seed 42); judges: 64 stratified (2 per emotion)", "Same sample for every system"],
-        ["Statistics", "Tests", "McNemar exact, Wilcoxon, 10k paired bootstrap, Holm correction", "Paired data; binary vs continuous metrics"],
-    ], columns=["Component", "Setting", "Value", "Justification"])
+        # ---- d1 emotion detector
+        ["d1 detector", "Backbone", "RoBERTa-base (125M)", "Highest top-5 accuracy (85.0%) of the base-size encoders at equal top-1; RoBERTa-large adds 2.9 pp but has 2.8x the parameters, 7.4x the training time and gives no reply gain", "Our measurement (Tables 4.5, 5.16, 5.25)"],
+        ["d1 detector", "Training input", "First user utterance", "A detector trained on situation descriptions fell from 56.9% to 48.2% on the user messages it actually receives", "Our measurement (Table 4.4)"],
+        ["d1 detector", "Maximum input length", "128 tokens", "99.7% of training first utterances fit (mean 46.5 tokens)", "Our measurement"],
+        ["d1 detector", "Learning rate", "2e-5", "Inside the fine-tuning ranges recommended for BERT (2e-5 to 5e-5) and used for RoBERTa (1e-5 to 3e-5)", "Devlin et al. (2019); Liu et al. (2019)"],
+        ["d1 detector", "Effective batch size", "16 (8 per step x 2 accumulation)", "Batch size recommended for BERT/RoBERTa fine-tuning; 8 per step fits in 8 GB", "Devlin et al. (2019); Liu et al. (2019); hardware limit"],
+        ["d1 detector", "Epochs and selection", "Up to 4, early stopping (patience 1), best checkpoint by validation accuracy", "BERT recommends 2-4 fine-tuning epochs; keeping the best validation checkpoint prevents over-fitting", "Devlin et al. (2019)"],
+        ["d1 detector", "Warm-up", "Linear, 6% of steps", "RoBERTa's fine-tuning setting; without warm-up our RoBERTa-large run diverged to 5.0% accuracy", "Liu et al. (2019); our observation"],
+        ["d1 detector", "Weight decay / gradient clipping", "0.01 / 1.0", "Weight decay as used for BERT; clipping at 1.0 is the Transformers default and keeps updates stable", "Devlin et al. (2019); library default"],
+        ["d1 detector", "Precision / seed", "fp16 mixed precision / 42", "Fits the 8 GB GPU and trains faster; fixed seed for reproducibility", "Hardware limit; convention"],
+        ["d1 detector (comparison only)", "RoBERTa-large learning rate / batch", "1e-5 / 4", "The base settings diverged; 1e-5 is the lowest value of RoBERTa's fine-tuning range and batch 4 fits in memory", "Liu et al. (2019); our observation"],
+        # ---- two-stage selection and attention cues
+        ["Two-stage selection", "Candidates passed to d2", "Top-3 emotions", "The true emotion is in the top-3 for 76.5% of messages against 50.3% for top-1, and most errors are neighbouring emotions", "Our measurement (Tables 5.2, 5.4)"],
+        ["Two-stage selection", "Stage-1 decoding", "Greedy, at most 10 new tokens, fall back to d1 top-1", "A classification decision should be deterministic; 100% of stage-1 outputs named a valid candidate", "Our measurement (Table 5.5)"],
+        ["Attention cues", "Attention source", "Final-layer attention from the [CLS] token, eager attention", "RoBERTa classifies from [CLS]; the default sdpa attention returns no weights, so eager attention is required", "Liu et al. (2019); our verification"],
+        ["Attention cues", "Amount", "Top 40% of tokens, at most 3 phrases", "Design choice to keep the prompt short; not tuned (listed as a limitation)", "Design choice"],
+        # ---- d2 generator
+        ["d2 generator", "Model", "Phi-4-mini-instruct (3.8B)", "Highest rule adherence in the bake-off with detector and prompt fixed (65.3% vs 57.7% Qwen2.5-1.5B, 22.0% Gemma-3-4B)", "Our measurement (Table 4.6)"],
+        ["d2 generator", "Quantisation", "4-bit NF4, double quantisation, fp16 compute", "NF4 preserves 16-bit quality while cutting memory about fourfold; measured peak use 3.40 GB on the 8 GB GPU", "Dettmers et al. (2023); our measurement (Table 5.26)"],
+        ["d2 generator", "Temperature", "0.7", "The developer's default for Qwen2.5-Instruct; identical for every system so differences come from design, not decoding", "Qwen2.5 generation_config; fairness"],
+        ["d2 generator", "Top-p (nucleus sampling)", "0.9", "Nucleus sampling avoids the repetitive, degenerate text of pure greedy or beam decoding; identical for every system", "Holtzman et al. (2020)"],
+        ["d2 generator", "Maximum new tokens", "250", "The prompt asks for under 100 words (about 130 tokens); the longest final reply is 119 tokens, so no reply is cut off", "Our measurement"],
+        ["d2 generator", "Word limit", "Under 100 words in the prompt, scored at 120", "Short replies reduce burden on a distressed user; the 20-word margin tolerates small overshoots", "Design choice"],
+        ["d2 generator", "Repetition penalty", "None", "Kept identical for all systems; a penalty of 1.1 is deferred because it would change the judged outputs", "Fairness; future work"],
+        # ---- conversational agent
+        ["Conversational agent", "d1 context window", "Last 4 user turns", "Context matters for emotion recognition in conversation; 4 turns was best or joint best in 3 of 4 long scenarios, 6 turns degraded 2", "Poria et al. (2019); our scenario tests"],
+        ["Conversational agent", "d2 memory", "Last 10 exchanges, verbatim", "Support conversations are short; verbatim history avoids losing emotional detail through summarisation", "Design choice"],
+        ["Conversational agent", "Question rule", "Mandatory on turn 1, optional afterwards", "A question in every reply turns a long conversation into an interrogation; turn 1 keeps the evaluated rules", "Design choice"],
+        # ---- corrected LoRA baseline
+        ["LoRA baseline", "Rank / alpha", "16 / 32", "Low ranks are sufficient to adapt attention weights; alpha = 2 x rank scales the update", "Hu et al. (2022)"],
+        ["LoRA baseline", "Target modules", "q, k, v, o attention projections", "The weight matrices studied for adaptation in LoRA", "Hu et al. (2022)"],
+        ["LoRA baseline", "Learning rate / dropout / weight decay", "2e-4 / 0.1 / 0.01", "LoRA's GPT-2 settings; QLoRA uses 2e-4 and dropout 0.1 for models up to 13B", "Hu et al. (2022); Dettmers et al. (2023)"],
+        ["LoRA baseline", "Warm-up / effective batch / optimiser", "6% linear / 16 (2 x 8) / paged AdamW 32-bit", "Same warm-up rule as the detector; batch fits 8 GB; paged optimisers avoid memory spikes", "Liu et al. (2019); Dettmers et al. (2023)"],
+        ["LoRA baseline", "Epochs and selection", "Up to 3, best epoch by validation loss, early stopping (patience 1)", "Validation loss rose after epoch 1 (1.4607 to 1.4626), so epoch 1 was kept", "Our training log"],
+        ["LoRA baseline", "Maximum length", "256 tokens", "The longest training pair is 177 tokens, so nothing is truncated", "Our measurement"],
+        ["LoRA baseline", "Padding token", "Qwen end-of-text token (endoftext)", "Using the end-of-turn token as padding masked it from the loss: the original run never learned to stop (99% of replies hit the token limit)", "Our finding (adjustment A11)"],
+        # ---- evaluation
+        ["AI judges", "Decoding", "Temperature 0, JSON-only answer", "Removes sampling noise so the same reply always gets the same score", "Design choice"],
+        ["AI judges", "Sample", "64 conversations: shortest and longest per emotion", "Covers all 32 emotions and both short and long messages within the 50-requests-per-day limit", "Design choice; resource limit"],
+        ["AI judges", "Panel", "Nemotron 3 Ultra + gpt-oss-120b, blind", "Different developers from our models avoid self-preference; a panel reduces single-judge bias", "Panickssery et al. (2024); Verga et al. (2024)"],
+        ["WASSA classifier", "Model", "hyy33, WASSA 2024 Track 2", "Trained on human empathy ratings of conversation turns; r = 0.544 with human ratings", "Giorgi et al. (2024); Yang et al. (2024)"],
+        ["Statistics", "Evaluation sample", "300 test conversations, seed 42", "Fixed before any experiment and identical for every system, so all comparisons are paired", "Design choice"],
+        ["Statistics", "Tests", "McNemar exact (binary), Wilcoxon signed-rank (scores)", "Paired tests matched to the data type; Wilcoxon does not assume normal differences", "McNemar (1947); Wilcoxon (1945)"],
+        ["Statistics", "Confidence intervals", "Paired bootstrap, 10,000 resamples", "More than the 1,000 resamples recommended for percentile intervals, giving stable limits", "Efron and Tibshirani (1993)"],
+        ["Statistics", "Multiple comparisons", "Holm correction; significant only if adjusted p < 0.05 and CI excludes zero", "Controls the family-wise error rate with more power than Bonferroni", "Holm (1979)"],
+        ["Human evaluation", "Design", "13 items (11 scored + 2 attention checks), 3-way forced choice", "Keeps the form short enough to avoid rater fatigue; preference judgements follow comparable studies", "Cao et al. (2025); Wu et al. (2025)"],
+        ["Resource benchmark", "Protocol", "50 messages, 3 warm-up, one system per run", "Warm-up removes first-call overhead; separate runs keep memory readings clean", "Design choice"],
+    ], columns=["Component", "Parameter", "Value", "Justification", "Evidence"])
     for sec in ("ch4_2", "ch5_2b"):
-        save(sec, "configuration_and_hyperparameters", hyper, "Final configuration and justification of every setting",
+        save(sec, "configuration_and_hyperparameters", hyper, "Every parameter used, its value, justification and evidence",
              "training/generation scripts (see WRITING_GUIDE.md for file paths)")
 
     adjustments = pd.DataFrame([
@@ -1090,6 +1136,7 @@ def build_project_tables():
         ["A7", "Fixed one-question rule becomes interrogation over many turns", "Rule designed for single turn", "Question optional from turn 2; no repeated phrasing", "Keeps turn-1 comparability"],
         ["A8", "RAG suggested by P2 panel", "All rules 63.7% -> 43.7%", "Not adopted", "Documented negative result"],
         ["A10", "Could a larger detector improve replies?", "RoBERTa-large: +2.9 pp top-1 on the test split", "Swapped RoBERTa-large into the final pipeline (same 300 conversations)", "No reply-quality measure improved (all rules p=0.16, WASSA p=0.43, validation p=0.68); not adopted"],
+        ["A11", "LoRA fine-tuned baseline never ended its replies", "99% of replies hit the 250-token limit; the padding token was the end-of-turn token (im_end), so it was masked from the loss", "Retrained with Qwen's own pad token, a start-up check, and published LoRA settings (lr 2e-4, dropout 0.1, weight decay 0.01, 6% warm-up, best epoch by validation loss)", "Replies 200.7 -> 10.0 words, 0% at the token limit; all rules 0.0% -> 22.3%; still far below the final system (60.0%)"],
         ["A9", "Repetition in Phi replies", "Boilerplate 58.7% (two-stage)", "Deferred: repetition_penalty 1.1", "Future work - would invalidate in-progress judging"],
     ], columns=["ID", "Problem found", "Evidence", "Adjustment", "Measured effect"])
     save("ch5_2b", "design_adjustment_log", adjustments, "Design adjustment log", "result files referenced in each row")

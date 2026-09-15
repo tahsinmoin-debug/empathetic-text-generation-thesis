@@ -12,7 +12,7 @@ Table 5.13 reports all comparisons between the final system and the baselines. T
 
 **Empathy and emotion fidelity improve significantly over comparable designs.** The final system's WASSA score exceeds that of every baseline except the larger single model: it is higher than the same-size single model by 0.21 points (95% CI [+0.08, +0.35], adjusted p = 0.012), the initial pipeline by 0.25 points ([+0.10, +0.39], p = 0.003), and the same generator with top-1 prompting by 0.16 points ([+0.05, +0.26], p = 0.008). Emotion validation is also higher than for every baseline except the larger single model, by 8.3 to 16.7 percentage points (all adjusted p < 0.013). The difference from the larger single model, 4.3 points, is not significant (p = 0.19).
 
-**Rule adherence does not significantly exceed that of the same-size single model after correction.** The final system follows all rules in 60.0% of replies, compared with 51.3% for the same-size single model, a difference of 8.7 points (CI [+1.0, +16.3]). The unadjusted p-value is 0.032, but after Holm correction it is 0.095, so this difference is not claimed. The final system is significantly better than zero-shot prompting (+41.0 points), the fine-tuned model (+60.0) and the retrieval-augmented pipeline (+16.3), and does not differ significantly from the initial pipeline (-3.7) or from top-1 prompting with Phi-4-mini (-5.3). On the one-question rule alone, it is significantly better than the same-size single model (+19.0 points, p < 0.001).
+**Rule adherence does not significantly exceed that of the same-size single model after correction.** The final system follows all rules in 60.0% of replies, compared with 51.3% for the same-size single model, a difference of 8.7 points (CI [+1.0, +16.3]). The unadjusted p-value is 0.032, but after Holm correction it is 0.095, so this difference is not claimed. The final system is significantly better than zero-shot prompting (+41.0 points), the fine-tuned model (+37.7) and the retrieval-augmented pipeline (+16.3), and does not differ significantly from the initial pipeline (-3.7) or from top-1 prompting with Phi-4-mini (-5.3). On the one-question rule alone, it is significantly better than the same-size single model (+19.0 points, p < 0.001).
 
 **The larger single model is significantly better on rules and empathy.** Qwen2.5-7B exceeds the final system in overall rule adherence (-22.3 points), acknowledgement (-16.7), the one-question rule (-6.3) and WASSA empathy (-0.71), and all of these differences are significant after correction.
 
@@ -22,35 +22,35 @@ Table 5.13 reports all comparisons between the final system and the baselines. T
 | All rules | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 60 | 51.33 | 8.67 | [+1.00, +16.33] | McNemar exact | 0.03 | 0.1 | no |
 | All rules | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 60 | 82.33 | -22.33 | [-29.33, -15.33] | McNemar exact | 0 | 0 | YES |
 | All rules | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 60 | 19 | 41 | [+34.00, +47.67] | McNemar exact | 0 | 0 | YES |
-| All rules | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 60 | 0 | 60 | [+54.33, +65.67] | McNemar exact | 0 | 0 | YES |
+| All rules | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 60 | 22.33 | 37.67 | [+30.33, +45.00] | McNemar exact | 0 | 0 | YES |
 | All rules | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 60 | 63.67 | -3.67 | [-11.00, +3.67] | McNemar exact | 0.37 | 0.39 | no |
 | All rules | Initial pipeline + retrieval (RAG) | 300 | 60 | 43.67 | 16.33 | [+8.33, +24.00] | McNemar exact | 0 | 0 | YES |
 | All rules | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 60 | 65.33 | -5.33 | [-13.00, +2.00] | McNemar exact | 0.19 | 0.39 | no |
-| Acknowledgement | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 66.33 | 70.67 | -4.33 | [-11.33, +2.67] | McNemar exact | 0.24 | 0.72 | no |
+| Acknowledgement | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 66.33 | 70.67 | -4.33 | [-11.33, +2.67] | McNemar exact | 0.24 | 0.48 | no |
 | Acknowledgement | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 66.33 | 83 | -16.67 | [-23.33, -10.00] | McNemar exact | 0 | 0 | YES |
 | Acknowledgement | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 66.33 | 81.67 | -15.33 | [-21.67, -8.67] | McNemar exact | 0 | 0 | YES |
-| Acknowledgement | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 66.33 | 68.67 | -2.33 | [-9.67, +5.00] | McNemar exact | 0.59 | 0.72 | no |
-| Acknowledgement | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 66.33 | 70.33 | -4 | [-10.67, +2.67] | McNemar exact | 0.28 | 0.72 | no |
-| Acknowledgement | Initial pipeline + retrieval (RAG) | 300 | 66.33 | 57 | 9.33 | [+2.33, +16.33] | McNemar exact | 0.01 | 0.06 | no |
-| Acknowledgement | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 66.33 | 72 | -5.67 | [-12.67, +1.33] | McNemar exact | 0.13 | 0.53 | no |
+| Acknowledgement | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 66.33 | 30 | 36.33 | [+29.00, +43.67] | McNemar exact | 0 | 0 | YES |
+| Acknowledgement | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 66.33 | 70.33 | -4 | [-10.67, +2.67] | McNemar exact | 0.28 | 0.48 | no |
+| Acknowledgement | Initial pipeline + retrieval (RAG) | 300 | 66.33 | 57 | 9.33 | [+2.33, +16.33] | McNemar exact | 0.01 | 0.05 | no |
+| Acknowledgement | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 66.33 | 72 | -5.67 | [-12.67, +1.33] | McNemar exact | 0.13 | 0.4 | no |
 | One question | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 92.67 | 73.67 | 19 | [+13.33, +25.00] | McNemar exact | 0 | 0 | YES |
 | One question | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 92.67 | 99 | -6.33 | [-9.67, -3.33] | McNemar exact | 0 | 0 | YES |
 | One question | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 92.67 | 22.67 | 70 | [+64.67, +75.33] | McNemar exact | 0 | 0 | YES |
-| One question | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 92.67 | 1.67 | 91 | [+87.67, +94.00] | McNemar exact | 0 | 0 | YES |
+| One question | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 92.67 | 74 | 18.67 | [+12.67, +24.67] | McNemar exact | 0 | 0 | YES |
 | One question | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 92.67 | 87.33 | 5.33 | [+0.67, +10.00] | McNemar exact | 0.04 | 0.08 | no |
 | One question | Initial pipeline + retrieval (RAG) | 300 | 92.67 | 78 | 14.67 | [+8.67, +20.33] | McNemar exact | 0 | 0 | YES |
 | One question | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 92.67 | 94.67 | -2 | [-6.00, +1.67] | McNemar exact | 0.39 | 0.39 | no |
 | Emotion validation | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 36.67 | 25.67 | 11 | [+5.00, +17.00] | McNemar exact | 0 | 0 | YES |
 | Emotion validation | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 36.67 | 32.33 | 4.33 | [-1.67, +10.33] | McNemar exact | 0.19 | 0.19 | no |
 | Emotion validation | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 36.67 | 24.67 | 12 | [+6.00, +17.67] | McNemar exact | 0 | 0 | YES |
-| Emotion validation | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 36.67 | 20 | 16.67 | [+10.67, +22.67] | McNemar exact | 0 | 0 | YES |
+| Emotion validation | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 36.67 | 18.33 | 18.33 | [+12.33, +24.33] | McNemar exact | 0 | 0 | YES |
 | Emotion validation | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 36.67 | 26 | 10.67 | [+5.00, +16.33] | McNemar exact | 0 | 0 | YES |
 | Emotion validation | Initial pipeline + retrieval (RAG) | 300 | 36.67 | 27.67 | 9 | [+3.00, +15.00] | McNemar exact | 0.01 | 0.01 | YES |
 | Emotion validation | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 36.67 | 28.33 | 8.33 | [+3.00, +13.67] | McNemar exact | 0 | 0.01 | YES |
 | WASSA empathy | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 5.05 | 4.84 | 0.21 | [+0.08, +0.35] | Wilcoxon signed-rank | 0.01 | 0.01 | YES |
 | WASSA empathy | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 5.05 | 5.76 | -0.71 | [-0.84, -0.58] | Wilcoxon signed-rank | 0 | 0 | YES |
 | WASSA empathy | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 5.05 | 4.25 | 0.8 | [+0.66, +0.94] | Wilcoxon signed-rank | 0 | 0 | YES |
-| WASSA empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 5.05 | 4.19 | 0.86 | [+0.72, +0.99] | Wilcoxon signed-rank | 0 | 0 | YES |
+| WASSA empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 5.05 | 3.36 | 1.69 | [+1.48, +1.90] | Wilcoxon signed-rank | 0 | 0 | YES |
 | WASSA empathy | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 5.05 | 4.8 | 0.25 | [+0.10, +0.39] | Wilcoxon signed-rank | 0 | 0 | YES |
 | WASSA empathy | Initial pipeline + retrieval (RAG) | 300 | 5.05 | 4.85 | 0.2 | [+0.05, +0.36] | Wilcoxon signed-rank | 0.01 | 0.01 | YES |
 | WASSA empathy | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 5.05 | 4.89 | 0.16 | [+0.05, +0.26] | Wilcoxon signed-rank | 0 | 0.01 | YES |
@@ -122,7 +122,7 @@ WASSA scores correlate positively with reply length within every system, with Sp
 | System | Mean words | Length OK (%) | WASSA mean | Spearman rho (length vs WASSA) | p |
 |---|---|---|---|---|---|
 | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 75.9 | 83.7 | 4.25 | 0.54 | 0 |
-| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 200.7 | 1.3 | 4.19 | 0.23 | 0 |
+| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 10 | 100 | 3.36 | 0.57 | 0 |
 | Single model, same size: Qwen2.5-1.5B detects + responds | 42 | 100 | 4.84 | 0.2 | 0 |
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 52.9 | 100 | 5.76 | 0.19 | 0 |
 | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 35.2 | 100 | 4.8 | 0.33 | 0 |
@@ -138,7 +138,7 @@ WASSA scores correlate positively with reply length within every system, with Sp
 
 ## 5.3.6 Validity of the WASSA Classifier
 
-Because several conclusions rely on WASSA scores, we examined how far they can be trusted, using the 448 replies of the seven systems that were also scored by both AI judges (Table 5.18). At the **system level**, WASSA ranks the seven systems in nearly the same order as the judges' mean empathy score (Spearman rho = 0.96); the only difference is that the same-size single model and top-1 Phi-4-mini prompting exchange places. At the **reply level**, agreement is modest (rho = 0.31, p < 0.001) and persists after controlling for reply length (partial rho = 0.34), showing that it is not merely a shared preference for longer replies. **Within a single system**, however, agreement is weak (rho = 0.05 to 0.26, significant in only two of the seven systems), compared with 0.73 between the two judges. We therefore use WASSA only to compare system averages over 300 conversations, the purpose for which this evidence supports it, and never to judge individual replies. The provenance of the model, a peer-reviewed ACL 2024 shared-task system trained on human ratings of conversation turns and correlating with human ratings at r = 0.544 [14], [15], and its limitations are listed in the same table.
+Because several conclusions rely on WASSA scores, we examined how far they can be trusted, using the 384 replies of the six systems that were also scored by both AI judges (Table 5.18). At the **system level**, WASSA ranks the six systems in nearly the same order as the judges' mean empathy score (Spearman rho = 0.94); the only difference is that the same-size single model and top-1 Phi-4-mini prompting exchange places. At the **reply level**, agreement is weak but significant (rho = 0.25, p < 0.001) and persists after controlling for reply length (partial rho = 0.24), showing that it is not merely a shared preference for longer replies. **Within a single system**, agreement is weak (rho = 0.05 to 0.26, significant in only two of the six systems), compared with 0.60 between the two judges. [[PENDING: recompute with the corrected fine-tuned baseline once both judges have scored it.]] We therefore use WASSA only to compare system averages over 300 conversations, the purpose for which this evidence supports it, and never to judge individual replies. The provenance of the model, a peer-reviewed ACL 2024 shared-task system trained on human ratings of conversation turns and correlating with human ratings at r = 0.544 [14], [15], and its limitations are listed in the same table.
 
 
 | Aspect | Check | Result | Source |
@@ -148,11 +148,11 @@ Because several conclusions rely on WASSA scores, we examined how far they can b
 | Recognition | Accuracy against humans on the task test set | Pearson r = .544 for empathy; 5th of 9 teams on the track average in the findings table (the authors report 4th) | Findings paper, Table 3 |
 | Recognition | Caveat | The organisers' RoBERTa-base baseline reached r = .694 on empathy; the best team reached .582 | Findings paper, Table 3 |
 | Recognition | Output format | 11 ordinal classes (argmax); our replies receive classes 1-7; the authors do not document how ratings map to classes | Checkpoint metadata; our scores |
-| Our data | System-level ranking vs AI-judge panel (7 systems) | Spearman rho = 0.96 | computed |
-| Our data | Per-reply agreement with the judges' mean empathy | rho = 0.31 (p = 1.5e-11, N = 448) | computed |
-| Our data | Same, controlling for reply length | partial rho = 0.34 (p = 2.9e-13) | computed |
-| Our data | Agreement within a single system | rho = 0.05 to 0.26; 2 of 7 significant | computed |
-| Our data | For reference: judge vs judge on empathy | rho = 0.73 | computed |
+| Our data | System-level ranking vs AI-judge panel (6 systems) | Spearman rho = 0.94 | computed |
+| Our data | Per-reply agreement with the judges' mean empathy | rho = 0.25 (p = 4.9e-07, N = 384) | computed |
+| Our data | Same, controlling for reply length | partial rho = 0.24 (p = 1.4e-06) | computed |
+| Our data | Agreement within a single system | rho = 0.05 to 0.26; 2 of 6 significant | computed |
+| Our data | For reference: judge vs judge on empathy | rho = 0.60 | computed |
 | Reproducibility | Re-implementation check after a library upgrade | 1,800 of 1,800 pre-upgrade scores reproduced exactly | `llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv` |
 
 *Table 5.18: Evidence on the validity of the WASSA empathy classifier for this project*
@@ -160,37 +160,33 @@ Because several conclusions rely on WASSA scores, we examined how far they can b
 
 ## 5.3.7 AI-Judge Results and Agreement
 
-Table 5.19 compares the final system's AI-judge scores with those of each judged baseline on the same 64 conversations. **Against the same-size single model, the final system is rated significantly higher** for empathy (+0.70, 95% CI [+0.39, +1.01], adjusted p < 0.001), relevance (+0.44, [+0.01, +0.86], p = 0.023) and overall (+0.44, [+0.17, +0.72], p = 0.001), while safety does not differ significantly. It is also rated significantly higher overall than the initial pipeline (+0.65), zero-shot prompting (+1.18) and the fine-tuned model (+4.24), with all adjusted p < 0.001. **Against the larger single model, the final system's empathy score is significantly lower** (-0.30, [-0.55, -0.07], p = 0.048). Its overall score is also lower (-0.21, [-0.40, -0.03]), but this difference is not significant after correction (p = 0.073). **The judges do not distinguish the final system from top-1 Phi-4-mini prompting** on any dimension (overall +0.04, p = 0.71; empathy +0.01, p = 0.96). The advantage of the two-stage design over top-1 prompting reported in Section 5.3.2 therefore rests on WASSA empathy and emotion validation, not on the judges' ratings.
+Table 5.19 compares the final system's AI-judge scores with those of each judged baseline on the same 64 conversations. **Against the same-size single model, the final system is rated significantly higher** for empathy (+0.70, 95% CI [+0.39, +1.01], adjusted p < 0.001), relevance (+0.44, [+0.01, +0.86], p = 0.023) and overall (+0.44, [+0.17, +0.72], p = 0.001), while safety does not differ significantly. It is also rated significantly higher overall than the initial pipeline (+0.65), and zero-shot prompting (+1.18), with all adjusted p < 0.001. [[PENDING: comparison with the corrected fine-tuned baseline.]] **Against the larger single model, the final system's empathy score is significantly lower** (-0.30, [-0.55, -0.07], p = 0.048). Its overall score is also lower (-0.21, [-0.40, -0.03]), but this difference is not significant after correction (p = 0.073). **The judges do not distinguish the final system from top-1 Phi-4-mini prompting** on any dimension (overall +0.04, p = 0.71; empathy +0.01, p = 0.96). The advantage of the two-stage design over top-1 prompting reported in Section 5.3.2 therefore rests on WASSA empathy and emotion validation, not on the judges' ratings.
 
-The two judges agree well with each other (Table 5.20). Across the 448 replies of the seven systems, the Spearman correlation between Nemotron 3 Ultra and gpt-oss-120b is 0.73 for empathy and 0.74 for the overall score, and 0.60 when the clearly deficient fine-tuned system is excluded. The judges rank the seven systems in the same order, except that the final system and top-1 Phi-4-mini, whose panel scores differ by only 0.03, exchange second and third place (rank correlation 0.96). Mistral Large, originally the third judge, scored the five systems built first but became unavailable before the final systems could be judged. Rather than compare systems scored by different panels, we compare every system on the two judges that scored all of them. On the 320 replies scored by all three judges, the two-judge and three-judge averages correlate at 0.98 for both empathy and the overall score and rank the five systems identically, and the three judges agree with one another at 0.75 to 0.79 on empathy. Removing the third judge therefore does not change the conclusions. This agreement is consistent with the reduced bias expected from a panel of judges drawn from different model families [35].
+The two judges agree well with each other (Table 5.20). Across the 384 replies of the six judged systems, the Spearman correlation between Nemotron 3 Ultra and gpt-oss-120b is 0.60 for both empathy and the overall score. The judges rank the six systems in the same order, except that the final system and top-1 Phi-4-mini, whose panel scores differ by only 0.03, exchange second and third place (rank correlation 0.94). Mistral Large, originally the third judge, scored the five systems built first but became unavailable before the final systems could be judged. Rather than compare systems scored by different panels, we compare every system on the two judges that scored all of them. On the 256 replies of the four systems scored by all three judges (excluding the original, flawed fine-tuned run), the two-judge and three-judge averages correlate at 0.97 for both empathy and the overall score and rank the four systems identically, and the three judges agree with one another at 0.57 to 0.63 on empathy. Removing the third judge therefore does not change the conclusions. This agreement is consistent with the reduced bias expected from a panel of judges drawn from different model families [35].
 
 
 | Dimension | Final system vs | N | Final | Baseline | Difference | 95% CI | p | p (Holm-adjusted) | Significant? |
 |---|---|---|---|---|---|---|---|---|---|
-| empathy | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 7.84 | 7.15 | 0.7 | [+0.39, +1.01] | 0 | 0 | YES |
 | empathy | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 7.84 | 8.15 | -0.3 | [-0.55, -0.07] | 0.02 | 0.05 | YES |
 | empathy | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 7.84 | 7.84 | 0.01 | [-0.23, +0.25] | 0.96 | 0.96 | no |
+| empathy | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 7.84 | 7.15 | 0.7 | [+0.39, +1.01] | 0 | 0 | YES |
 | empathy | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 7.84 | 6.98 | 0.87 | [+0.52, +1.24] | 0 | 0 | YES |
 | empathy | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 7.84 | 5.98 | 1.86 | [+1.48, +2.23] | 0 | 0 | YES |
-| empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 7.84 | 3.44 | 4.41 | [+4.05, +4.76] | 0 | 0 | YES |
-| relevance | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.45 | 8.02 | 0.44 | [+0.01, +0.86] | 0.01 | 0.02 | YES |
 | relevance | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 8.45 | 8.68 | -0.23 | [-0.47, +0.02] | 0.04 | 0.08 | no |
 | relevance | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 8.45 | 8.29 | 0.16 | [-0.13, +0.45] | 0.31 | 0.31 | no |
+| relevance | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.45 | 8.02 | 0.44 | [+0.01, +0.86] | 0.01 | 0.02 | YES |
 | relevance | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 8.45 | 7.63 | 0.82 | [+0.45, +1.20] | 0 | 0 | YES |
 | relevance | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.45 | 7.23 | 1.23 | [+0.68, +1.73] | 0 | 0 | YES |
-| relevance | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.45 | 3.92 | 4.53 | [+4.12, +4.93] | 0 | 0 | YES |
-| safety | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 9.76 | 9.56 | 0.2 | [-0.01, +0.41] | 0.08 | 0.32 | no |
 | safety | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 9.76 | 9.86 | -0.1 | [-0.23, +0.02] | 0.13 | 0.39 | no |
 | safety | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 9.76 | 9.81 | -0.05 | [-0.17, +0.06] | 0.36 | 0.39 | no |
+| safety | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 9.76 | 9.56 | 0.2 | [-0.01, +0.41] | 0.08 | 0.32 | no |
 | safety | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 9.76 | 9.5 | 0.26 | [+0.01, +0.55] | 0.18 | 0.39 | no |
 | safety | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 9.76 | 9.31 | 0.45 | [+0.23, +0.66] | 0 | 0 | YES |
-| safety | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 9.76 | 5.97 | 3.79 | [+3.40, +4.20] | 0 | 0 | YES |
-| overall | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.68 | 8.24 | 0.44 | [+0.17, +0.72] | 0 | 0 | YES |
 | overall | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 8.68 | 8.9 | -0.21 | [-0.40, -0.03] | 0.04 | 0.07 | no |
 | overall | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 8.68 | 8.65 | 0.04 | [-0.16, +0.24] | 0.71 | 0.71 | no |
+| overall | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.68 | 8.24 | 0.44 | [+0.17, +0.72] | 0 | 0 | YES |
 | overall | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 8.68 | 8.04 | 0.65 | [+0.35, +0.96] | 0 | 0 | YES |
 | overall | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.68 | 7.51 | 1.18 | [+0.83, +1.51] | 0 | 0 | YES |
-| overall | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.68 | 4.44 | 4.24 | [+3.93, +4.55] | 0 | 0 | YES |
 
 *Table 5.19: Paired significance tests comparing the final system's AI-judge scores with each judged baseline*
 
@@ -198,12 +194,12 @@ The two judges agree well with each other (Table 5.20). Across the 448 replies o
 
 | Check | N | Result | Without fine-tuned system |
 |---|---|---|---|
-| Per-reply agreement on empathy: Nemotron 3 Ultra vs gpt-oss-120b | 448 | rho = 0.731 (p = 5.7e-76) | rho = 0.596 |
-| Per-reply agreement on overall: Nemotron 3 Ultra vs gpt-oss-120b | 448 | rho = 0.745 (p = 2.8e-80) | rho = 0.604 |
-| Do both judges rank the 7 systems in the same order (overall)? | 7 | All but 2 systems; these swap places: RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) / FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | rank rho = 0.96 |
-| Two-judge vs three-judge panel mean (empathy), 5 systems judged by all three | 320 | per-reply rho = 0.982 | identical system ranking |
-| Two-judge vs three-judge panel mean (overall), 5 systems judged by all three | 320 | per-reply rho = 0.985 | identical system ranking |
-| Three-judge agreement on empathy (all pairs), 5 systems | 320 | rho = 0.75 to 0.79 |  |
+| Per-reply agreement on empathy: Nemotron 3 Ultra vs gpt-oss-120b | 384 | rho = 0.596 (p = 3.0e-38) | rho = 0.596 |
+| Per-reply agreement on overall: Nemotron 3 Ultra vs gpt-oss-120b | 384 | rho = 0.604 (p = 1.6e-39) | rho = 0.604 |
+| Do both judges rank the 6 systems in the same order (overall)? | 6 | All but 2 systems; these swap places: RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) / FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | rank rho = 0.94 |
+| Two-judge vs three-judge panel mean (empathy), 4 systems judged by all three | 256 | per-reply rho = 0.970 | identical system ranking |
+| Two-judge vs three-judge panel mean (overall), 4 systems judged by all three | 256 | per-reply rho = 0.973 | identical system ranking |
+| Three-judge agreement on empathy (all pairs), 4 systems | 256 | rho = 0.57 to 0.63 |  |
 
 *Table 5.20: Agreement between the AI judges and comparison of the two-judge and three-judge panels*
 
