@@ -76,6 +76,12 @@ if _SP.exists() and len(pd.read_csv(_SP)) >= 300:
     SETTINGS.insert(SETTINGS.index("single_model_bigger"), SINGLE_PHI)
     LABEL[SINGLE_PHI] = "Single model, same generator: Phi-4-mini (4-bit) detects + responds"
 
+TWO_PASS = "single_model_phi_two_pass"
+_TP = ROOT / "evaluation_results_d2_settings_comparison" / f"{TWO_PASS}_scored_predictions.csv"
+if _TP.exists() and len(pd.read_csv(_TP)) >= 300:
+    SETTINGS.insert(SETTINGS.index("single_model_bigger"), TWO_PASS)
+    LABEL[TWO_PASS] = "Single model, two passes: Phi-4-mini labels the emotion itself, then per-emotion prompt"
+
 PENDING = "[[PENDING - AI-judge scores not yet returned]]"
 
 

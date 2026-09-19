@@ -70,6 +70,10 @@ _SINGLE_PHI = SINGLE_MODEL_DIR / "single_model_phi_generation_output.csv"
 if _complete(_SINGLE_PHI):
     SOURCES["single_model_phi"] = (_SINGLE_PHI, "single_model_phi")
 
+_TWO_PASS = SINGLE_MODEL_DIR / "single_model_phi_two_pass_generation_output.csv"
+if _complete(_TWO_PASS):
+    SOURCES["single_model_phi_two_pass"] = (_TWO_PASS, "single_model_phi_two_pass")
+
 # PROVISIONAL rule-adherence heuristics - same as ablation_confidence_gating/score_ablation_responses.py,
 # duplicated here (not imported) to keep each results folder self-contained, matching the rest of the repo.
 ACK_KEYWORDS = [

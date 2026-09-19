@@ -81,6 +81,10 @@ _SINGLE_PHI = ROOT_DIR / "evaluation_results_single_model_baseline" / "single_mo
 if _complete(_SINGLE_PHI):
     SOURCES["single_model_phi"] = (_SINGLE_PHI, "single_model_phi")
 
+_TWO_PASS = ROOT_DIR / "evaluation_results_single_model_baseline" / "single_model_phi_two_pass_generation_output.csv"
+if _complete(_TWO_PASS):
+    SOURCES["single_model_phi_two_pass"] = (_TWO_PASS, "single_model_phi_two_pass")
+
 # Settings where d1 actually ran and produced a real predicted_emotion.
 SETTINGS_WITH_D1_SIGNAL = {
     "prompt_engineered_pipeline", "rag_pipeline", "bakeoff_qwen", "bakeoff_phi", "bakeoff_gemma",

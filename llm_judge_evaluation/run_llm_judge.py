@@ -89,6 +89,10 @@ _SINGLE_PHI = THESIS_ROOT / "evaluation_results_single_model_baseline" / "single
 if _complete(_SINGLE_PHI):
     SOURCES["single_model_phi"] = (_SINGLE_PHI, "single_model_phi")
 
+_TWO_PASS = THESIS_ROOT / "evaluation_results_single_model_baseline" / "single_model_phi_two_pass_generation_output.csv"
+if _complete(_TWO_PASS):
+    SOURCES["single_model_phi_two_pass"] = (_TWO_PASS, "single_model_phi_two_pass")
+
 JUDGE_PROMPT_TEMPLATE = """You are evaluating an AI assistant that provides emotional support to people going through
 difficult moments, similar to a mental health support chatbot. Someone has shared something
 they're feeling or experiencing, and the AI has responded.
