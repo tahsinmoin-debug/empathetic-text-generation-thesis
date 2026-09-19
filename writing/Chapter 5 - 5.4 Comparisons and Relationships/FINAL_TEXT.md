@@ -146,11 +146,22 @@ In summary, R1 is supported by both a published framework and our data, R3 is su
 
 | Rule | Where the rule comes from | Effect on WASSA empathy (within system) | Effect on AI-judge empathy (within system) |
 |---|---|---|---|
-| R1: acknowledge the feeling | Emotional reactions are one of the three empathy mechanisms of the EPITOME framework for text-based support (Sharma et al., 2020) | +0.36 (2227 vs 1073 replies) p = 1.45e-14 | +0.11 (300 vs 116 replies) p = 0.905 |
-| R2: ask exactly one question | Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one | -0.20 (2618 vs 682 replies) p = 0.000398 | -0.04 (323 vs 93 replies) p = 0.88 |
-| R3: stay within 120 words | Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement) | -0.22 (3021 vs 279 replies) p = 0.0121 | +0.65 (396 vs 20 replies) p = 0.00591 |
+| R1: acknowledge the feeling | Emotional reactions are one of the three empathy mechanisms of the EPITOME framework for text-based support (Sharma et al., 2020) | +0.37 (2459 vs 1141 replies) p = 1.65e-17 | +0.11 (300 vs 116 replies) p = 0.905 |
+| R2: ask exactly one question | Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one | -0.19 (2906 vs 694 replies) p = 0.00144 | -0.04 (323 vs 93 replies) p = 0.88 |
+| R3: stay within 120 words | Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement) | -0.22 (3319 vs 281 replies) p = 0.00796 | +0.65 (396 vs 20 replies) p = 0.00591 |
 
 *Table 5.28: Origin of each response rule and its measured effect within systems*
+
+
+## 5.4.9 Separating the Effect of the Detector from the Effect of the Generator
+
+The comparisons in Section 5.3.2 hold the conversations and decoding fixed but not the generator, because the final system's generator (Phi-4-mini) is larger than the 1.5-billion-parameter single model. To attribute the results correctly, we ran a further baseline in which **the final system's own generator is given the single-model prompt with no detector at all**, so that the only difference from the final system is the decoupled design.
+
+The result separates the two effects cleanly. **Model capacity explains the structural gains, and the decoupled design explains the empathic gains.** Moving from Qwen2.5-1.5B to Phi-4-mini as a single model raises rule adherence from 51.3% to 73.7% (+22.3 points, p < 0.001) but leaves empathy and emotional fidelity essentially unchanged: WASSA moves from 4.84 to 4.75 (p = 0.18) and emotion validation from 25.7% to 27.0% (p = 0.70). In other words, **a larger generator alone buys none of the empathy we report**. Adding the detector, the top-3 candidates and the emotion-specific guidance to that same generator raises **WASSA from 4.75 to 5.05 (+0.30, adjusted p < 0.001) and emotion validation from 27.0% to 36.7% (+9.7 points, adjusted p = 0.007)**. Both gains are therefore caused by the decoupled design, not by the size of the generator, which answers the question the Pre-Thesis 2 panel raised about whether the second model earns its place.
+
+The same comparison shows the cost of the design. With the generator held fixed, the decoupled system follows all three rules less often than the single model (60.0% against 73.7%, adjusted p = 0.002), mainly through the acknowledgement check (66.3% against 77.3%, p = 0.013); the one-question rule does not differ (92.7% against 96.0%, p = 0.22) and every reply stays within the length limit. The prompt is the likely cause: in the decoupled system, the three rules share space with emotion-specific guidance and cue words, whereas the single-model prompt contains the rules alone. Two qualifications should be kept in mind. The acknowledgement check is keyword-based (Section 5.4.8), so replies that validate a feeling in wording outside the keyword list are not counted, and rule adherence measures the *form* of a reply, whereas WASSA and emotion validation measure what the reply expresses.
+
+**In summary, at an equal generator the decoupled design is the better configuration for the goal of this thesis**, producing measurably more empathetic and more emotionally faithful replies, and it achieves this with the emotional decision exposed for inspection. It trades part of its rule adherence for that gain, and we report the trade-off rather than claiming an advantage on every measure.
 
 
 

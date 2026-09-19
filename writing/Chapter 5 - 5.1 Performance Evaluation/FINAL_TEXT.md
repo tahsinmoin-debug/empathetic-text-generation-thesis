@@ -12,6 +12,7 @@ All generation systems respond to the same 300 conversations, sampled with seed 
 | zero_shot | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 81.67 | 22.67 | 83.67 | 19 | 75.92 | 0.42 | 9.33 | 4.25 | 1.31 | 24.67 |  | 300 |
 | fine_tuned_fixed | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 30 | 74 | 100 | 22.33 | 9.95 | 0.81 | 3.67 | 3.36 | 1.9 | 18.33 |  | 300 |
 | single_model_same_size | Single model, same size: Qwen2.5-1.5B detects + responds | 70.67 | 73.67 | 100 | 51.33 | 41.96 | 1.02 | 13.33 | 4.84 | 1.26 | 25.67 |  | 300 |
+| single_model_phi | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 77.33 | 96 | 99.33 | 73.67 | 73.48 | 1.04 | 4 | 4.75 | 1.13 | 27 |  | 300 |
 | single_model_bigger | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 83 | 99 | 100 | 82.33 | 52.95 | 1.01 | 1 | 5.76 | 1.09 | 32.33 |  | 300 |
 | prompt_engineered_pipeline | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 70.33 | 87.33 | 100 | 63.67 | 35.21 | 1.07 | 9.33 | 4.8 | 1.33 | 26 | 28.33 | 300 |
 | rag_pipeline | Initial pipeline + retrieval (RAG) | 57 | 78 | 100 | 43.67 | 34 | 1.13 | 16.33 | 4.85 | 1.46 | 27.67 | 29.33 | 300 |
