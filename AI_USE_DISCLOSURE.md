@@ -11,9 +11,13 @@ comes from those runs and from result files kept in this repository.
 
 ## 1. Writing
 
+The submitted conference paper was rewritten by the authors from the assistant's draft; the thesis
+section drafts in `writing/` are still largely as drafted, and should be rewritten in the same way
+before submission.
+
 | Item | AI role | Author role |
 |---|---|---|
-| Conference paper (`ICCIT format writing/`), Abstract and Sections I-VII | Wrote the complete first draft from the authors' results and notes | Chose the framing and claims, revised the text, verified every number and reference |
+| Conference paper (`ICCIT format writing/`), Abstract and Sections I-VII | Wrote the first draft from the authors' results and notes | **Rewrote the manuscript in their own words for submission**, chose the framing and claims, verified every number and reference |
 | Thesis writing kit (`writing/*/FINAL_TEXT`), Chapters 2-5 sections | Wrote the draft text, including the tables, captions and reference list | Same as above |
 | Reference list (`writing/_scripts/references.py`) | Assembled and formatted entries in IEEE style | Checked entries against publisher pages |
 
@@ -41,9 +45,9 @@ by the authors.
 ## 4. Statement used in the paper
 
 > In accordance with IEEE policy on AI-generated text, the authors disclose the following. Claude
-> (Anthropic) was used to produce the initial draft of the Abstract and of Sections I to VII of this
-> manuscript from the authors' experimental results and notes, and the authors then revised that
-> draft. Claude was also used to write parts of the analysis code, namely the scripts that compute
+> An initial draft of the Abstract and of Sections I to VII was produced with Claude (Anthropic) from
+> the authors' experimental results and notes; the authors then rewrote the manuscript, and the text
+> presented here is their own. Claude was also used to write parts of the analysis code, namely the scripts that compute
 > the reported statistics and generate the tables and figures, and the scripts that run and merge the
 > LLM-judge evaluation. It was not used to generate any experimental result: all models were trained
 > and all systems evaluated by the authors on their own hardware, and every number reported here comes
