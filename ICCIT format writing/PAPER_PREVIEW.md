@@ -21,7 +21,7 @@ We answer these questions with a controlled comparison in which data, decoding a
 - A decoupled pipeline for a single 8 GB GPU, in which a RoBERTa-base detector passes its top-3 emotions, emotion-specific guidance and attention-derived cue words to a 4-bit Phi-4-mini generator, compared against monolithic baselines at 1.5B and 7.6B parameters.
 - Controlled ablations separating the effect of *decoupling* (same generator with and without a detector) from the effect of *emotion-specific guidance* (same detector and generator, with and without it).
 - Three independent analyses showing that detector accuracy is not what limits reply quality.
-- A multi-signal evaluation (rule adherence, WASSA empathy, emotion validation and a blind LLM-judge panel) with paired significance tests and correction for multiple comparisons, including negative results for retrieval augmentation and fine-tuning.
+- A multi-signal evaluation (rule adherence, WASSA empathy, emotion validation and a blind LLM-judge panel) with paired significance tests and correction for multiple comparisons, including negative results for retrieval augmentation and for end-to-end fine-tuning.
 
 ## II. Related Work
 
@@ -59,7 +59,7 @@ All baselines respond to the same conversations with the same decoding settings.
 
 **Evaluation sample.** Generation experiments use 300 test conversations sampled with seed 42. The detector is evaluated on all 2,542 test examples.
 
-**Measures.** (1) *Rule adherence*: automatic checks for an acknowledgement phrase, exactly one question mark and at most 120 words; we report the share of replies satisfying all three. (2) *WASSA empathy*: the hyy33 system from the WASSA 2024 shared task [26], trained on human empathy ratings of conversation turns and correlating with them at r = 0.544 [17], mapped to a 0-10 scale. (3) *Emotion validation*: whether the detector, applied to the reply, recovers the gold emotion of the conversation. (4) *AI judges*: Nemotron 3 Ultra and gpt-oss-120b, from developers unrelated to our models [15], score each reply blind from 1 to 10 for empathy, relevance and safety at temperature 0; overall is the mean of the three. Judges are applied to a stratified subset of 64 conversations (the shortest and longest for each emotion). A third planned judge, Mistral Large, became unavailable before the final systems were judged; on the 320 replies it did score, the two- and three-judge averages correlate at Spearman ρ = 0.98 with identical system rankings.
+**Measures.** (1) *Rule adherence*: automatic checks for an acknowledgement phrase, exactly one question mark and at most 120 words; we report the share of replies satisfying all three. (2) *WASSA empathy*: the hyy33 system from the WASSA 2024 shared task [26], trained on human empathy ratings of conversation turns and correlating with them at r = 0.544 [17], mapped to a 0-10 scale. (3) *Emotion validation*: whether the detector, applied to the reply, recovers the gold emotion of the conversation. (4) *AI judges*: Nemotron 3 Ultra and gpt-oss-120b, from developers unrelated to our models [15], score each reply blind from 1 to 10 for empathy, relevance and safety at temperature 0; overall is the mean of the three. Judges are applied to a stratified subset of 64 conversations (the shortest and longest for each emotion). A third planned judge, Mistral Large, became unavailable before the final systems were judged; on the 256 replies it scored of systems still in the comparison, the two- and three-judge averages correlate at Spearman ρ = 0.97 with identical system rankings.
 
 **Statistics.** All comparisons are paired. We use McNemar's exact test for binary measures [27], the Wilcoxon signed-rank test for scores [28] and 95% bootstrap confidence intervals from 10,000 resamples [29]. P-values are Holm-corrected [30] across the baselines compared on each measure. We call a difference significant only if the corrected p < 0.05 and the interval excludes zero.
 
@@ -69,7 +69,7 @@ All baselines respond to the same conversations with the same decoding settings.
 
 ### A. Overall Comparison
 
-*TABLE I. Results on 300 ED test conversations (judge scores on the 64-conversation subset). Params: total parameters in billions. Rules: replies satisfying all three rules. Val.: emotion validation. Emp./All: AI-judge empathy and overall (1-10); n/a = judging of this baseline was not complete at submission.*
+*TABLE I. Results on 300 ED test conversations (judge scores on the 64-conversation subset). Params: total parameters in billions. Rules: replies satisfying all three rules. Val.: emotion validation. Emp./All: AI-judge empathy and overall (1-10); n/a = system not covered by the judge panel, or judging not complete at submission.*
 
 | System | Params | Rules (%) | 1 Q (%) | Words | WASSA | Val. (%) | Emp. | All |
 |---|---|---|---|---|---|---|---|---|
@@ -78,7 +78,7 @@ All baselines respond to the same conversations with the same decoding settings.
 | Single model Qwen2.5-1.5B | 1.5 | 51.3 | 73.7 | 42.0 | 4.84 | 25.7 | 7.15 | 8.24 |
 | Single model Qwen2.5-7B | 7.6 | **82.3** | **99.0** | 53.0 | **5.76** | 32.3 | **8.15** | **8.90** |
 | Initial pipeline (GPT-2 + Qwen-1.5B) | 1.9 | 63.7 | 87.3 | 35.2 | 4.80 | 26.0 | 6.98 | 8.04 |
-| RoBERTa + Qwen-1.5B, top-1 | 1.7 | 57.7 | 84.3 | 34.7 | 4.78 | 25.3 | - | - |
+| RoBERTa + Qwen-1.5B, top-1 | 1.7 | 57.7 | 84.3 | 34.7 | 4.78 | 25.3 | n/a | n/a |
 | RoBERTa + Phi-4-mini, top-1 | 4.0 | 65.3 | 94.7 | 80.5 | 4.89 | 28.3 | 7.84 | 8.65 |
 | **Ours: two-stage RoBERTa + Phi-4-mini** | 4.0 | 60.0 | 92.7 | 57.1 | 5.05 | **36.7** | 7.84 | 8.68 |
 
@@ -145,7 +145,7 @@ We compared decoupled and monolithic small language models for empathetic respon
 
 **Acknowledgment**
 
-[[PENDING: funding or supervision acknowledgment, added after review.]] The authors used Claude (Anthropic) to assist with analysis scripts and with drafting and language editing of this manuscript. All experiments, results and text were reviewed, verified and revised by the authors, who take full responsibility for the content.
+The authors used Claude (Anthropic) to assist with analysis scripts and with drafting and language editing of this manuscript. All experiments, results and text were reviewed, verified and revised by the authors, who take full responsibility for the content.
 
 ## References
 
