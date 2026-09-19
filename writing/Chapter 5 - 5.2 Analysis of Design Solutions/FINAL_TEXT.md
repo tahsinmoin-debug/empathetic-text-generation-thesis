@@ -68,6 +68,27 @@ Table 5.11 assesses the main alternatives against criteria beyond performance: c
 
 We select the two-stage design with a RoBERTa-base detector and a Phi-4-mini generator. Among designs of comparable size, it produces the most emotionally faithful replies and the highest empathy scores, its rule adherence is statistically indistinguishable from that of the best small configuration, and it is the only design that exposes its complete emotional reasoning. The larger single model outperforms it in raw quality. This trade-off is reported openly, and Section 5.6 discusses when the larger model would be the better choice.
 
+Because the measures disagree with one another, Table 5.30 summarises them in a single ranking. Each of five independent measures, namely rule adherence, WASSA empathy, emotion validation, AI-judge empathy and freedom from boilerplate, is standardised across the systems and the five standardised values are averaged with equal weight. Nothing is tuned: the weights are equal, every judged system is included, and the measures are the ones already reported in Table 5.1.
+
+The final system ranks **second of eight**, behind only the 7.6-billion-parameter single model, which requires 4.7 times as many parameters and 62% more GPU memory (Section 5.4.7). It is ahead of the single model built on its own generator (+0.50 against +0.09), of top-1 prompting with that generator (+0.04) and of the same-size single model (+0.06). **Among the systems that fit the 8 GB budget set as an objective in Section 4.1.1, the final system ranks first.** The ranking is not an artefact of one favourable measure: removing any single measure leaves the final system in second or third place, always behind the larger single model.
+
+A composite of this kind depends on which measures are included, so it is reported as a summary of the per-measure results rather than as evidence in its own right. The per-measure comparisons in Sections 5.3.2 and 5.4.9, with their significance tests, remain the basis for the conclusions of this thesis.
+
+
+| System | All rules (%) | WASSA empathy | Emotion validation (%) | AI-judge empathy | Non-repetition (%) | Composite (equal weights) |
+|---|---|---|---|---|---|---|
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 82.33 | 5.76 | 32.33 | 8.15 | 41.3 | 0.79 |
+| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | 60 | 5.05 | 36.67 | 7.84 | 41.3 | 0.5 |
+| Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 63.67 | 4.8 | 26 | 6.98 | 76.3 | 0.24 |
+| Single model, same generator: Phi-4-mini (4-bit) detects + responds | 73.67 | 4.75 | 27 | 8.04 | 27.7 | 0.09 |
+| Single model, same size: Qwen2.5-1.5B detects + responds | 51.33 | 4.84 | 25.67 | 7.15 | 65 | 0.06 |
+| RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 65.33 | 4.89 | 28.33 | 7.84 | 23 | 0.04 |
+| Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 19 | 4.25 | 24.67 | 5.98 | 65.3 | -0.59 |
+| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 22.33 | 3.36 | 18.33 | 3.88 | 90.3 | -1.13 |
+
+*Table 5.30: Equal-weight composite of five independent measures across the judged systems*
+
+
 ## References
 
 [8] A. Yang, B. Yang, B. Zhang, B. Hui et al. (Qwen Team), "Qwen2.5 technical report," arXiv:2412.15115, 2024.  

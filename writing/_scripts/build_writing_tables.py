@@ -1044,6 +1044,50 @@ def build_single_model_showdown(per_reply):
          note)
 
 
+def build_composite_ranking(per_reply):
+    """Equal-weight composite across five independent measures, with a leave-one-out robustness check.
+
+    No weighting is tuned: every measure is standardised across systems and averaged with equal weight,
+    and the table reports all judged systems, including those that outrank the final system.
+    """
+    judges = load_judges(PANEL)
+    judges["empathy_mean"] = panel_mean(judges, PANEL, "empathy")
+    div_path = ROOT / "evaluation_results_diversity" / "diversity_results.csv"
+    div = pd.read_csv(div_path).set_index("setting") if div_path.exists() else pd.DataFrame()
+    rows = []
+    for s in [x for x in SETTINGS if x in set(JUDGED_ALL)]:
+        d = per_reply[per_reply.setting == s]
+        j = judges[judges.setting == s]
+        if not len(j) or s not in div.index:
+            continue
+        rows.append({"Setting ID": s, "System": LABEL[s],
+                     "All rules (%)": d["all_rules"].mean() * 100,
+                     "WASSA empathy": d["wassa_empathy_0_10"].mean(),
+                     "Emotion validation (%)": d["validation_match"].mean() * 100,
+                     "AI-judge empathy": j["empathy_mean"].mean(),
+                     "Non-repetition (%)": 100 - div.loc[s, "boilerplate_rate"]})
+    t = pd.DataFrame(rows).set_index(["Setting ID", "System"])
+    z = (t - t.mean()) / t.std()
+    t["Composite (equal weights)"] = z.mean(axis=1)
+    ranks = {}
+    for col in z.columns:
+        order = z.drop(columns=[col]).mean(axis=1).sort_values(ascending=False).index
+        ranks[col] = [i for i, k in enumerate(order, start=1) if k[0] == FINAL][0]
+    t = t.round(2).sort_values("Composite (equal weights)", ascending=False).reset_index().drop(columns="Setting ID")
+    note = ("Each measure is standardised across the systems and the five standardised values are averaged with "
+            "equal weight; no weighting was tuned and every judged system is shown. Robustness: removing any one "
+            "measure leaves the final system at rank "
+            + ", ".join(f"{r}" for r in sorted(set(ranks.values())))
+            + " of " + str(len(t)) + ", always behind the 7.6-billion-parameter single model, which needs 4.7 times "
+            "the parameters and 62% more GPU memory. Among the systems that fit the project's 8 GB budget, stated "
+            "as an objective in Section 4.1.1 before any experiment, the final system ranks first. A composite "
+            "depends on which measures are included and is reported as a summary of the per-measure results in "
+            "Table 5.1, not as evidence in itself.")
+    for sec in ("ch5_2a", "ch5_4"):
+        save(sec, "composite_ranking", t, "Equal-weight composite of five independent measures",
+             "computed from the per-measure tables by this script", note)
+
+
 def build_human_eval_placeholder():
     key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_do_not_share_with_raters.csv")
     items = (key.drop_duplicates("item_number")[["item_number", "gold_emotion", "is_attention_check",
@@ -1295,6 +1339,7 @@ def main():
     build_resource_efficiency()
     build_rules_validity(per_reply)
     build_single_model_showdown(per_reply)
+    build_composite_ranking(per_reply)
     build_human_eval_placeholder()
     build_literature()
     build_project_tables()
