@@ -69,6 +69,11 @@ LABEL = {
 }
 FINAL = "two_stage_phi"
 FT = "fine_tuned_fixed"
+SINGLE_PHI = "single_model_phi"
+
+if (ROOT / "evaluation_results_d2_settings_comparison" / f"{SINGLE_PHI}_scored_predictions.csv").exists():
+    SETTINGS.insert(SETTINGS.index("single_model_bigger"), SINGLE_PHI)
+    LABEL[SINGLE_PHI] = "Single model, same generator: Phi-4-mini (4-bit) detects + responds"
 
 PENDING = "[[PENDING - AI-judge scores not yet returned]]"
 
@@ -279,7 +284,7 @@ def build_rules_and_quality(per_reply):
     summary.insert(0, "System", [LABEL[s] for s in summary.index])
     summary.insert(0, "Setting ID", summary.index)
     summary = summary.reset_index(drop=True)
-    no_d1 = summary["Setting ID"].isin(["zero_shot", FT, "single_model_same_size", "single_model_bigger"])
+    no_d1 = summary["Setting ID"].isin(["zero_shot", FT, "single_model_same_size", SINGLE_PHI, "single_model_bigger"])
     summary.loc[no_d1, "Context awareness (%)"] = np.nan
     summary = summary.round(2)
 
@@ -365,7 +370,7 @@ def build_two_stage(per_reply):
 
 
 def build_final_significance(per_reply):
-    baselines = ["single_model_same_size", "single_model_bigger", "zero_shot", FT,
+    baselines = ([SINGLE_PHI] if SINGLE_PHI in SETTINGS else []) + ["single_model_same_size", "single_model_bigger", "zero_shot", FT,
                  "prompt_engineered_pipeline", "rag_pipeline", "bakeoff_phi"]
     binary = {"all_rules": "All rules", "ack_present": "Acknowledgement", "exactly_one_question": "One question",
               "validation_match": "Emotion validation"}
