@@ -1,21 +1,29 @@
 Dimension,Final system vs,N,Final,Baseline,Difference,95% CI,p,p (Holm-adjusted),Significant?
-empathy,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,7.84,8.15,-0.3,"[-0.55, -0.07]",0.02417,0.04834,YES
+empathy,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,7.84,8.15,-0.3,"[-0.55, -0.07]",0.02417,0.07251,no
 empathy,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),64,7.84,7.84,0.01,"[-0.23, +0.25]",0.95528,0.95528,no
-empathy,"Single model, same size: Qwen2.5-1.5B detects + responds",64,7.84,7.15,0.7,"[+0.39, +1.01]",7e-05,0.0002,YES
-empathy,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,7.84,6.98,0.87,"[+0.52, +1.24]",1e-05,4e-05,YES
+empathy,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",64,7.84,8.04,-0.2,"[-0.45, +0.08]",0.03838,0.07675,no
+empathy,"Single model, same size: Qwen2.5-1.5B detects + responds",64,7.84,7.15,0.7,"[+0.39, +1.01]",7e-05,0.00026,YES
+empathy,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,7.84,6.98,0.87,"[+0.52, +1.24]",1e-05,5e-05,YES
 empathy,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",64,7.84,5.98,1.86,"[+1.48, +2.23]",0.0,0.0,YES
-relevance,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,8.45,8.68,-0.23,"[-0.47, +0.02]",0.04158,0.08317,no
-relevance,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),64,8.45,8.29,0.16,"[-0.13, +0.45]",0.31257,0.31257,no
-relevance,"Single model, same size: Qwen2.5-1.5B detects + responds",64,8.45,8.02,0.44,"[+0.01, +0.86]",0.00754,0.02262,YES
-relevance,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,8.45,7.63,0.82,"[+0.45, +1.20]",0.0001,0.00038,YES
+empathy,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),64,7.84,3.88,3.97,"[+3.49, +4.43]",0.0,0.0,YES
+relevance,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,8.45,8.68,-0.23,"[-0.47, +0.02]",0.04158,0.12475,no
+relevance,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),64,8.45,8.29,0.16,"[-0.13, +0.45]",0.31257,0.62515,no
+relevance,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",64,8.45,8.48,-0.02,"[-0.34, +0.32]",0.62846,0.62846,no
+relevance,"Single model, same size: Qwen2.5-1.5B detects + responds",64,8.45,8.02,0.44,"[+0.01, +0.86]",0.00754,0.03016,YES
+relevance,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,8.45,7.63,0.82,"[+0.45, +1.20]",0.0001,0.00048,YES
 relevance,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",64,8.45,7.23,1.23,"[+0.68, +1.73]",0.0,1e-05,YES
+relevance,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),64,8.45,5.33,3.12,"[+2.47, +3.74]",0.0,0.0,YES
 safety,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,9.76,9.86,-0.1,"[-0.23, +0.02]",0.13027,0.39081,no
 safety,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),64,9.76,9.81,-0.05,"[-0.17, +0.06]",0.36067,0.39081,no
-safety,"Single model, same size: Qwen2.5-1.5B detects + responds",64,9.76,9.56,0.2,"[-0.01, +0.41]",0.08032,0.32129,no
+safety,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",64,9.76,9.83,-0.07,"[-0.23, +0.12]",0.0727,0.36352,no
+safety,"Single model, same size: Qwen2.5-1.5B detects + responds",64,9.76,9.56,0.2,"[-0.01, +0.41]",0.08032,0.36352,no
 safety,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,9.76,9.5,0.26,"[+0.01, +0.55]",0.17815,0.39081,no
-safety,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",64,9.76,9.31,0.45,"[+0.23, +0.66]",0.00026,0.0013,YES
-overall,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,8.68,8.9,-0.21,"[-0.40, -0.03]",0.03635,0.0727,no
+safety,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",64,9.76,9.31,0.45,"[+0.23, +0.66]",0.00026,0.00156,YES
+safety,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),64,9.76,8.67,1.09,"[+0.77, +1.41]",0.0,0.0,YES
+overall,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",64,8.68,8.9,-0.21,"[-0.40, -0.03]",0.03635,0.10905,no
 overall,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),64,8.68,8.65,0.04,"[-0.16, +0.24]",0.7084,0.7084,no
-overall,"Single model, same size: Qwen2.5-1.5B detects + responds",64,8.68,8.24,0.44,"[+0.17, +0.72]",0.00039,0.00116,YES
-overall,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,8.68,8.04,0.65,"[+0.35, +0.96]",8e-05,0.00031,YES
+overall,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",64,8.68,8.78,-0.1,"[-0.32, +0.16]",0.08131,0.16262,no
+overall,"Single model, same size: Qwen2.5-1.5B detects + responds",64,8.68,8.24,0.44,"[+0.17, +0.72]",0.00039,0.00155,YES
+overall,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,64,8.68,8.04,0.65,"[+0.35, +0.96]",8e-05,0.00039,YES
 overall,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",64,8.68,7.51,1.18,"[+0.83, +1.51]",0.0,0.0,YES
+overall,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),64,8.68,5.96,2.73,"[+2.29, +3.16]",0.0,0.0,YES

@@ -2,6 +2,8 @@ System,Nemotron 3 Ultra empathy,Nemotron 3 Ultra relevance,Nemotron 3 Ultra safe
 "Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",8.12,8.7,9.78,8.17,8.66,9.94
 FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,7.69,8.38,9.67,8.0,8.53,9.84
 RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),7.58,8.0,9.67,8.09,8.58,9.95
+"Single model, same generator: Phi-4-mini (4-bit) detects + responds",7.94,8.34,9.72,8.14,8.61,9.94
 "Single model, same size: Qwen2.5-1.5B detects + responds",6.92,7.83,9.31,7.38,8.2,9.81
 Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,6.78,7.36,9.2,7.17,7.91,9.8
 "Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",5.17,6.34,8.84,6.8,8.11,9.78
+Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),3.89,5.14,8.03,3.86,5.52,9.31

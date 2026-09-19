@@ -146,9 +146,9 @@ In summary, R1 is supported by both a published framework and our data, R3 is su
 
 | Rule | Where the rule comes from | Effect on WASSA empathy (within system) | Effect on AI-judge empathy (within system) |
 |---|---|---|---|
-| R1: acknowledge the feeling | Emotional reactions are one of the three empathy mechanisms of the EPITOME framework for text-based support (Sharma et al., 2020) | +0.37 (2459 vs 1141 replies) p = 1.65e-17 | +0.11 (300 vs 116 replies) p = 0.905 |
-| R2: ask exactly one question | Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one | -0.19 (2906 vs 694 replies) p = 0.00144 | -0.04 (323 vs 93 replies) p = 0.88 |
-| R3: stay within 120 words | Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement) | -0.22 (3319 vs 281 replies) p = 0.00796 | +0.65 (396 vs 20 replies) p = 0.00591 |
+| R1: acknowledge the feeling | Emotional reactions are one of the three empathy mechanisms of the EPITOME framework for text-based support (Sharma et al., 2020) | +0.37 (2459 vs 1141 replies) p = 1.65e-17 | +0.25 (366 vs 146 replies) p = 0.123 |
+| R2: ask exactly one question | Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one | -0.19 (2906 vs 694 replies) p = 0.00144 | -0.08 (409 vs 103 replies) p = 0.759 |
+| R3: stay within 120 words | Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement) | -0.22 (3319 vs 281 replies) p = 0.00796 | +0.64 (492 vs 20 replies) p = 0.00861 |
 
 *Table 5.28: Origin of each response rule and its measured effect within systems*
 
@@ -161,7 +161,9 @@ The result separates the two effects cleanly. **Model capacity explains the stru
 
 The same comparison shows the cost of the design. With the generator held fixed, the decoupled system follows all three rules less often than the single model (60.0% against 73.7%, adjusted p = 0.002), mainly through the acknowledgement check (66.3% against 77.3%, p = 0.013); the one-question rule does not differ (92.7% against 96.0%, p = 0.22) and every reply stays within the length limit. The prompt is the likely cause: in the decoupled system, the three rules share space with emotion-specific guidance and cue words, whereas the single-model prompt contains the rules alone. Two qualifications should be kept in mind. The acknowledgement check is keyword-based (Section 5.4.8), so replies that validate a feeling in wording outside the keyword list are not counted, and rule adherence measures the *form* of a reply, whereas WASSA and emotion validation measure what the reply expresses.
 
-**In summary, at an equal generator the decoupled design is the better configuration for the goal of this thesis**, producing measurably more empathetic and more emotionally faithful replies, and it achieves this with the emotional decision exposed for inspection. It trades part of its rule adherence for that gain, and we report the trade-off rather than claiming an advantage on every measure.
+The AI judges, which read the replies themselves, place the two systems level: the single model scores 8.04 for empathy and 8.78 overall against 7.84 and 8.68 for the decoupled system, and neither difference is significant after correction (p = 0.077 and p = 0.16). The evidence at an equal generator is therefore mixed in the way one would expect from measures that look at different things: the decoupled system wins on the emotion the reply expresses (emotion validation, +9.7 points) and on the empathy classifier (+0.30), the single model wins on rule adherence (+13.7 points), and the judges see no reliable difference.
+
+**In summary, at an equal generator the decoupled design is the better configuration for the goal of this thesis**, producing measurably more emotionally faithful replies and higher classifier-rated empathy, with the emotional decision exposed for inspection, while the judges rate the two configurations equally. It trades part of its rule adherence for that gain, and we report the trade-off rather than claiming an advantage on every measure.
 
 
 

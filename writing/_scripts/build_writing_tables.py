@@ -505,7 +505,7 @@ def build_rag_table(summary):
 
 PANEL = {"Nemotron 3 Ultra": "nemotron_openrouter_scores.csv", "gpt-oss-120b": "gptoss_groq_scores.csv"}
 MISTRAL = {"Mistral Large": "mistral_large_scores.csv"}
-JUDGED_ALL = ["single_model_bigger", FINAL, "bakeoff_phi", "single_model_same_size",
+JUDGED_ALL = ["single_model_bigger", FINAL, "bakeoff_phi", SINGLE_PHI, "single_model_same_size",
               "prompt_engineered_pipeline", "zero_shot", FT]
 JUDGED = list(JUDGED_ALL)  # set in build_judges(): FT only when fully judged
 DIMS = ["empathy", "relevance", "safety"]
@@ -538,14 +538,15 @@ def panel_mean(df, judges, dim):
     return df[[f"{n}|{dim}" for n in judges]].mean(axis=1)
 
 
-def ft_fully_judged():
-    df = load_judges(PANEL)
-    return int((df["setting"] == FT).sum()) >= 64
+def fully_judged(df, setting):
+    """A system enters the judge tables only when both judges have scored all 64 conversations."""
+    return int((df["setting"] == setting).sum()) >= 64
 
 
 def build_judges():
     global JUDGED
-    JUDGED = [x for x in JUDGED_ALL if x != FT or ft_fully_judged()]
+    scored = load_judges(PANEL)
+    JUDGED = [x for x in JUDGED_ALL if fully_judged(scored, x)]
     df = load_judges(PANEL)
     df = df[df["setting"].isin(JUDGED)].copy()
     for dim in DIMS + ["overall"]:
