@@ -153,6 +153,35 @@ In summary, R1 is supported by both a published framework and our data, R3 is su
 *Table 5.28: Origin of each response rule and its measured effect within systems*
 
 
+Table 5.29 sets the two systems side by side on every measure we collect, and adds a length control, because the single model writes 29% longer replies (73.5 against 57.1 words) and both the AI judges and the acknowledgement check reward length (Sections 5.4.4 and 5.4.8).
+
+**What the decoupled design wins.** Its replies score higher on the WASSA empathy classifier (5.05 against 4.75) and recover the user's true emotion more often (36.7% against 27.0%). The WASSA advantage is the more robust of the two: it holds *despite* shorter replies, and it becomes stronger, not weaker, when length is held constant (p < 0.001), whereas the emotion-validation advantage weakens under that control (p = 0.13). The decoupled system also repeats itself less, with a boilerplate rate of 58.7% against 72.3% and higher lexical diversity (distinct-2 47.8% against 39.1%), which matters because repetitiveness is the most frequently reported weakness of LLM empathy [29]. It reaches these results while generating 22% fewer words per reply, and it exposes the emotion it used, which can be logged, audited or intercepted before generation.
+
+**What the single model wins, and what remains of it.** The single model follows all three rules more often (73.7% against 60.0%) and acknowledges the feeling more often (77.3% against 66.3%). Both advantages are largely explained by reply length: with length held constant, the acknowledgement difference disappears entirely (p = 0.36) and the rule-adherence difference shrinks to the edge of significance (p = 0.04). The remaining part is a real cost of the design: in the decoupled system, the three rules share the prompt with emotion-specific guidance and cue words, so the generator follows them slightly less closely.
+
+**Where the two are equal.** The AI judges do not separate the systems on empathy (7.84 against 8.04, adjusted p = 0.077) or overall quality (8.68 against 8.78, p = 0.16), and at matched reply length their scores coincide almost exactly (7.92 against 7.89 for replies of 40 to 60 words, 7.83 against 7.89 for 60 to 80 words).
+
+**Conclusion.** Against its own generator used alone, the decoupled design produces replies that express the user's emotion more accurately and are rated as more empathetic by an independent classifier, that repeat themselves less and are shorter, and whose emotional reasoning is inspectable; it pays for this with slightly lower adherence to the response rules. For a system whose purpose is to make someone feel understood, and whose emotional decision must be auditable, that is a favourable exchange, but it is an exchange rather than a clean win, and we report it as such.
+
+
+| Measure | Decoupled (ours) | Same generator alone | Difference | 95% CI | Test | p | p, length held constant | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| WASSA empathy (0-10) | 5.05 | 4.75 | 0.3 | [+0.19, +0.41] | Wilcoxon signed-rank | 0.0 | 0.0 | decoupled better |
+| Emotion validation (%) | 36.67 | 27.0 | 9.67 | [+3.67, +15.33] | McNemar exact | 0.00169 | 0.1335 | decoupled better |
+| AI-judge empathy (1-10) | 7.84 | 8.04 | -0.2 | [-0.45, +0.09] | Wilcoxon signed-rank | 0.07675 | 0.5539 | no difference |
+| AI-judge overall (1-10) | 8.68 | 8.78 | -0.1 | [-0.32, +0.17] | Wilcoxon signed-rank | 0.16262 | 0.4855 | no difference |
+| All three rules (%) | 60.0 | 73.67 | -13.67 | [-21.00, -6.33] | McNemar exact | 0.00048 | 0.0405 | single model better |
+| Acknowledgement (%) | 66.33 | 77.33 | -11.0 | [-18.00, -4.00] | McNemar exact | 0.00269 | 0.3584 | single model better |
+| Exactly one question (%) | 92.67 | 96.0 | -3.33 | [-7.00, +0.33] | McNemar exact | 0.11018 | 0.6265 | no difference |
+| Reply length (words) | 57.11 | 73.48 | -16.37 | [-18.77, -14.01] | Wilcoxon signed-rank | 0.0 | 0.1056 | shorter replies by design |
+| Boilerplate rate (%) | 58.7 | 72.3 | -13.6 | corpus-level measure | - | - | - | decoupled better |
+| Distinct-2 (%) | 47.84 | 39.12 | 8.72 | corpus-level measure | - | - | - | decoupled better |
+| Emotion used is visible and can be intercepted | yes | no | - | - | - | - | - | decoupled better |
+
+*Table 5.29: The decoupled system against the same generator used alone, measure by measure, with reply length held constant*
+
+
+
 ## 5.4.9 Separating the Effect of the Detector from the Effect of the Generator
 
 The comparisons in Section 5.3.2 hold the conversations and decoding fixed but not the generator, because the final system's generator (Phi-4-mini) is larger than the 1.5-billion-parameter single model. To attribute the results correctly, we ran a further baseline in which **the final system's own generator is given the single-model prompt with no detector at all**, so that the only difference from the final system is the decoupled design.

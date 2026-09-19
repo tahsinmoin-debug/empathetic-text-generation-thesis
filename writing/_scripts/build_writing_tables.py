@@ -954,6 +954,90 @@ def build_rules_validity(per_reply):
          "computed from per-reply result files and the AI-judge panel by this script", note)
 
 
+def build_single_model_showdown(per_reply):
+    """Decoupled system vs the SAME generator used alone, measure by measure, with a length control.
+
+    This is the comparison a reader most wants: both systems use Phi-4-mini, so the only difference is
+    the detector and the emotion-specific prompt.
+    """
+    from scipy.stats import mannwhitneyu, spearmanr
+    if SINGLE_PHI not in SETTINGS:
+        return
+    judges = load_judges(PANEL)
+    for dim in ("empathy", "overall"):
+        judges[dim] = panel_mean(judges, PANEL, dim)
+    d = per_reply.merge(judges[["conv_id", "setting", "empathy", "overall"]], on=["conv_id", "setting"], how="left")
+    w = d.set_index(["conv_id", "setting"])
+
+    def rank_resid(y, x):
+        ry, rx = y.rank(), x.rank()
+        coef = np.polyfit(rx, ry, 1)
+        return ry - (coef[0] * rx + coef[1])
+
+    rows = []
+    for key, name, pct in [("wassa_empathy_0_10", "WASSA empathy (0-10)", False),
+                           ("validation_match", "Emotion validation (%)", True),
+                           ("empathy", "AI-judge empathy (1-10)", False),
+                           ("overall", "AI-judge overall (1-10)", False),
+                           ("all_rules", "All three rules (%)", True),
+                           ("ack_present", "Acknowledgement (%)", True),
+                           ("exactly_one_question", "Exactly one question (%)", True),
+                           ("word_count", "Reply length (words)", False)]:
+        both = pd.concat([w.xs(FINAL, level="setting")[key], w.xs(SINGLE_PHI, level="setting")[key]],
+                         axis=1, keys=["a", "b"]).dropna()
+        diff = both["a"].astype(float) - both["b"].astype(float)
+        scale = 100 if pct else 1
+        if pct:
+            p, _, _ = mcnemar(both["a"].astype(bool), both["b"].astype(bool))
+            test = "McNemar exact"
+        else:
+            p = wilcoxon(both["a"], both["b"]).pvalue if diff.abs().sum() else 1.0
+            test = "Wilcoxon signed-rank"
+        lo, hi = boot_ci(diff)
+        # same comparison with reply length held constant
+        sub = d[d["setting"].isin([FINAL, SINGLE_PHI])].dropna(subset=[key])
+        pc = spearmanr(rank_resid((sub["setting"] == FINAL).astype(float), sub["word_count"]),
+                       rank_resid(sub[key].astype(float), sub["word_count"])).pvalue
+        if key in ("empathy", "overall"):
+            # use the Holm-corrected p from the judge comparison table, as reported in Section 5.3.7
+            jt = pd.read_csv(W / SECTIONS["ch5_3"] / "tables" / "final_system_vs_baselines_judges.csv")
+            row = jt[(jt["Dimension"] == key) & (jt["Final system vs"] == LABEL[SINGLE_PHI])]
+            if len(row):
+                p = float(row["p (Holm-adjusted)"].iloc[0])
+        if key == "word_count":
+            verdict = "shorter replies by design"
+        else:
+            verdict = ("decoupled better" if (p < 0.05 and diff.mean() > 0) else
+                       "single model better" if (p < 0.05 and diff.mean() < 0) else "no difference")
+        rows.append({"Measure": name, "Decoupled (ours)": round(both["a"].mean() * scale, 2),
+                     "Same generator alone": round(both["b"].mean() * scale, 2),
+                     "Difference": round(diff.mean() * scale, 2), "95% CI": f"[{lo * scale:+.2f}, {hi * scale:+.2f}]",
+                     "Test": test, "p": round(p, 5), "p, length held constant": round(pc, 4), "Verdict": verdict})
+
+    div = pd.read_csv(ROOT / "evaluation_results_diversity" / "diversity_results.csv").set_index("setting")
+    for key, name in [("boilerplate_rate", "Boilerplate rate (%)"), ("dist_2", "Distinct-2 (%)")]:
+        a, bb = div.loc[FINAL, key], div.loc[SINGLE_PHI, key]
+        better = "decoupled better" if ((a < bb) if key == "boilerplate_rate" else (a > bb)) else "single model better"
+        rows.append({"Measure": name, "Decoupled (ours)": a, "Same generator alone": bb,
+                     "Difference": round(a - bb, 2), "95% CI": "corpus-level measure", "Test": "-", "p": "-",
+                     "p, length held constant": "-", "Verdict": better})
+    rows.append({"Measure": "Emotion used is visible and can be intercepted", "Decoupled (ours)": "yes",
+                 "Same generator alone": "no", "Difference": "-", "95% CI": "-", "Test": "-", "p": "-",
+                 "p, length held constant": "-", "Verdict": "decoupled better"})
+
+    note = ("Both systems use the same generator (Phi-4-mini, 4-bit) on the same 300 conversations, so the only "
+            "difference is the detector and the emotion-specific prompt. Judge measures use the 64 judged "
+            "conversations. The last p-value repeats each comparison with reply length held constant (rank "
+            "residuals), because the single model writes 29% longer replies and both the judges and the "
+            "acknowledgement check reward length: the acknowledgement and rule-adherence advantages of the single "
+            "model largely disappear under that control, whereas the WASSA advantage of the decoupled system "
+            "strengthens. Repetition measures are corpus-level and therefore have no paired test.")
+    save("ch5_4", "decoupled_vs_single_generator", pd.DataFrame(rows),
+         "Decoupled system against the same generator used alone, measure by measure",
+         "computed from per-reply result files, the judge panel and `evaluation_results_diversity/` by this script",
+         note)
+
+
 def build_human_eval_placeholder():
     key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_do_not_share_with_raters.csv")
     items = (key.drop_duplicates("item_number")[["item_number", "gold_emotion", "is_attention_check",
@@ -1204,6 +1288,7 @@ def main():
     build_parameter_efficiency(per_reply)
     build_resource_efficiency()
     build_rules_validity(per_reply)
+    build_single_model_showdown(per_reply)
     build_human_eval_placeholder()
     build_literature()
     build_project_tables()
