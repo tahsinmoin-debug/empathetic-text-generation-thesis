@@ -10,7 +10,7 @@ The design process follows an iterative, evidence-gated methodology (Figure 4.1)
 
 ## 4.1.1 Problem Definition and Objective Formulation
 
-The objective is a text-based conversational system that responds to a person sharing an emotional experience with a short, validating and non-intrusive reply, and that makes its emotional reasoning inspectable. This objective translates into three measurable targets: (i) to identify the expressed emotion among 32 fine-grained categories and expose both the candidate emotions and the final choice; (ii) to generate replies that acknowledge the feeling, ask at most one question and remain short; and (iii) to run all components on a single 8 GB consumer GPU without sending user messages to an external service. The central design question, raised directly by the Pre-Thesis 2 defence panel, is whether emotion detection and response generation should be performed by separate models or whether a single model suffices. The methodology is therefore constructed to test that question rather than to assume its answer.
+The objective is a text-based conversational system that responds to a person sharing an emotional experience with a short, validating and non-intrusive reply, and that makes its emotional reasoning inspectable. This objective translates into three measurable targets: (i) to identify the expressed emotion among 32 fine-grained categories and expose both the candidate emotions and the final choice; (ii) to generate replies that acknowledge the feeling, ask at most one question and remain short, following the empathy mechanisms of *emotional reactions* and *explorations* identified for text-based mental-health support [41] and the counselling guidance against asking several questions at once [42], whose validity is examined in Section 5.4.8; and (iii) to run all components on a single 8 GB consumer GPU without sending user messages to an external service. The central design question, raised directly by the Pre-Thesis 2 defence panel, is whether emotion detection and response generation should be performed by separate models or whether a single model suffices. The methodology is therefore constructed to test that question rather than to assume its answer.
 
 ## 4.1.2 Data Acquisition and Preprocessing
 
@@ -65,7 +65,7 @@ As a signal independent of both the rule checks and the AI judges, we use the hy
 
 ## 4.1.6 Implementation Environment
 
-All components are implemented in Python 3.10 with PyTorch 2.5.1 [41] and Hugging Face Transformers 5.16.1 [40], using bitsandbytes for 4-bit quantisation, SciPy [42] for statistical testing and scikit-learn [43] for classification metrics. All experiments run on a single NVIDIA GeForce RTX 4060 with 8 GB of memory [38] and 16 GB of system memory (Table 4.3).
+All components are implemented in Python 3.10 with PyTorch 2.5.1 [43] and Hugging Face Transformers 5.16.1 [40], using bitsandbytes for 4-bit quantisation, SciPy [44] for statistical testing and scikit-learn [45] for classification metrics. All experiments run on a single NVIDIA GeForce RTX 4060 with 8 GB of memory [38] and 16 GB of system memory (Table 4.3).
 
 
 | Purpose | Tool | Version |
@@ -112,6 +112,8 @@ In summary, the design process treats the choice between a decoupled and a monol
 [35] P. Verga, S. Hofstatter, S. Althammer, Y. Su, A. Piktus, A. Arkhangorodsky, M. Xu, N. White, and P. Lewis, "Replacing judges with juries: Evaluating LLM generations with a panel of diverse models," arXiv:2404.18796, 2024.  
 [38] NVIDIA, "GeForce RTX 4060 Ti & 4060 graphics cards: Specifications." [Online]. Available: https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4060-4060ti/  
 [40] T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue, A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz et al., "Transformers: State-of-the-art natural language processing," in Proc. 2020 Conf. Empirical Methods Natural Language Processing: System Demonstrations, 2020, pp. 38-45, doi: 10.18653/v1/2020.emnlp-demos.6.  
-[41] A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan et al., "PyTorch: An imperative style, high-performance deep learning library," in Advances in Neural Information Processing Systems (NeurIPS), vol. 32, 2019, pp. 8024-8035.  
-[42] P. Virtanen, R. Gommers, T. E. Oliphant et al., "SciPy 1.0: Fundamental algorithms for scientific computing in Python," Nature Methods, vol. 17, pp. 261-272, 2020, doi: 10.1038/s41592-019-0686-2.  
-[43] F. Pedregosa, G. Varoquaux, A. Gramfort et al., "Scikit-learn: Machine learning in Python," J. Machine Learning Research, vol. 12, pp. 2825-2830, 2011.  
+[41] A. Sharma, A. S. Miner, D. C. Atkins, and T. Althoff, "A computational approach to understanding empathy expressed in text-based mental health support," in Proc. 2020 Conf. Empirical Methods Natural Language Processing (EMNLP), 2020, pp. 5263-5276, doi: 10.18653/v1/2020.emnlp-main.425.  
+[42] Substance Abuse and Mental Health Services Administration, Enhancing Motivation for Change in Substance Use Disorder Treatment, Treatment Improvement Protocol (TIP) Series No. 35, SAMHSA Publication No. PEP19-02-01-003. Rockville, MD, USA: SAMHSA, 2019, ch. 3.  
+[43] A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan et al., "PyTorch: An imperative style, high-performance deep learning library," in Advances in Neural Information Processing Systems (NeurIPS), vol. 32, 2019, pp. 8024-8035.  
+[44] P. Virtanen, R. Gommers, T. E. Oliphant et al., "SciPy 1.0: Fundamental algorithms for scientific computing in Python," Nature Methods, vol. 17, pp. 261-272, 2020, doi: 10.1038/s41592-019-0686-2.  
+[45] F. Pedregosa, G. Varoquaux, A. Gramfort et al., "Scikit-learn: Machine learning in Python," J. Machine Learning Research, vol. 12, pp. 2825-2830, 2011.  

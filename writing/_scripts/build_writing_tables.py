@@ -71,7 +71,8 @@ FINAL = "two_stage_phi"
 FT = "fine_tuned_fixed"
 SINGLE_PHI = "single_model_phi"
 
-if (ROOT / "evaluation_results_d2_settings_comparison" / f"{SINGLE_PHI}_scored_predictions.csv").exists():
+_SP = ROOT / "evaluation_results_d2_settings_comparison" / f"{SINGLE_PHI}_scored_predictions.csv"
+if _SP.exists() and len(pd.read_csv(_SP)) >= 300:
     SETTINGS.insert(SETTINGS.index("single_model_bigger"), SINGLE_PHI)
     LABEL[SINGLE_PHI] = "Single model, same generator: Phi-4-mini (4-bit) detects + responds"
 
@@ -911,6 +912,47 @@ def build_resource_efficiency():
          "Two tests per baseline, no multiple-comparison correction. Memory is one peak reading per system.")
 
 
+def build_rules_validity(per_reply):
+    """Do the three response rules actually track measured empathy? Effects are computed WITHIN each
+    system (each system's mean removed), so they are not driven by differences between systems."""
+    from scipy.stats import mannwhitneyu
+    judges = load_judges(PANEL)
+    judges["judge_empathy"] = panel_mean(judges, PANEL, "empathy")
+    d = per_reply.merge(judges[["conv_id", "setting", "judge_empathy"]], on=["conv_id", "setting"], how="left")
+    d["one_question"] = d["question_count"] == 1
+
+    def effect(col, flag):
+        x = d.dropna(subset=[col]).copy()
+        x["c"] = x[col] - x.groupby("setting")[col].transform("mean")
+        a, bb = x[x[flag]]["c"], x[~x[flag]]["c"]
+        if min(len(a), len(bb)) < 15:
+            return "too few replies", ""
+        p = mannwhitneyu(a, bb).pvalue
+        return f"{a.mean() - bb.mean():+.2f} ({len(a)} vs {len(bb)} replies)", f"p = {p:.3g}"
+
+    rows = []
+    for flag, rule, basis in [
+        ("ack_present", "R1: acknowledge the feeling",
+         "Emotional reactions are one of the three empathy mechanisms of the EPITOME framework for text-based support (Sharma et al., 2020)"),
+        ("one_question", "R2: ask exactly one question",
+         "Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one"),
+        ("length_ok", "R3: stay within 120 words",
+         "Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement)"),
+    ]:
+        w_eff, w_p = effect("wassa_empathy_0_10", flag)
+        j_eff, j_p = effect("judge_empathy", flag)
+        rows.append({"Rule": rule, "Where the rule comes from": basis,
+                     "Effect on WASSA empathy (within system)": f"{w_eff} {w_p}".strip(),
+                     "Effect on AI-judge empathy (within system)": f"{j_eff} {j_p}".strip()})
+    note = ("Within-system effects: each system's mean is subtracted before comparing replies that follow the rule with "
+            "those that do not, so the numbers are not explained by differences between systems (Mann-Whitney U). "
+            "Acknowledgement raises WASSA empathy and staying within the length limit raises judge empathy. The "
+            "one-question rule is not rewarded by either automatic measure: it is justified by counselling practice and "
+            "by preventing the interrogation failure mode, not by a higher empathy score.")
+    save("ch5_4", "rules_validity", pd.DataFrame(rows), "Are the three response rules valid? Origin and measured effect of each rule",
+         "computed from per-reply result files and the AI-judge panel by this script", note)
+
+
 def build_human_eval_placeholder():
     key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_do_not_share_with_raters.csv")
     items = (key.drop_duplicates("item_number")[["item_number", "gold_emotion", "is_attention_check",
@@ -1160,6 +1202,7 @@ def main():
     build_detector_sensitivity()
     build_parameter_efficiency(per_reply)
     build_resource_efficiency()
+    build_rules_validity(per_reply)
     build_human_eval_placeholder()
     build_literature()
     build_project_tables()
