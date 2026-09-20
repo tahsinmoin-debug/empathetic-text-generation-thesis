@@ -1,19 +1,27 @@
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
+% Template version as of 6/27/2024
+
 \usepackage{cite}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
 \usepackage{graphicx}
-\usepackage{booktabs}
+\usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \begin{document}
 
 \title{Does a Separate Emotion Detector Help Small Language Models Respond Empathetically? A Controlled Study on a Consumer GPU}
 
-% Double-blind review: keep authors anonymous. Replace with the IEEEauthorblockN/A block for camera-ready.
-\author{\IEEEauthorblockN{Anonymous Authors}
-\IEEEauthorblockA{\textit{Submitted for double-blind review}}}
+% DOUBLE-BLIND SUBMISSION: no names, affiliations or e-mail addresses (ICCIT requirement).
+% For the camera-ready version, replace this block with the author blocks of the template:
+%   \author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
+%   \IEEEauthorblockA{\textit{dept. name of organization} \\ \textit{name of organization} \\
+%   City, Country \\ email address or ORCID}
+%   \and ... }
+\author{\IEEEauthorblockN{Anonymous Authors}}
 
 \maketitle
 
@@ -21,15 +29,17 @@
 Small language models that run on local hardware are attractive for emotionally supportive conversation, because a user's disclosure never has to leave the device. It is unclear, however, whether such models benefit from a separate emotion detector or should simply be prompted to recognise the emotion and respond in one step. We present a controlled study on the EmpatheticDialogues benchmark in which every system uses the same 300 test conversations, the same decoding settings and a single 8 GB GPU. Our decoupled system passes the three most probable of 32 emotions from a RoBERTa-base detector (50.3\% top-1 accuracy), together with emotion-specific guidance and attention-derived cue words, to a 4-bit Phi-4-mini generator. We evaluate replies with rule adherence, the WASSA 2024 empathy classifier, emotion validation and a blind two-judge LLM panel, using paired tests with Holm correction. The decoupled system (4.0B parameters) is significantly more empathetic and emotionally faithful than a 1.5B single model, and, at an equal generator, significantly more emotionally faithful and higher on the empathy classifier than that generator used alone, but a 7.6B single model remains stronger on rule adherence and on the empathy classifier; with 52\% of its parameters and 38\% less GPU memory, at a similar response time, our system reaches 97.5\% of its overall AI-judge score. Three analyses show that detection accuracy is not the bottleneck: incorrect labels do not degrade replies, a more accurate detector brings no gain, and the generator's own emotion choice is less accurate than the detector's yet yields better replies. The benefit comes from how the detected emotion is used rather than how accurately it is detected.
 
 \end{abstract}
+
 \begin{IEEEkeywords}
 empathetic response generation, emotion recognition, small language models, EmpatheticDialogues, LLM-as-a-judge
 
 \end{IEEEkeywords}
 
-\section{Introduction}
-People increasingly turn to conversational agents when they want to talk about how they feel. A useful reply to such a message should recognise the feeling, validate it, and invite the person to continue without overwhelming them with questions \cite{rashkin2019}. Large language models (LLMs) produce fluent and often empathetic replies \cite{qian2023llm,sorin2024jmir}, but the strongest models run on remote servers, which means that sensitive disclosures are sent to a third party. Small open models that fit on a consumer GPU avoid this problem, yet they are weaker at recognising fine-grained emotions \cite{belay2025}.
 
-A natural response is to \emph{decouple} the task: a small encoder detects the emotion and a generator writes the reply conditioned on it. Earlier empathetic dialogue models predicted the emotion as an auxiliary objective of a single generation model \cite{lin2019moel,sabour2022cem,zhou2023case}, and Yang et al. recently proposed using the emotion predictions of such models to guide an LLM \cite{yang2024hef}. What remains unclear is whether a separate detector is worth its cost for \emph{small, locally run} generators, and, if it helps, whether the benefit comes from detecting the emotion more accurately or from the way the detected emotion is used.
+\section{Introduction}
+People increasingly turn to conversational agents when they want to talk about how they feel. A useful reply to such a message should recognise the feeling, validate it, and invite the person to continue without overwhelming them with questions \cite{b1}. Large language models (LLMs) produce fluent and often empathetic replies \cite{b2,b3}, but the strongest models run on remote servers, which means that sensitive disclosures are sent to a third party. Small open models that fit on a consumer GPU avoid this problem, yet they are weaker at recognising fine-grained emotions \cite{b4}.
+
+A natural response is to \emph{decouple} the task: a small encoder detects the emotion and a generator writes the reply conditioned on it. Earlier empathetic dialogue models predicted the emotion as an auxiliary objective of a single generation model \cite{b5,b6,b7}, and Yang et al. recently proposed using the emotion predictions of such models to guide an LLM \cite{b8}. What remains unclear is whether a separate detector is worth its cost for \emph{small, locally run} generators, and, if it helps, whether the benefit comes from detecting the emotion more accurately or from the way the detected emotion is used.
 
 We answer these questions with a controlled comparison in which data, decoding and hardware are held fixed. Our contributions are:
 
@@ -42,95 +52,108 @@ We answer these questions with a controlled comparison in which data, decoding a
 
 
 \section{Related Work}
-\textbf{Empathetic response generation.} EmpatheticDialogues (ED) \cite{rashkin2019} contains about 25k conversations grounded in 32 emotions. Models trained on it, such as MoEL \cite{lin2019moel}, MIME \cite{majumder2020mime}, EmpDG \cite{li2020empdg}, KEMP \cite{li2022kemp}, CEM \cite{sabour2022cem}, CASE \cite{zhou2023case} and ESCM \cite{yang2023escm}, predict the emotion as an auxiliary task and report emotion accuracies between 30.6\% and 41.2\% \cite{qian2023llm,yang2023escm}.
+\textbf{Empathetic response generation.} EmpatheticDialogues (ED) \cite{b1} contains about 25k conversations grounded in 32 emotions. Models trained on it, such as MoEL \cite{b5}, MIME \cite{b9}, EmpDG \cite{b10}, KEMP \cite{b11}, CEM \cite{b6}, CASE \cite{b7} and ESCM \cite{b12}, predict the emotion as an auxiliary task and report emotion accuracies between 30.6\% and 41.2\% \cite{b2,b12}.
 
-\textbf{LLMs for empathy.} Qian et al. found that LLMs outperform these specialised models in human evaluation \cite{qian2023llm}, and TOOL-ED improves LLM empathy by letting the model call an emotion knowledge tool \cite{cao2025tooled}. A systematic review reports that LLM replies are often rated as empathetic but tend to be repetitive and lengthy \cite{sorin2024jmir}.
+\textbf{LLMs for empathy.} Qian et al. found that LLMs outperform these specialised models in human evaluation \cite{b2}, and TOOL-ED improves LLM empathy by letting the model call an emotion knowledge tool \cite{b13}. A systematic review reports that LLM replies are often rated as empathetic but tend to be repetitive and lengthy \cite{b3}.
 
-\textbf{Combining small models with LLMs.} The closest work to ours is HEF \cite{yang2024hef}, which gives an LLM the top-\emph{k} emotions and the attention-weighted cause words of a small empathetic model and reports higher emotion accuracy for ChatGPT and 6-13B open models. Our study differs in four respects: we use a dedicated classifier rather than a joint generation model; every component runs locally with at most 3.8B generator parameters; we compare against monolithic single models of smaller and larger size under identical conditions; and we test directly whether detection accuracy drives the improvement.
+\textbf{Combining small models with LLMs.} The closest work to ours is HEF \cite{b8}, which gives an LLM the top-\emph{k} emotions and the attention-weighted cause words of a small empathetic model and reports higher emotion accuracy for ChatGPT and 6-13B open models. Our study differs in four respects: we use a dedicated classifier rather than a joint generation model; every component runs locally with at most 3.8B generator parameters; we compare against monolithic single models of smaller and larger size under identical conditions; and we test directly whether detection accuracy drives the improvement.
 
-\textbf{Evaluation.} Strong LLM judges agree with human preferences in over 80\% of cases but favour longer answers and their own outputs \cite{zheng2023judge,panickssery2024}; panels of judges from different model families reduce this bias \cite{verga2024}. The WASSA 2024 shared task provides empathy classifiers trained on human ratings of conversation turns \cite{giorgi2024wassa}.
+\textbf{Evaluation.} Strong LLM judges agree with human preferences in over 80\% of cases but favour longer answers and their own outputs \cite{b14,b15}; panels of judges from different model families reduce this bias \cite{b16}. The WASSA 2024 shared task provides empathy classifiers trained on human ratings of conversation turns \cite{b17}.
 
 
 \section{Method}
 
 \subsection{Task and Data}
-Given a user's message, the system must produce a reply that satisfies three rules: it (R1) acknowledges the feeling, (R2) asks exactly one question and (R3) stays within 120 words. R1 and R2 correspond to the \emph{emotional reactions} and \emph{explorations} mechanisms of empathy in text-based support \cite{sharma2020epitome}, while asking several questions is the question-answer trap that counselling guidance warns against \cite{samhsa2019tip35}. Within systems, replies with an acknowledgement score 0.36 points higher on WASSA (p $<$ 0.001) and replies within the length limit score 0.65 points higher on judged empathy (p = 0.006); the one-question rule is not rewarded by either measure and is justified as a usability requirement. The rules are not satisfied by imitating the data: real ED listener replies acknowledge the feeling in only 10.6\% of cases and meet all three rules in 4.3\%. We use the official ED train, validation and test partitions. Each conversation contributes its \emph{first user utterance} labelled with the conversation's emotion, which gives 2,542 test examples. We deliberately do not use the situation descriptions, because they are written after the fact and state the feeling explicitly: a GPT-2 detector trained on them scored 56.9\% on situation text but only 48.2\% on the user messages that a deployed system actually receives.
+Given a user's message, the system must produce a reply that satisfies three rules: it (R1) acknowledges the feeling, (R2) asks exactly one question and (R3) stays within 120 words. R1 and R2 correspond to the \emph{emotional reactions} and \emph{explorations} mechanisms of empathy in text-based support \cite{b18}, while asking several questions is the question-answer trap that counselling guidance warns against \cite{b19}. Within systems, replies with an acknowledgement score 0.36 points higher on WASSA (p $<$ 0.001) and replies within the length limit score 0.65 points higher on judged empathy (p = 0.006); the one-question rule is not rewarded by either measure and is justified as a usability requirement. The rules are not satisfied by imitating the data: real ED listener replies acknowledge the feeling in only 10.6\% of cases and meet all three rules in 4.3\%. We use the official ED train, validation and test partitions. Each conversation contributes its \emph{first user utterance} labelled with the conversation's emotion, which gives 2,542 test examples. We deliberately do not use the situation descriptions, because they are written after the fact and state the feeling explicitly: a GPT-2 detector trained on them scored 56.9\% on situation text but only 48.2\% on the user messages that a deployed system actually receives.
 
 
 \subsection{Emotion Detector (d1)}
-We fine-tune RoBERTa-base \cite{liu2019roberta} (125M parameters) as a 32-way classifier on first utterances (learning rate 2e-5, effective batch size 16, linear warm-up over 6\% of steps, early stopping on validation accuracy, at most 128 tokens). Among equally tuned base-size encoders, RoBERTa-base was comparable to ELECTRA in top-1 accuracy (50.1\% against 50.2\%), above BERT (48.8\%), and gave the highest top-5 accuracy (85.0\%); RoBERTa-large reached 53.0\% but required 7x the training time. The deployed checkpoint reaches \textbf{50.3\% top-1, 76.5\% top-3 and 84.3\% top-5} accuracy (macro-F1 49.4\%) on the test partition, against a chance level of 3.1\%. Its most frequent errors are between neighbouring emotions such as \emph{sentimental}/\emph{nostalgic} and \emph{afraid}/\emph{terrified}, which motivates passing several candidates rather than one label.
+We fine-tune RoBERTa-base \cite{b20} (125M parameters) as a 32-way classifier on first utterances (learning rate 2e-5, effective batch size 16, linear warm-up over 6\% of steps, early stopping on validation accuracy, at most 128 tokens). Among equally tuned base-size encoders, RoBERTa-base was comparable to ELECTRA in top-1 accuracy (50.1\% against 50.2\%), above BERT (48.8\%), and gave the highest top-5 accuracy (85.0\%); RoBERTa-large reached 53.0\% but required 7x the training time. The deployed checkpoint reaches \textbf{50.3\% top-1, 76.5\% top-3 and 84.3\% top-5} accuracy (macro-F1 49.4\%) on the test partition, against a chance level of 3.1\%. Its most frequent errors are between neighbouring emotions such as \emph{sentimental}/\emph{nostalgic} and \emph{afraid}/\emph{terrified}, which motivates passing several candidates rather than one label.
 
 
 \subsection{Two-Stage Generator (d2)}
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.92\linewidth]{figures/fig_architecture.png}
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\columnwidth]{figures/fig_architecture.png}}
 \caption{Decoupled two-stage pipeline. The detector's top-3 emotions and attention cue words condition a 4-bit Phi-4-mini generator.}
 \label{fig:arch}
 \end{figure}
 
-Fig.~\ref{fig:arch} shows the pipeline. The generator is Phi-4-mini-instruct \cite{abouelenin2025phi4mini} (3.8B) loaded with 4-bit NF4 quantisation \cite{dettmers2023qlora}. It was selected in a bake-off against Qwen2.5-1.5B \cite{qwen2024} and Gemma-3-4B under the same detector and prompt: Phi-4-mini gave the highest rule adherence (65.3\% against 57.7\% and 22.0\%), whereas Gemma-3-4B exceeded the length limit in 72.3\% of replies. In \textbf{stage 1}, the generator is shown the user message and the detector's three most probable emotions and chooses one by greedy decoding. In \textbf{stage 2}, it writes the reply under a system prompt containing (i) guidance specific to the chosen emotion, stating what to focus on and what to avoid for each of the 32 emotions, (ii) the three rules, and (iii) \emph{cue words}, the 40\% of tokens that received the most attention from the detector's final-layer [CLS] representation. Stage-2 decoding uses temperature 0.7, top-p 0.9 and at most 250 new tokens. The full system has 4.0B parameters.
+Fig.~\ref{fig:arch} shows the pipeline. The generator is Phi-4-mini-instruct \cite{b21} (3.8B) loaded with 4-bit NF4 quantisation \cite{b22}. It was selected in a bake-off against Qwen2.5-1.5B \cite{b23} and Gemma-3-4B under the same detector and prompt: Phi-4-mini gave the highest rule adherence (65.3\% against 57.7\% and 22.0\%), whereas Gemma-3-4B exceeded the length limit in 72.3\% of replies. In \textbf{stage 1}, the generator is shown the user message and the detector's three most probable emotions and chooses one by greedy decoding. In \textbf{stage 2}, it writes the reply under a system prompt containing (i) guidance specific to the chosen emotion, stating what to focus on and what to avoid for each of the 32 emotions, (ii) the three rules, and (iii) \emph{cue words}, the 40\% of tokens that received the most attention from the detector's final-layer [CLS] representation. Stage-2 decoding uses temperature 0.7, top-p 0.9 and at most 250 new tokens. The full system has 4.0B parameters.
 
 
 \subsection{Baselines}
-All baselines respond to the same conversations with the same decoding settings. \emph{Zero-shot}: Qwen2.5-1.5B with a generic empathetic prompt and no detector. \emph{Fine-tuned}: Qwen2.5-1.5B fine-tuned end to end on ED replies with LoRA \cite{hu2022lora} (rank 16, alpha 32, learning rate 2e-4, dropout 0.1, best epoch by validation loss). \emph{Single model (1.5B)} and \emph{single model (7.6B)}: Qwen2.5-1.5B and Qwen2.5-7B (4-bit), each prompted with the same rules to first name the emotion and then respond in one pass. \emph{Initial pipeline}: a GPT-2 Medium detector with a Qwen2.5-1.5B generator and a generic emotion-conditioned prompt. \emph{Top-1 Phi}: our detector and generator, passing only the top-1 emotion with a generic prompt. We also tested retrieval augmentation \cite{lewis2020rag} of the initial pipeline with similar ED conversations.
+All baselines respond to the same conversations with the same decoding settings. \emph{Zero-shot}: Qwen2.5-1.5B with a generic empathetic prompt and no detector. \emph{Fine-tuned}: Qwen2.5-1.5B fine-tuned end to end on ED replies with LoRA \cite{b24} (rank 16, alpha 32, learning rate 2e-4, dropout 0.1, best epoch by validation loss). \emph{Single model (1.5B)} and \emph{single model (7.6B)}: Qwen2.5-1.5B and Qwen2.5-7B (4-bit), each prompted with the same rules to first name the emotion and then respond in one pass. \emph{Initial pipeline}: a GPT-2 Medium detector with a Qwen2.5-1.5B generator and a generic emotion-conditioned prompt. \emph{Top-1 Phi}: our detector and generator, passing only the top-1 emotion with a generic prompt. We also tested retrieval augmentation \cite{b25} of the initial pipeline with similar ED conversations.
 
 
 \section{Experimental Setup}
 \textbf{Evaluation sample.} Generation experiments use 300 test conversations sampled with seed 42. The detector is evaluated on all 2,542 test examples.
 
-\textbf{Measures.} (1) \emph{Rule adherence}: automatic checks for an acknowledgement phrase, exactly one question mark and at most 120 words; we report the share of replies satisfying all three. (2) \emph{WASSA empathy}: the hyy33 system from the WASSA 2024 shared task \cite{yang2024hyy33}, trained on human empathy ratings of conversation turns and correlating with them at r = 0.544 \cite{giorgi2024wassa}, mapped to a 0-10 scale. (3) \emph{Emotion validation}: whether the detector, applied to the reply, recovers the gold emotion of the conversation. (4) \emph{AI judges}: Nemotron 3 Ultra and gpt-oss-120b, from developers unrelated to our models \cite{panickssery2024}, score each reply blind from 1 to 10 for empathy, relevance and safety at temperature 0; overall is the mean of the three. Judges are applied to a stratified subset of 64 conversations (the shortest and longest for each emotion). A third planned judge, Mistral Large, became unavailable before the final systems were judged; on the 256 replies it scored of systems still in the comparison, the two- and three-judge averages correlate at Spearman $\rho$ = 0.97 with identical system rankings.
+\textbf{Measures.} (1) \emph{Rule adherence}: automatic checks for an acknowledgement phrase, exactly one question mark and at most 120 words; we report the share of replies satisfying all three. (2) \emph{WASSA empathy}: the hyy33 system from the WASSA 2024 shared task \cite{b26}, trained on human empathy ratings of conversation turns and correlating with them at r = 0.544 \cite{b17}, mapped to a 0-10 scale. (3) \emph{Emotion validation}: whether the detector, applied to the reply, recovers the gold emotion of the conversation. (4) \emph{AI judges}: Nemotron 3 Ultra and gpt-oss-120b, from developers unrelated to our models \cite{b15}, score each reply blind from 1 to 10 for empathy, relevance and safety at temperature 0; overall is the mean of the three. Judges are applied to a stratified subset of 64 conversations (the shortest and longest for each emotion). A third planned judge, Mistral Large, became unavailable before the final systems were judged; on the 256 replies it scored of systems still in the comparison, the two- and three-judge averages correlate at Spearman $\rho$ = 0.97 with identical system rankings.
 
-\textbf{Statistics.} All comparisons are paired. We use McNemar's exact test for binary measures \cite{mcnemar1947}, the Wilcoxon signed-rank test for scores \cite{wilcoxon1945} and 95\% bootstrap confidence intervals from 10,000 resamples \cite{efron1993}. P-values are Holm-corrected \cite{holm1979} across the baselines compared on each measure. We call a difference significant only if the corrected p $<$ 0.05 and the interval excludes zero.
+\textbf{Statistics.} All comparisons are paired. We use McNemar's exact test for binary measures \cite{b27}, the Wilcoxon signed-rank test for scores \cite{b28} and 95\% bootstrap confidence intervals from 10,000 resamples \cite{b29}. P-values are Holm-corrected \cite{b30} across the baselines compared on each measure. We call a difference significant only if the corrected p $<$ 0.05 and the interval excludes zero.
 
-\textbf{Implementation.} All experiments use Python with PyTorch \cite{paszke2019pytorch} and Hugging Face Transformers \cite{wolf2020transformers} on one NVIDIA RTX 4060 with 8 GB of memory.
+\textbf{Implementation.} All experiments use Python with PyTorch \cite{b31} and Hugging Face Transformers \cite{b32} on one NVIDIA RTX 4060 with 8 GB of memory.
 
 
 \section{Results}
 
 \subsection{Overall Comparison}
-\begin{table*}[t]
-\centering
+\begin{table*}[htbp]
 \caption{Results on 300 ED test conversations (judge scores on the 64-conversation subset). Params: total parameters in billions. Rules: replies satisfying all three rules. Val.: emotion validation. Emp./All: AI-judge empathy and overall (1-10); n/a = system not covered by the judge panel.}
 \label{tab:main}
+\begin{center}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccc}
-\toprule
-System & Params & Rules (\%) & 1 Q (\%) & Words & WASSA & Val. (\%) & Emp. & All \\
-\midrule
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{System} & \textbf{Params} & \textbf{Rules (\%)} & \textbf{1 Q (\%)} & \textbf{Words} & \textbf{WASSA} & \textbf{Val. (\%)} & \textbf{Emp.} & \textbf{All} \\
+\hline
 Zero-shot Qwen2.5-1.5B & 1.5 & 19.0 & 22.7 & 75.9 & 4.25 & 24.7 & 5.98 & 7.51 \\
+\hline
 Fine-tuned Qwen2.5-1.5B & 1.5 & 22.3 & 74.0 & 10.0 & 3.36 & 18.3 & 3.88 & 5.96 \\
+\hline
 Single model Qwen2.5-1.5B & 1.5 & 51.3 & 73.7 & 42.0 & 4.84 & 25.7 & 7.15 & 8.24 \\
+\hline
 Single model Phi-4-mini (our generator) & 3.8 & 73.7 & 96.0 & 73.5 & 4.75 & 27.0 & 8.04 & 8.78 \\
+\hline
 Single model Qwen2.5-7B & 7.6 & \textbf{82.3} & \textbf{99.0} & 53.0 & \textbf{5.76} & 32.3 & \textbf{8.15} & \textbf{8.90} \\
+\hline
 Initial pipeline (GPT-2 + Qwen-1.5B) & 1.9 & 63.7 & 87.3 & 35.2 & 4.80 & 26.0 & 6.98 & 8.04 \\
+\hline
 RoBERTa + Qwen-1.5B, top-1 & 1.7 & 57.7 & 84.3 & 34.7 & 4.78 & 25.3 & n/a & n/a \\
+\hline
 RoBERTa + Phi-4-mini, top-1 & 4.0 & 65.3 & 94.7 & 80.5 & 4.89 & 28.3 & 7.84 & 8.65 \\
+\hline
 \textbf{Ours: two-stage RoBERTa + Phi-4-mini} & 4.0 & 60.0 & 92.7 & 57.1 & 5.05 & \textbf{36.7} & 7.84 & 8.68 \\
-\bottomrule
+\hline
 \end{tabular}}
+\end{center}
 \end{table*}
 
 Table~\ref{tab:main} summarises all systems. Our system achieves the highest emotion validation (36.7\%) of any system and the second-highest WASSA score, behind only the 7.6B single model; on the AI judges it lies third, within 0.22 points of the highest-scoring system. The fine-tuned model learns the style of ED listeners: 10-word replies that usually ask a question but rarely acknowledge the feeling (30.0\%), meeting all rules in 22.3\% of cases. Retrieval augmentation lowered the initial pipeline's rule adherence from 63.7\% to 43.7\%, as the retrieved listener replies model the same style. Because the measures disagree, we also summarise them by standardising five of them (rule adherence, WASSA, emotion validation, judge empathy and freedom from boilerplate) across systems and averaging them with equal weight: our system ranks second of eight, behind only the 7.6B single model, which needs 4.7 times the parameters and 62\% more GPU memory, and first among the systems that fit the 8 GB budget. Removing any one measure leaves it second or third, so the ranking does not depend on a single favourable measure.
 
 
 \subsection{Significance Against Key Baselines}
-\begin{table}[t]
-\centering
+\begin{table}[htbp]
 \caption{Paired differences (ours minus baseline) with 95\% bootstrap CIs. Rules and validation in percentage points. * significant after Holm correction.}
 \label{tab:sig}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lccc}
-\toprule
-Measure & vs 1.5B single & vs 7.6B single & vs top-1 Phi \\
-\midrule
+\begin{center}
+\scriptsize
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{vs 1.5B single} & \textbf{vs 7.6B single} & \textbf{vs top-1 Phi} \\
+\hline
 Rules & +8.7 [+1.0, +16.3] & -22.3 [-29.3, -15.3]* & -5.3 [-13.0, +2.0] \\
+\hline
 Validation & +11.0 [+5.0, +17.0]* & +4.3 [-1.7, +10.3] & +8.3 [+3.0, +13.7]* \\
+\hline
 WASSA & +0.21 [+0.08, +0.35]* & -0.71 [-0.84, -0.58]* & +0.16 [+0.05, +0.26]* \\
+\hline
 Judge emp. & +0.70 [+0.39, +1.01]* & -0.30 [-0.55, -0.07]* & +0.01 [-0.23, +0.25] \\
+\hline
 Judge all & +0.44 [+0.17, +0.72]* & -0.21 [-0.40, -0.03] & +0.04 [-0.16, +0.24] \\
-\bottomrule
-\end{tabular}}
+\hline
+\end{tabular}
+\end{center}
 \end{table}
 
 Table~\ref{tab:sig} reports the key paired comparisons. \textbf{Against the 1.5B single model}, our system is significantly more empathetic by both WASSA (+0.21) and the AI judges (+0.70 for empathy, +0.44 overall) and more emotionally faithful (+11.0 points). Its higher rule adherence (+8.7 points) is not significant after correction (corrected p = 0.095). \textbf{Against the 7.6B single model}, it is significantly worse on rule adherence and WASSA, while the judges' empathy (-0.30) and overall (-0.21) gaps do not survive correction (p = 0.073 and p = 0.109). \textbf{Against top-1 Phi}, which uses the same detector and generator, emotion-specific guidance significantly raises WASSA (+0.16) and emotion validation (+8.3 points) while writing 29\% fewer words, but the AI judges rate the two configurations alike.
@@ -141,30 +164,38 @@ Because our generator is larger than the 1.5B single model, Table~\ref{tab:main}
 
 
 \subsection{Is the Detector the Bottleneck?}
-\begin{table}[t]
-\centering
+\begin{table}[htbp]
 \caption{Three tests of whether detector accuracy limits reply quality.}
 \label{tab:bottleneck}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lcc}
-\toprule
-Test & Result & p \\
-\midrule
+\begin{center}
+\scriptsize
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Test} & \textbf{Result} & \textbf{p} \\
+\hline
 Rules when d1 label is wrong vs correct (ours) & 64.2\% vs 54.3\% & 0.096 \\
+\hline
 WASSA when label is wrong vs correct (initial) & 4.78 vs 4.83 & 0.72 \\
+\hline
 GPT-2 to RoBERTa d1, Qwen-1.5B fixed: validation & 26.0\% to 25.3\% & 0.91 \\
+\hline
 RoBERTa-base to -large in ours: accuracy & 50.3\% to 53.3\% & 0.21 \\
+\hline
 ... all rules & 60.0\% to 54.7\% & 0.60 \\
+\hline
 ... WASSA & 5.05 to 5.01 & 0.85 \\
+\hline
 ... emotion validation & 36.7\% to 38.0\% & 0.85 \\
+\hline
 Stage-1 pick vs d1 top-1 accuracy & 42.3\% vs 50.3\% & 0.005 \\
-\bottomrule
-\end{tabular}}
+\hline
+\end{tabular}
+\end{center}
 \end{table}
 
-Table~\ref{tab:bottleneck} presents three analyses. First, replies generated from an incorrect detector label are no worse in rule adherence or empathy (Fisher and Mann-Whitney tests). Second, replacing the detector with a more accurate one leaves reply quality unchanged, both when GPT-2 is replaced by RoBERTa and when RoBERTa-large is substituted into our system (Holm-corrected p shown). Third, the generator's stage-1 choice agrees with the gold label \emph{less} often than the detector's top-1 prediction (42.3\% against 50.3\%), yet the two-stage system produces the most emotionally faithful replies. Many disagreements are plausible neighbouring emotions, and ED assigns a single label per conversation \cite{rashkin2019}. Together these results indicate that a reply needs an emotion close enough to respond to, and that the gain comes from the emotion-specific guidance rather than from selecting the gold label.
+Table~\ref{tab:bottleneck} presents three analyses. First, replies generated from an incorrect detector label are no worse in rule adherence or empathy (Fisher and Mann-Whitney tests). Second, replacing the detector with a more accurate one leaves reply quality unchanged, both when GPT-2 is replaced by RoBERTa and when RoBERTa-large is substituted into our system (Holm-corrected p shown). Third, the generator's stage-1 choice agrees with the gold label \emph{less} often than the detector's top-1 prediction (42.3\% against 50.3\%), yet the two-stage system produces the most emotionally faithful replies. Many disagreements are plausible neighbouring emotions, and ED assigns a single label per conversation \cite{b1}. Together these results indicate that a reply needs an emotion close enough to respond to, and that the gain comes from the emotion-specific guidance rather than from selecting the gold label.
 
-For reference, our detector reads only the first user message yet exceeds the emotion accuracy reported by joint generation models that use the full dialogue context (30.6-48.3\%) \cite{qian2023llm,yang2023escm,wu2025traits}. It achieves higher accuracy with less input for two reasons. First, it is initialised from RoBERTa, pre-trained on about 160 GB of text \cite{liu2019roberta}, whereas joint models such as MoEL and CASE start from GloVe word vectors and train their encoders on ED alone \cite{lin2019moel,zhou2023case}; RoBERTa-GPT2, which is built on pre-trained RoBERTa and GPT-2, reaches a comparable 51.5\% \cite{liu2021robertagpt2}, showing that pre-training, not access to the full dialogue, drives the accuracy. Second, our detector is trained and selected only for emotion classification, whereas joint models share their capacity with response generation. As those models were not re-trained under our setting, we do not claim the best detector on ED.
+For reference, our detector reads only the first user message yet exceeds the emotion accuracy reported by joint generation models that use the full dialogue context (30.6-48.3\%) \cite{b2,b12,b33}. It achieves higher accuracy with less input for two reasons. First, it is initialised from RoBERTa, pre-trained on about 160 GB of text \cite{b20}, whereas joint models such as MoEL and CASE start from GloVe word vectors and train their encoders on ED alone \cite{b5,b7}; RoBERTa-GPT2, which is built on pre-trained RoBERTa and GPT-2, reaches a comparable 51.5\% \cite{b34}, showing that pre-training, not access to the full dialogue, drives the accuracy. Second, our detector is trained and selected only for emotion classification, whereas joint models share their capacity with response generation. As those models were not re-trained under our setting, we do not claim the best detector on ED.
 
 
 \subsection{Judge Agreement}
@@ -180,9 +211,9 @@ Our results give a qualified answer. At comparable or smaller scale, a separate 
 
 \textbf{Application orientation.} The system runs entirely on one 8 GB consumer GPU, so disclosures need not leave the device. We extended it into a multi-turn agent in which the detector reads the user's last four turns, the generator keeps the last ten exchanges, and every turn displays the candidate emotions, the chosen emotion and the cue words. This audit trail lets developers or clinicians see why a reply took a given tone and insert safeguards before generation, which a single end-to-end model cannot offer.
 
-This study has several limitations. At an equal generator the measures disagree, so the case for the decoupled design rests on emotion validation and the empathy classifier rather than on the judges, which rate the two configurations equally. Automatic measures are proxies: the acknowledgement check is keyword-based, WASSA rewards length (Spearman $\rho$ = 0.14-0.54 with word count within systems) and was trained on discussions of news articles \cite{giorgi2024wassa}, emotion validation uses our own detector, and LLM judges prefer longer answers \cite{zheng2023judge}. Judge results rest on 64 conversations. All measures reported here are automatic: a human preference study is under way but not complete, so the ranking rests on rule checks, an empathy classifier and LLM judges rather than on the judgement of people seeking support. Evaluation covers single turns in English, and resource use was measured on one GPU. Our system reuses stock phrases in 58.7\% of replies.
+This study has several limitations. At an equal generator the measures disagree, so the case for the decoupled design rests on emotion validation and the empathy classifier rather than on the judges, which rate the two configurations equally. Automatic measures are proxies: the acknowledgement check is keyword-based, WASSA rewards length (Spearman $\rho$ = 0.14-0.54 with word count within systems) and was trained on discussions of news articles \cite{b17}, emotion validation uses our own detector, and LLM judges prefer longer answers \cite{b14}. Judge results rest on 64 conversations. All measures reported here are automatic: a human preference study is under way but not complete, so the ranking rests on rule checks, an empathy classifier and LLM judges rather than on the judgement of people seeking support. Evaluation covers single turns in English, and resource use was measured on one GPU. Our system reuses stock phrases in 58.7\% of replies.
 
-\textbf{Ethical considerations.} ED is used under its CC BY-NC 4.0 licence, and no data from real users was collected; only ED text was sent to the judge APIs. The label set has no category for suicidal ideation and the system has no crisis safeguard, so it must not be deployed as a mental-health service without a reviewed crisis filter and referral mechanism \cite{who2023suicide}.
+\textbf{Ethical considerations.} ED is used under its CC BY-NC 4.0 licence, and no data from real users was collected; only ED text was sent to the judge APIs. The label set has no category for suicidal ideation and the system has no crisis safeguard, so it must not be deployed as a mental-health service without a reviewed crisis filter and referral mechanism \cite{b35}.
 
 
 \section{Conclusion}
@@ -193,42 +224,42 @@ We compared decoupled and monolithic small language models for empathetic respon
 In accordance with IEEE policy on AI-generated text, the authors disclose the following. An initial draft of the Abstract and of Sections I to VII was produced with Claude (Anthropic) from the authors' experimental results and notes; the authors then rewrote the manuscript, and the text presented here is their own. Claude was also used to write parts of the analysis code, namely the scripts that compute the reported statistics and generate the tables and figures, and the scripts that run and merge the LLM-judge evaluation. It was not used to generate any experimental result: all models were trained and all systems evaluated by the authors on their own hardware, and every number reported here comes from those runs. The authors verified all results, references and claims, and take full responsibility for the content of this paper.
 
 
-\begin{thebibliography}{35}
-\bibitem{rashkin2019} H. Rashkin, E. M. Smith, M. Li, and Y.-L. Boureau, "Towards empathetic open-domain conversation models: A new benchmark and dataset," in Proc. 57th Annu. Meeting Assoc. Comput. Linguistics (ACL), Florence, Italy, 2019, pp. 5370-5381, doi: 10.18653/v1/P19-1534.
-\bibitem{qian2023llm} Y. Qian, W.-N. Zhang, and T. Liu, "Harnessing the power of large language models for empathetic response generation: Empirical investigations and improvements," in Findings Assoc. Comput. Linguistics: EMNLP 2023, 2023; arXiv:2310.05140.
-\bibitem{sorin2024jmir} V. Sorin, D. Brin, Y. Barash, E. Konen, A. Charney, G. Nadkarni, and E. Klang, "Large language models and empathy: Systematic review," J. Med. Internet Res., vol. 26, p. e52597, 2024, doi: 10.2196/52597.
-\bibitem{belay2025} T. D. Belay, I. A. Azime, A. A. Ayele, G. Sidorov, D. Klakow, P. Slusallek, O. Kolesnikova, and S. M. Yimam, "Evaluating the capabilities of large language models for multi-label emotion understanding," in Proc. 31st Int. Conf. Computational Linguistics (COLING), Abu Dhabi, UAE, 2025, pp. 3523-3540.
-\bibitem{lin2019moel} Z. Lin, A. Madotto, J. Shin, P. Xu, and P. Fung, "MoEL: Mixture of empathetic listeners," in Proc. 2019 Conf. Empirical Methods Natural Language Processing and 9th Int. Joint Conf. Natural Language Processing (EMNLP-IJCNLP), 2019, pp. 121-132, doi: 10.18653/v1/D19-1012.
-\bibitem{sabour2022cem} S. Sabour, C. Zheng, and M. Huang, "CEM: Commonsense-aware empathetic response generation," in Proc. AAAI Conf. Artificial Intelligence, vol. 36, no. 10, 2022, pp. 11229-11237.
-\bibitem{zhou2023case} J. Zhou, C. Zheng, B. Wang, Z. Zhang, and M. Huang, "CASE: Aligning coarse-to-fine cognition and affection for empathetic response generation," in Proc. 61st Annu. Meeting Assoc. Comput. Linguistics (ACL), vol. 1, 2023, pp. 8223-8237, doi: 10.18653/v1/2023.acl-long.457.
-\bibitem{yang2024hef} Z. Yang, Z. Ren, Y. Wang, S. Peng, H. Sun, X. Zhu, and X. Liao, "Enhancing empathetic response generation by augmenting LLMs with small-scale empathetic models," arXiv:2402.11801, 2024.
-\bibitem{majumder2020mime} N. Majumder, P. Hong, S. Peng, J. Lu, D. Ghosal, A. Gelbukh, R. Mihalcea, and S. Poria, "MIME: MIMicking emotions for empathetic response generation," in Proc. 2020 Conf. Empirical Methods Natural Language Processing (EMNLP), 2020, pp. 8968-8979, doi: 10.18653/v1/2020.emnlp-main.721.
-\bibitem{li2020empdg} Q. Li, H. Chen, Z. Ren, P. Ren, Z. Tu, and Z. Chen, "EmpDG: Multi-resolution interactive empathetic dialogue generation," in Proc. 28th Int. Conf. Computational Linguistics (COLING), 2020, pp. 4454-4466, doi: 10.18653/v1/2020.coling-main.394.
-\bibitem{li2022kemp} Q. Li, P. Li, Z. Ren, P. Ren, and Z. Chen, "Knowledge bridging for empathetic dialogue generation," in Proc. AAAI Conf. Artificial Intelligence, vol. 36, no. 10, 2022, pp. 10993-11001.
-\bibitem{yang2023escm} Z. Yang, Z. Ren, Y. Wang, X. Zhu, Z. Chen, T. Cai, Y. Wu, Y. Su, S. Ju, and X. Liao, "Exploiting emotion-semantic correlations for empathetic response generation," in Findings Assoc. Comput. Linguistics: EMNLP 2023, 2023, pp. 4826-4837, doi: 10.18653/v1/2023.findings-emnlp.320.
-\bibitem{cao2025tooled} H. Cao, Y. Zhang, S. Feng, X. Yang, D. Wang, and Y. Zhang, "TOOL-ED: Enhancing empathetic response generation with the tool calling capability of LLM," in Proc. 31st Int. Conf. Computational Linguistics (COLING), Abu Dhabi, UAE, 2025, pp. 5305-5320.
-\bibitem{zheng2023judge} L. Zheng, W.-L. Chiang, Y. Sheng et al., "Judging LLM-as-a-judge with MT-Bench and Chatbot Arena," in Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track, vol. 36, 2023; arXiv:2306.05685.
-\bibitem{panickssery2024} A. Panickssery, S. R. Bowman, and S. Feng, "LLM evaluators recognize and favor their own generations," in Advances in Neural Information Processing Systems (NeurIPS), vol. 37, 2024; arXiv:2404.13076.
-\bibitem{verga2024} P. Verga, S. Hofstatter, S. Althammer, Y. Su, A. Piktus, A. Arkhangorodsky, M. Xu, N. White, and P. Lewis, "Replacing judges with juries: Evaluating LLM generations with a panel of diverse models," arXiv:2404.18796, 2024.
-\bibitem{giorgi2024wassa} S. Giorgi, J. Sedoc, V. Barriere, and S. Tafreshi, "Findings of WASSA 2024 shared task on empathy and personality detection in interactions," in Proc. 14th Workshop Computational Approaches to Subjectivity, Sentiment, \& Social Media Analysis (WASSA), 2024, pp. 369-379, doi: 10.18653/v1/2024.wassa-1.30.
-\bibitem{sharma2020epitome} A. Sharma, A. S. Miner, D. C. Atkins, and T. Althoff, "A computational approach to understanding empathy expressed in text-based mental health support," in Proc. 2020 Conf. Empirical Methods Natural Language Processing (EMNLP), 2020, pp. 5263-5276, doi: 10.18653/v1/2020.emnlp-main.425.
-\bibitem{samhsa2019tip35} Substance Abuse and Mental Health Services Administration, Enhancing Motivation for Change in Substance Use Disorder Treatment, Treatment Improvement Protocol (TIP) Series No. 35, SAMHSA Publication No. PEP19-02-01-003. Rockville, MD, USA: SAMHSA, 2019, ch. 3.
-\bibitem{liu2019roberta} Y. Liu, M. Ott, N. Goyal, J. Du, M. Joshi, D. Chen, O. Levy, M. Lewis, L. Zettlemoyer, and V. Stoyanov, "RoBERTa: A robustly optimized BERT pretraining approach," arXiv:1907.11692, 2019.
-\bibitem{abouelenin2025phi4mini} A. Abouelenin, A. Ashfaq, A. Atkinson et al. (Microsoft), "Phi-4-Mini technical report: Compact yet powerful multimodal language models via Mixture-of-LoRAs," arXiv:2503.01743, 2025.
-\bibitem{dettmers2023qlora} T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, "QLoRA: Efficient finetuning of quantized LLMs," in Advances in Neural Information Processing Systems (NeurIPS), vol. 36, 2023.
-\bibitem{qwen2024} A. Yang, B. Yang, B. Zhang, B. Hui et al. (Qwen Team), "Qwen2.5 technical report," arXiv:2412.15115, 2024.
-\bibitem{hu2022lora} E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen, "LoRA: Low-rank adaptation of large language models," in Proc. Int. Conf. Learning Representations (ICLR), 2022.
-\bibitem{lewis2020rag} P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. Kuttler, M. Lewis, W. Yih, T. Rocktaschel, S. Riedel, and D. Kiela, "Retrieval-augmented generation for knowledge-intensive NLP tasks," in Advances in Neural Information Processing Systems (NeurIPS), vol. 33, 2020, pp. 9459-9474.
-\bibitem{yang2024hyy33} H. Yang, L. Huang, T. Li, N. Rusnachenko, and H. Liang, "hyy33 at WASSA 2024 empathy and personality shared task: Using the CombinedLoss and FGM for enhancing BERT-based models in emotion and empathy prediction from conversation turns," in Proc. 14th Workshop Computational Approaches to Subjectivity, Sentiment, \& Social Media Analysis (WASSA), 2024, pp. 430-434, doi: 10.18653/v1/2024.wassa-1.39.
-\bibitem{mcnemar1947} Q. McNemar, "Note on the sampling error of the difference between correlated proportions or percentages," Psychometrika, vol. 12, no. 2, pp. 153-157, 1947.
-\bibitem{wilcoxon1945} F. Wilcoxon, "Individual comparisons by ranking methods," Biometrics Bulletin, vol. 1, no. 6, pp. 80-83, 1945.
-\bibitem{efron1993} B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York, NY, USA: Chapman \& Hall, 1993.
-\bibitem{holm1979} S. Holm, "A simple sequentially rejective multiple test procedure," Scandinavian J. Statistics, vol. 6, no. 2, pp. 65-70, 1979.
-\bibitem{paszke2019pytorch} A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan et al., "PyTorch: An imperative style, high-performance deep learning library," in Advances in Neural Information Processing Systems (NeurIPS), vol. 32, 2019, pp. 8024-8035.
-\bibitem{wolf2020transformers} T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue, A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz et al., "Transformers: State-of-the-art natural language processing," in Proc. 2020 Conf. Empirical Methods Natural Language Processing: System Demonstrations, 2020, pp. 38-45, doi: 10.18653/v1/2020.emnlp-demos.6.
-\bibitem{wu2025traits} J. Wu, X. Huang, Z. Zhu, and S. Wang, "From traits to empathy: Personality-aware multimodal empathetic response generation," in Proc. 31st Int. Conf. Computational Linguistics (COLING), Abu Dhabi, UAE, 2025, pp. 8925-8938.
-\bibitem{liu2021robertagpt2} Y. Liu, W. Maier, W. Minker, and S. Ultes, "Empathetic dialogue generation with pre-trained RoBERTa-GPT2 and external knowledge," in Proc. Int. Workshop Spoken Dialogue System Technology (IWSDS), 2021; arXiv:2109.03004.
-\bibitem{who2023suicide} World Health Organization and International Association for Suicide Prevention, Preventing Suicide: A Resource for Media Professionals, Update 2023. Geneva, Switzerland: WHO, 2023. [Online]. Available: https://www.who.int/publications/i/item/9789240076846
+\begin{thebibliography}{00}
+\bibitem{b1} H. Rashkin, E. M. Smith, M. Li, and Y.-L. Boureau, ``Towards empathetic open-domain conversation models: A new benchmark and dataset,'' in Proc. 57th Annu. Meeting Assoc. Comput. Linguistics (ACL), Florence, Italy, 2019, pp. 5370--5381, doi: 10.18653/v1/P19-1534.
+\bibitem{b2} Y. Qian, W.-N. Zhang, and T. Liu, ``Harnessing the power of large language models for empathetic response generation: Empirical investigations and improvements,'' in Findings Assoc. Comput. Linguistics: EMNLP 2023, 2023; arXiv:2310.05140.
+\bibitem{b3} V. Sorin, D. Brin, Y. Barash, E. Konen, A. Charney, G. Nadkarni, and E. Klang, ``Large language models and empathy: Systematic review,'' J. Med. Internet Res., vol. 26, p. e52597, 2024, doi: 10.2196/52597.
+\bibitem{b4} T. D. Belay, I. A. Azime, A. A. Ayele, G. Sidorov, D. Klakow, P. Slusallek, O. Kolesnikova, and S. M. Yimam, ``Evaluating the capabilities of large language models for multi-label emotion understanding,'' in Proc. 31st Int. Conf. Computational Linguistics (COLING), Abu Dhabi, UAE, 2025, pp. 3523--3540.
+\bibitem{b5} Z. Lin, A. Madotto, J. Shin, P. Xu, and P. Fung, ``MoEL: Mixture of empathetic listeners,'' in Proc. 2019 Conf. Empirical Methods Natural Language Processing and 9th Int. Joint Conf. Natural Language Processing (EMNLP-IJCNLP), 2019, pp. 121--132, doi: 10.18653/v1/D19-1012.
+\bibitem{b6} S. Sabour, C. Zheng, and M. Huang, ``CEM: Commonsense-aware empathetic response generation,'' in Proc. AAAI Conf. Artificial Intelligence, vol. 36, no. 10, 2022, pp. 11229--11237.
+\bibitem{b7} J. Zhou, C. Zheng, B. Wang, Z. Zhang, and M. Huang, ``CASE: Aligning coarse-to-fine cognition and affection for empathetic response generation,'' in Proc. 61st Annu. Meeting Assoc. Comput. Linguistics (ACL), vol. 1, 2023, pp. 8223--8237, doi: 10.18653/v1/2023.acl-long.457.
+\bibitem{b8} Z. Yang, Z. Ren, Y. Wang, S. Peng, H. Sun, X. Zhu, and X. Liao, ``Enhancing empathetic response generation by augmenting LLMs with small-scale empathetic models,'' arXiv:2402.11801, 2024.
+\bibitem{b9} N. Majumder, P. Hong, S. Peng, J. Lu, D. Ghosal, A. Gelbukh, R. Mihalcea, and S. Poria, ``MIME: MIMicking emotions for empathetic response generation,'' in Proc. 2020 Conf. Empirical Methods Natural Language Processing (EMNLP), 2020, pp. 8968--8979, doi: 10.18653/v1/2020.emnlp-main.721.
+\bibitem{b10} Q. Li, H. Chen, Z. Ren, P. Ren, Z. Tu, and Z. Chen, ``EmpDG: Multi-resolution interactive empathetic dialogue generation,'' in Proc. 28th Int. Conf. Computational Linguistics (COLING), 2020, pp. 4454--4466, doi: 10.18653/v1/2020.coling-main.394.
+\bibitem{b11} Q. Li, P. Li, Z. Ren, P. Ren, and Z. Chen, ``Knowledge bridging for empathetic dialogue generation,'' in Proc. AAAI Conf. Artificial Intelligence, vol. 36, no. 10, 2022, pp. 10993--11001.
+\bibitem{b12} Z. Yang, Z. Ren, Y. Wang, X. Zhu, Z. Chen, T. Cai, Y. Wu, Y. Su, S. Ju, and X. Liao, ``Exploiting emotion-semantic correlations for empathetic response generation,'' in Findings Assoc. Comput. Linguistics: EMNLP 2023, 2023, pp. 4826--4837, doi: 10.18653/v1/2023.findings-emnlp.320.
+\bibitem{b13} H. Cao, Y. Zhang, S. Feng, X. Yang, D. Wang, and Y. Zhang, ``TOOL-ED: Enhancing empathetic response generation with the tool calling capability of LLM,'' in Proc. 31st Int. Conf. Computational Linguistics (COLING), Abu Dhabi, UAE, 2025, pp. 5305--5320.
+\bibitem{b14} L. Zheng, W.-L. Chiang, Y. Sheng et al., ``Judging LLM-as-a-judge with MT-Bench and Chatbot Arena,'' in Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track, vol. 36, 2023; arXiv:2306.05685.
+\bibitem{b15} A. Panickssery, S. R. Bowman, and S. Feng, ``LLM evaluators recognize and favor their own generations,'' in Advances in Neural Information Processing Systems (NeurIPS), vol. 37, 2024; arXiv:2404.13076.
+\bibitem{b16} P. Verga, S. Hofstatter, S. Althammer, Y. Su, A. Piktus, A. Arkhangorodsky, M. Xu, N. White, and P. Lewis, ``Replacing judges with juries: Evaluating LLM generations with a panel of diverse models,'' arXiv:2404.18796, 2024.
+\bibitem{b17} S. Giorgi, J. Sedoc, V. Barriere, and S. Tafreshi, ``Findings of WASSA 2024 shared task on empathy and personality detection in interactions,'' in Proc. 14th Workshop Computational Approaches to Subjectivity, Sentiment, \& Social Media Analysis (WASSA), 2024, pp. 369--379, doi: 10.18653/v1/2024.wassa-1.30.
+\bibitem{b18} A. Sharma, A. S. Miner, D. C. Atkins, and T. Althoff, ``A computational approach to understanding empathy expressed in text-based mental health support,'' in Proc. 2020 Conf. Empirical Methods Natural Language Processing (EMNLP), 2020, pp. 5263--5276, doi: 10.18653/v1/2020.emnlp-main.425.
+\bibitem{b19} Substance Abuse and Mental Health Services Administration, Enhancing Motivation for Change in Substance Use Disorder Treatment, Treatment Improvement Protocol (TIP) Series No. 35, SAMHSA Publication No. PEP19-02-01-003. Rockville, MD, USA: SAMHSA, 2019, ch. 3.
+\bibitem{b20} Y. Liu, M. Ott, N. Goyal, J. Du, M. Joshi, D. Chen, O. Levy, M. Lewis, L. Zettlemoyer, and V. Stoyanov, ``RoBERTa: A robustly optimized BERT pretraining approach,'' arXiv:1907.11692, 2019.
+\bibitem{b21} A. Abouelenin, A. Ashfaq, A. Atkinson et al. (Microsoft), ``Phi-4-Mini technical report: Compact yet powerful multimodal language models via Mixture-of-LoRAs,'' arXiv:2503.01743, 2025.
+\bibitem{b22} T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, ``QLoRA: Efficient finetuning of quantized LLMs,'' in Advances in Neural Information Processing Systems (NeurIPS), vol. 36, 2023.
+\bibitem{b23} A. Yang, B. Yang, B. Zhang, B. Hui et al. (Qwen Team), ``Qwen2.5 technical report,'' arXiv:2412.15115, 2024.
+\bibitem{b24} E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen, ``LoRA: Low-rank adaptation of large language models,'' in Proc. Int. Conf. Learning Representations (ICLR), 2022.
+\bibitem{b25} P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. Kuttler, M. Lewis, W. Yih, T. Rocktaschel, S. Riedel, and D. Kiela, ``Retrieval-augmented generation for knowledge-intensive NLP tasks,'' in Advances in Neural Information Processing Systems (NeurIPS), vol. 33, 2020, pp. 9459--9474.
+\bibitem{b26} H. Yang, L. Huang, T. Li, N. Rusnachenko, and H. Liang, ``hyy33 at WASSA 2024 empathy and personality shared task: Using the CombinedLoss and FGM for enhancing BERT-based models in emotion and empathy prediction from conversation turns,'' in Proc. 14th Workshop Computational Approaches to Subjectivity, Sentiment, \& Social Media Analysis (WASSA), 2024, pp. 430--434, doi: 10.18653/v1/2024.wassa-1.39.
+\bibitem{b27} Q. McNemar, ``Note on the sampling error of the difference between correlated proportions or percentages,'' Psychometrika, vol. 12, no. 2, pp. 153--157, 1947.
+\bibitem{b28} F. Wilcoxon, ``Individual comparisons by ranking methods,'' Biometrics Bulletin, vol. 1, no. 6, pp. 80--83, 1945.
+\bibitem{b29} B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York, NY, USA: Chapman \& Hall, 1993.
+\bibitem{b30} S. Holm, ``A simple sequentially rejective multiple test procedure,'' Scandinavian J. Statistics, vol. 6, no. 2, pp. 65--70, 1979.
+\bibitem{b31} A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan et al., ``PyTorch: An imperative style, high-performance deep learning library,'' in Advances in Neural Information Processing Systems (NeurIPS), vol. 32, 2019, pp. 8024--8035.
+\bibitem{b32} T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue, A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz et al., ``Transformers: State-of-the-art natural language processing,'' in Proc. 2020 Conf. Empirical Methods Natural Language Processing: System Demonstrations, 2020, pp. 38--45, doi: 10.18653/v1/2020.emnlp-demos.6.
+\bibitem{b33} J. Wu, X. Huang, Z. Zhu, and S. Wang, ``From traits to empathy: Personality-aware multimodal empathetic response generation,'' in Proc. 31st Int. Conf. Computational Linguistics (COLING), Abu Dhabi, UAE, 2025, pp. 8925--8938.
+\bibitem{b34} Y. Liu, W. Maier, W. Minker, and S. Ultes, ``Empathetic dialogue generation with pre-trained RoBERTa-GPT2 and external knowledge,'' in Proc. Int. Workshop Spoken Dialogue System Technology (IWSDS), 2021; arXiv:2109.03004.
+\bibitem{b35} World Health Organization and International Association for Suicide Prevention, Preventing Suicide: A Resource for Media Professionals, Update 2023. Geneva, Switzerland: WHO, 2023. [Online]. Available: https://www.who.int/publications/i/item/9789240076846
 \end{thebibliography}
 
 \end{document}

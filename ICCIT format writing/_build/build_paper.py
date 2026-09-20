@@ -146,13 +146,15 @@ def tex_inline(s, cites):
         return key
 
     s = PENDING.sub(lambda m: stash(r"\textcolor{red}{" + tex_escape(m.group(0)[2:-2]) + "}"), s)
-    s = CITE.sub(lambda m: stash(r"\cite{" + ",".join(k.strip() for k in m.group(1).split(",")) + "}"), s)
+    s = CITE.sub(lambda m: stash(r"\cite{" + ",".join(cites.get(k.strip(), k.strip()) if isinstance(cites, dict) else k.strip()
+                                                       for k in m.group(1).split(",")) + "}"), s)
     s = REF.sub(lambda m: stash(r"\ref{" + m.group(1) + "}"), s)
     s = tex_escape(s)
     s = re.sub(r"\*\*(.+?)\*\*", r"\\textbf{\1}", s)
     s = re.sub(r"\*(.+?)\*", r"\\emph{\1}", s)
     s = re.sub(r"\brho\b", r"$\\rho$", s)
     s = s.replace("Fig. @@", "Fig.~@@").replace("Table @@", "Table~@@").replace("Section V-C", "Section~V-C")
+    s = tex_quotes(s)
     for k, v in keep.items():
         s = s.replace(k, v)
     return s
@@ -167,24 +169,58 @@ def tex_escape(s):
     return s.replace(r"\textbackslash\{\}", r"\textbackslash{}")
 
 
+def tex_quotes(s):
+    """Straight quotes render as two closing marks in LaTeX; convert pairs to ``...'' form."""
+    out, opening = [], True
+    for ch in s:
+        if ch == '"':
+            out.append("``" if opening else "''")
+            opening = not opening
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+def tex_bib(entry):
+    """Template style for references: LaTeX quotes and en-dashes in page ranges."""
+    entry = tex_quotes(tex_escape(entry))
+    return re.sub(r"(pp\.\s*\d+)-(\d+)", "\\1--\\2", entry)
+
+
 def to_tex(title, blocks, cites):
+    """Emit LaTeX in the official IEEE conference template's structure.
+
+    Preamble, author block, table style (\hline, caption above, centred) and the b1..bN bibliography
+    keys follow IEEE-conference-template-062824.tex, so the file can be dropped into Overleaf or
+    Prism and compiled without further changes. All template guidance text is removed, as IEEE
+    requires.
+    """
+    key_of = {k: f"b{n}" for k, n in cites.items()}  # template-style citation labels
     out = [
         r"\documentclass[conference]{IEEEtran}",
         r"\IEEEoverridecommandlockouts",
+        r"% Template version as of 6/27/2024",
+        "",
         r"\usepackage{cite}",
-        r"\usepackage{amsmath,amssymb}",
+        r"\usepackage{amsmath,amssymb,amsfonts}",
+        r"\usepackage{algorithmic}",
         r"\usepackage{graphicx}",
-        r"\usepackage{booktabs}",
+        r"\usepackage{textcomp}",
         r"\usepackage{xcolor}",
-        r"\usepackage[hidelinks]{hyperref}",
+        r"\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em",
+        r"    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}",
         "",
         r"\begin{document}",
         "",
         r"\title{" + tex_escape(title) + "}",
         "",
-        r"% Double-blind review: keep authors anonymous. Replace with the IEEEauthorblockN/A block for camera-ready.",
-        r"\author{\IEEEauthorblockN{Anonymous Authors}",
-        r"\IEEEauthorblockA{\textit{Submitted for double-blind review}}}",
+        r"% DOUBLE-BLIND SUBMISSION: no names, affiliations or e-mail addresses (ICCIT requirement).",
+        r"% For the camera-ready version, replace this block with the author blocks of the template:",
+        r"%   \author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}",
+        r"%   \IEEEauthorblockA{\textit{dept. name of organization} \\ \textit{name of organization} \\",
+        r"%   City, Country \\ email address or ORCID}",
+        r"%   \and ... }",
+        r"\author{\IEEEauthorblockN{Anonymous Authors}}",
         "",
         r"\maketitle",
         "",
@@ -193,9 +229,9 @@ def to_tex(title, blocks, cites):
     for kind, pl in blocks:
         if kind == "h1":
             if mode == "abstract":
-                out.append(r"\end{abstract}")
+                out += [r"\end{abstract}", ""]
             elif mode == "keywords":
-                out.append(r"\end{IEEEkeywords}")
+                out += [r"\end{IEEEkeywords}", ""]
             mode = None
             if pl == "Abstract":
                 out.append(r"\begin{abstract}"); mode = "abstract"
@@ -204,37 +240,47 @@ def to_tex(title, blocks, cites):
             elif pl == "Acknowledgment":
                 out += ["", r"\section*{Acknowledgment}"]
             else:
-                out += ["", r"\section{" + tex_inline(pl, cites) + "}"]
+                out += ["", r"\section{" + tex_inline(pl, key_of) + "}"]
         elif kind == "h2":
-            out += ["", r"\subsection{" + tex_inline(pl, cites) + "}"]
+            out += ["", r"\subsection{" + tex_inline(pl, key_of) + "}"]
         elif kind == "p":
-            out += [tex_inline(pl, cites), ""]
+            out += [tex_inline(pl, key_of), ""]
         elif kind == "list":
             out.append(r"\begin{itemize}")
-            out += [r"\item " + tex_inline(x, cites) for x in pl]
+            out += [r"\item " + tex_inline(x, key_of) for x in pl]
             out += [r"\end{itemize}", ""]
         elif kind == "figure":
-            out += [r"\begin{figure}[t]", r"\centering",
-                    r"\includegraphics[width=0.92\linewidth]{figures/" + pl["file"] + "}",
-                    r"\caption{" + tex_inline(pl["caption"], cites) + "}",
+            out += [r"\begin{figure}[htbp]",
+                    r"\centerline{\includegraphics[width=\columnwidth]{figures/" + pl["file"] + "}}",
+                    r"\caption{" + tex_inline(pl["caption"], key_of) + "}",
                     r"\label{" + pl["label"] + "}", r"\end{figure}", ""]
         elif kind == "table":
             env = "table*" if pl["wide"] else "table"
-            width = r"\textwidth" if pl["wide"] else r"\linewidth"
             ncol = len(pl["rows"][0])
-            out += [r"\begin{" + env + "}[t]", r"\centering",
-                    r"\caption{" + tex_inline(pl["caption"], cites) + "}",
+            # Tables with many columns are scaled to the text/column width so they cannot overflow;
+            # narrow ones are simply set smaller, which keeps the template's look.
+            fit = ncol >= 5
+            width = r"\textwidth" if pl["wide"] else r"\columnwidth"
+            out += [r"\begin{" + env + "}[htbp]",
+                    r"\caption{" + tex_inline(pl["caption"], key_of) + "}",
                     r"\label{" + pl["label"] + "}",
-                    r"\resizebox{" + width + r"}{!}{%",
-                    r"\begin{tabular}{l" + "c" * (ncol - 1) + "}", r"\toprule"]
+                    r"\begin{center}"]
+            out.append(r"\resizebox{" + width + r"}{!}{%" if fit else r"\scriptsize")
+            out += [r"\begin{tabular}{|l|" + "c|" * (ncol - 1) + "}", r"\hline"]
             for j, row in enumerate(pl["rows"]):
-                out.append(" & ".join(tex_inline(c, cites) for c in row) + r" \\")
+                cells = [tex_inline(c, key_of) for c in row]
                 if j == 0:
-                    out.append(r"\midrule")
-            out += [r"\bottomrule", r"\end{tabular}}", r"\end{" + env + "}", ""]
-    out += ["", r"\begin{thebibliography}{" + str(len(cites)) + "}"]
-    for k, _ in sorted(cites.items(), key=lambda kv: kv[1]):
-        out.append(r"\bibitem{" + k + "} " + tex_escape(ALL_REFS[k]))
+                    cells = [r"\textbf{" + c + "}" for c in cells]
+                out += [" & ".join(cells) + r" \\", r"\hline"]
+            out += [r"\end{tabular}" + ("}" if fit else ""), r"\end{center}", r"\end{" + env + "}", ""]
+    if mode == "abstract":
+        out.append(r"\end{abstract}")
+    elif mode == "keywords":
+        out.append(r"\end{IEEEkeywords}")
+
+    out += ["", r"\begin{thebibliography}{00}"]
+    for k, n in sorted(cites.items(), key=lambda kv: kv[1]):
+        out.append(r"\bibitem{" + key_of[k] + "} " + tex_bib(ALL_REFS[k]))
     out += [r"\end{thebibliography}", "", r"\end{document}", ""]
     return "\n".join(out)
 
