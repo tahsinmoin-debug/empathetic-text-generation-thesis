@@ -5,6 +5,7 @@ conference paper and in the thesis can be checked against the repository. It is 
 accurate rather than flattering: where an AI assistant did most of the work, this file says so.
 
 **Assistant used:** Claude (Anthropic), through Claude Code, during 2026.
+**Authors' own work:** the proposed system (detector training, two-stage pipeline, conversational agent, response scoring) and every experiment run.
 **Not used:** no AI system produced any experimental result. Every model was trained and every
 system evaluated by the authors on their own hardware, and every number in the thesis and the paper
 comes from those runs and from result files kept in this repository.
@@ -44,15 +45,9 @@ by the authors.
 
 ## 4. Statement used in the paper
 
-> In accordance with IEEE policy on AI-generated text, the authors disclose the following. Claude
-> An initial draft of the Abstract and of Sections I to VII was produced with Claude (Anthropic) from
-> the authors' experimental results and notes; the authors then rewrote the manuscript, and the text
-> presented here is their own. Claude was also used to write parts of the analysis code, namely the scripts that compute
-> the reported statistics and generate the tables and figures, and the scripts that run and merge the
-> LLM-judge evaluation. It was not used to generate any experimental result: all models were trained
-> and all systems evaluated by the authors on their own hardware, and every number reported here comes
-> from those runs. The authors verified all results, references and claims, and take full
-> responsibility for the content of this paper.
+> The system presented in this paper, comprising the emotion detector and its training, the two-stage prompting pipeline, the conversational agent and the response-scoring code, was designed and implemented by the authors, who also ran every experiment on their own hardware; no experimental result was produced by an AI system.
+> In accordance with IEEE policy on AI-generated text, the authors further disclose that Claude (Anthropic) was used for three supporting purposes: it produced an initial draft of the Abstract and of Sections I to VII from the authors' results and notes, which the authors then rewrote, so the text presented here is their own; it wrote parts of the analysis code that computes the reported statistics and produces the tables and figures; and it wrote scripts used to run and merge the LLM-judge evaluation and to run two of the baselines.
+> The authors verified all results, references and claims, and take full responsibility for the content of this paper.
 
 ## 5. To complete before submission
 
