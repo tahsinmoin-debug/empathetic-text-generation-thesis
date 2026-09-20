@@ -1078,7 +1078,7 @@ def build_composite_ranking(per_reply):
             "equal weight; no weighting was tuned and every judged system is shown. Robustness: removing any one "
             "measure leaves the final system at rank "
             + ", ".join(f"{r}" for r in sorted(set(ranks.values())))
-            + " of " + str(len(t)) + ", always behind the 7.6-billion-parameter single model, which needs 4.7 times "
+            + " of " + str(len(t)) + ", always behind the 7.6-billion-parameter single model, which needs 1.9 times "
             "the parameters and 62% more GPU memory. Among the systems that fit the project's 8 GB budget, stated "
             "as an objective in Section 4.1.1 before any experiment, the final system ranks first. A composite "
             "depends on which measures are included and is reported as a summary of the per-measure results in "

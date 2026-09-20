@@ -41,8 +41,8 @@ def main():
     box(ax, 2.6, 11.0, 4.8, 1.2, "User message", GREY, GREY_BG)
     box(ax, 0.0, 8.4, 4.3, 1.8, "d1: RoBERTa-base\n(125M) emotion\ndetector, 32 classes", BLUE, BLUE_BG)
     box(ax, 5.7, 8.4, 4.3, 1.8, "Attention cues\n[CLS] attention,\ntop 40% of words", BLUE, BLUE_BG)
-    box(ax, 0.0, 5.6, 4.3, 1.9, "Stage 1: Phi-4-mini\nchooses one of\nd1's top-3 emotions", ORANGE, ORANGE_BG)
-    box(ax, 5.7, 5.6, 4.3, 1.9, "Prompt builder\nemotion-specific\nguidance + 3 rules", GREY, GREY_BG)
+    box(ax, 0.0, 5.6, 4.0, 1.9, "Stage 1: Phi-4-mini\nchooses one of\nd1's top-3 emotions", ORANGE, ORANGE_BG)
+    box(ax, 6.0, 5.6, 4.0, 1.9, "Prompt builder\nemotion-specific\nguidance + 3 rules", GREY, GREY_BG)
     box(ax, 1.0, 2.6, 8.0, 1.9, "Stage 2: Phi-4-mini (3.8B, 4-bit)\nwrites the reply\nT = 0.7, top-p = 0.9", ORANGE, ORANGE_BG)
     box(ax, 2.6, 0.2, 4.8, 1.3, "Reply + visible\nemotion decision", GREY, GREY_BG)
 
@@ -50,9 +50,9 @@ def main():
     arrow(ax, 6.0, 11.0, 7.85, 10.2)
     arrow(ax, 2.15, 8.4, 2.15, 7.5, "top-3", lx=0.75)
     arrow(ax, 7.85, 8.4, 7.85, 7.5, "cue words", lx=1.05)
-    arrow(ax, 4.35, 6.4, 5.65, 6.4)
-    ax.text(5.0, 6.7, "chosen", fontsize=7.5, color="#444444", ha="center")
-    arrow(ax, 7.85, 5.6, 6.6, 4.5)
+    arrow(ax, 4.05, 6.25, 5.95, 6.25)
+    ax.text(5.0, 6.62, "chosen", fontsize=7.0, color="#444444", ha="center", va="bottom")
+    arrow(ax, 8.0, 5.6, 6.6, 4.5)
     arrow(ax, 5.0, 2.6, 5.0, 1.5)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

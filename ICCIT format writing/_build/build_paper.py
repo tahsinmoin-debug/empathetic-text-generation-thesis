@@ -197,7 +197,7 @@ def to_tex(title, blocks, cites):
     """
     key_of = {k: f"b{n}" for k, n in cites.items()}  # template-style citation labels
     out = [
-        r"\documentclass[conference]{IEEEtran}",
+        r"\documentclass[conference,a4paper]{IEEEtran}",
         r"\IEEEoverridecommandlockouts",
         r"% Template version as of 6/27/2024",
         "",
@@ -344,7 +344,7 @@ def to_docx(title, blocks, cites, refs, path):
     st.font.name, st.font.size = "Times New Roman", Pt(10)
     st.element.rPr.rFonts.set(qn("w:eastAsia"), "Times New Roman")
     sec = doc.sections[0]
-    sec.page_width, sec.page_height = Inches(8.5), Inches(11)
+    sec.page_width, sec.page_height = Inches(8.27), Inches(11.69)  # A4, matching the LaTeX build
     sec.top_margin, sec.bottom_margin = Inches(0.75), Inches(1.0)
     sec.left_margin = sec.right_margin = Inches(0.625)
 
