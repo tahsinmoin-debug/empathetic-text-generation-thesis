@@ -4,7 +4,7 @@ This section sets out the project's requirements, the development method followe
 
 ## 3.6.1 Requirements and Specifications
 
-The requirements were refined from the project proposal, supervisor feedback and the remarks of the Pre-Thesis 2 defence panel into the following specification.
+The requirements were refined from the project proposal and supervisor feedback into the following specification.
 
 **Functional requirements.** (F1) Given a user's message, the system identifies the most likely emotion among the 32 EmpatheticDialogues categories [1] and exposes this decision for inspection. (F2) It generates a reply that acknowledges the feeling, offers a reassuring thought and asks at most one follow-up question. (F3) Replies are short: at most 100 words as instructed, and scored against a limit of 120 words. (F4) The system supports multi-turn conversation and tracks changes in the user's emotion.
 
@@ -18,7 +18,7 @@ The project followed an iterative, evidence-gated methodology, described in Sect
 
 ## 3.6.3 Work Breakdown and Schedule
 
-Table 3.2 divides the work into ten phases and Figure 3.1 presents them as a Gantt chart. Because the dates are taken from when each set of project artefacts was produced, the schedule reflects the work as it actually happened. Phases P0 to P2 cover background study, candidate models and the move to EmpatheticDialogues that produced the Pre-Thesis 2 report in June 2026. Phases P3 to P5 cover evaluation of the initial pipeline, external evaluation, and the design adjustments made in response, from July to September 2026. Phases P6 to P9 cover the conversational agent, robustness analyses, human evaluation and thesis writing.
+Table 3.2 divides the work into ten phases and Figure 3.1 presents them as a Gantt chart. Because the dates are taken from when each set of project artefacts was produced, the schedule reflects the work as it actually happened. Phases P0 to P2 cover background study, candidate models and the move to EmpatheticDialogues, completed in June 2026. Phases P3 to P5 cover evaluation of the initial pipeline, external evaluation, and the design adjustments made in response, from July to September 2026. Phases P6 to P9 cover the conversational agent, robustness analyses, human evaluation and thesis writing.
 
 
 | Phase | Work package | Start | End | Main outputs | Evidence in repository |
@@ -58,7 +58,7 @@ Because only one member's computer had a suitable GPU, tasks were divided so tha
 The plan was revised whenever evidence overturned an assumption. The five main revisions were as follows.
 
 1. **Change of dataset (June 2026).** Early work used GoEmotions [39], a dataset of Reddit comments labelled with 28 emotions. Because these are isolated comments rather than conversations, the project moved to EmpatheticDialogues, and the detector and generator work was restarted on the new data.
-2. **Expanded evaluation (July-August 2026).** After the Pre-Thesis 2 panel questioned whether multiple models were needed, single-model baselines of equal and larger size, a retrieval-augmented variant and an AI-judge panel were added to the schedule before any further development.
+2. **Expanded evaluation (July-August 2026).** Once the question arose of whether multiple models were needed at all, single-model baselines of equal and larger size, a retrieval-augmented variant and an AI-judge panel were added to the schedule before any further development.
 3. **Replacement of the judge panel (August 2026).** Several planned judges became unavailable because of quota limits and model retirements. The panel was rebuilt from other providers and fixed at two judges that remained accessible for the whole evaluation, and judging was divided between two accounts to work within a daily limit of 50 requests, so that every system was scored by the same two judges.
 4. **Redesign of the detector (late August 2026).** A mismatch was discovered between the text the detector was trained on and the text it received in use. The detector was retrained, and a comparison of generator models was added to the schedule, leading to the final two-stage design.
 5. **Scope control (September 2026).** A repetition-penalty improvement was deferred to future work and the final system's outputs were frozen, because regenerating them would have invalidated AI-judge scores that were already being collected.
