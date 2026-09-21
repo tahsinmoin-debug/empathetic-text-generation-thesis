@@ -16,8 +16,11 @@
 
 1. Open [script.google.com](https://script.google.com) and choose **New project**.
 2. Delete whatever is in the editor, paste the whole of `create_google_form_v2.gs`, press **Save**.
-3. Press **Run**. Google asks for permission the first time — allow it.
-4. Open **Execution log**. It prints two links: one to edit the form, one to send to raters.
+3. In the toolbar, set the function dropdown (the one next to **Debug**) to **createForm**.
+4. Press **Run**. Google asks for permission the first time — allow it.
+5. Open **Execution log**. It prints two links: one to edit the form, one to send to raters.
+
+If the log says "Execution completed" with no links, the dropdown was still on **myFunction** — select **createForm** and run again. Each run creates a *new* form, so run it once; if you run it twice, delete the extra form from Google Drive.
 
 The script creates all 80 questions: 8 situations × (3 grids of three replies + 1 preference question), plus the consent question and an optional comment box. Nothing in the form names a model.
 

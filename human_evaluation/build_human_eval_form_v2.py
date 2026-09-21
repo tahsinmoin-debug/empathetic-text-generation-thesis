@@ -257,8 +257,18 @@ function createForm() {{
       .setTitle('Anything you would like to add? (optional)')
       .setRequired(false);
 
-  Logger.log('Edit the form here: ' + form.getEditUrl());
-  Logger.log('Send this link to raters: ' + form.getPublishedUrl());
+  Logger.log('EDIT THE FORM HERE:   ' + form.getEditUrl());
+  Logger.log('SEND THIS TO RATERS:  ' + form.getPublishedUrl());
+  return form.getPublishedUrl();
+}}
+
+/**
+ * Apps Script runs whichever function is selected in the toolbar, and a new project
+ * starts with an empty myFunction. If that one is still selected, running it would do
+ * nothing and print no links, so it simply calls createForm.
+ */
+function myFunction() {{
+  createForm();
 }}
 '''
     (HERE / "create_google_form_v2.gs").write_text(script, encoding="utf-8")
