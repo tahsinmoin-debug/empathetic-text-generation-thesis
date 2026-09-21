@@ -124,7 +124,7 @@ Keep these consistent in every chapter:
 
 ## 7. AI-judge panel note
 
-Mistral Large returned HTTP 403 ("not available in your subscription tier") on both team accounts, so it could not score the final system or top-1 Phi. All 7 systems are therefore compared on the **two judges that scored every system** (Nemotron 3 Ultra, gpt-oss-120b). On the 320 replies all three judges scored, the two- and three-judge averages correlate at rho 0.98 with identical rankings (`Chapter 5 - 5.3/tables/ai_judge_agreement.csv`). Never mix the old three-judge numbers (e.g. 9.02, 8.38, 8.23) with the two-judge numbers.
+The panel is **two judges, Nemotron 3 Ultra and gpt-oss-120b**, and both scored every one of the 512 replies (8 systems x 64 conversations), so all systems are rated by identical judges (`Chapter 5 - 5.3/tables/ai_judge_agreement.csv`). Judge numbers from drafts written before 14 Sep 2026 (e.g. 9.02, 8.38, 8.23) come from an earlier scoring run and must never be mixed with the current ones.
 
 ## 8. Still pending (leave space)
 

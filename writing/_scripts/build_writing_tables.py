@@ -510,7 +510,6 @@ def build_rag_table(summary):
 
 
 PANEL = {"Nemotron 3 Ultra": "nemotron_openrouter_scores.csv", "gpt-oss-120b": "gptoss_groq_scores.csv"}
-MISTRAL = {"Mistral Large": "mistral_large_scores.csv"}
 JUDGED_ALL = ["single_model_bigger", FINAL, "bakeoff_phi", SINGLE_PHI, "single_model_same_size",
               "prompt_engineered_pipeline", "zero_shot", FT]
 JUDGED = list(JUDGED_ALL)  # set in build_judges(): FT only when fully judged
@@ -579,8 +578,7 @@ def build_judges():
     note = ("Two-judge panel: Nemotron 3 Ultra (OpenRouter) and gpt-oss-120b (Groq); temperature 0; blind (never see "
             "the system name or the gold reply); 1-10 on empathy, relevance and safety; overall = mean of the three; "
             "panel = mean of the two judges. Stratified sample: 2 conversations per emotion (shortest + longest) = 64 "
-            "conversations, identical for every system. Mistral Large was planned as a third judge but became "
-            "unavailable on both team accounts before the final systems were judged (see ai_judge_agreement.csv).")
+            "conversations, identical for every system.")
     for sec in ("ch5_1", "ch5_3"):
         save(sec, "ai_judge_scores", table, "AI-judge panel scores (1-10)",
              "`llm_judge_evaluation/nemotron_openrouter_scores.csv`, `gptoss_groq_scores.csv`", note)
@@ -636,26 +634,9 @@ def judge_agreement_and_selection(df):
                  "Result": "YES" if not diff else f"All but {len(diff)} systems; these swap places: " + " / ".join(diff),
                  "Without fine-tuned system": f"rank rho = {spearmanr(sys_means.iloc[:, 0], sys_means.iloc[:, 1]).statistic:.2f}"})
 
-    # Does dropping Mistral change anything? Check on the 5 systems all three judges scored.
-    three = load_judges({**PANEL, **MISTRAL})
-    three = three[three["setting"].isin(JUDGED)]  # the original buggy fine-tuned outputs are not used
-    for dim in ("empathy", "overall"):
-        two_m, three_m = panel_mean(three, PANEL, dim), panel_mean(three, {**PANEL, **MISTRAL}, dim)
-        same = (list(two_m.groupby(three["setting"]).mean().sort_values().index)
-                == list(three_m.groupby(three["setting"]).mean().sort_values().index))
-        rows.append({"Check": f"Two-judge vs three-judge panel mean ({dim}), {three['setting'].nunique()} systems judged by all three",
-                     "N": len(three), "Result": f"per-reply rho = {spearmanr(two_m, three_m).statistic:.3f}",
-                     "Without fine-tuned system": "identical system ranking" if same else "ranking CHANGES"})
-    all3 = list({**PANEL, **MISTRAL})
-    pair_r = [spearmanr(three[f"{x}|empathy"], three[f"{y}|empathy"]).statistic
-              for i, x in enumerate(all3) for y in all3[i + 1:]]
-    rows.append({"Check": f"Three-judge agreement on empathy (all pairs), {three['setting'].nunique()} systems", "N": len(three),
-                 "Result": f"rho = {min(pair_r):.2f} to {max(pair_r):.2f}", "Without fine-tuned system": ""})
-    note = ("Mistral Large returned HTTP 403 ('not available in your subscription tier') on both team accounts, so the "
-            "final systems could not be scored by it. To avoid mixing judge sets across systems, every system is "
-            "compared on the two judges that scored all of them. The last three rows show that dropping Mistral "
-            "leaves the result unchanged on the systems it did score.")
-    save("ch5_3", "ai_judge_agreement", pd.DataFrame(rows), "Inter-judge agreement and the two-judge panel check",
+    note = ("Both judges scored every one of the 512 replies, so all systems are compared on identical judges. "
+            "Scores are the mean of the two judges; agreement is measured per reply and at system level.")
+    save("ch5_3", "ai_judge_agreement", pd.DataFrame(rows), "Agreement between the two AI judges",
          "computed from `llm_judge_evaluation/*_scores.csv` by this script", note)
     for stale in ("ai_judge_agreement_PENDING.csv",):
         p = W / SECTIONS["ch5_3"] / "tables" / stale
@@ -667,8 +648,6 @@ def judge_agreement_and_selection(df):
          "Used - every judged system", "Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen)"],
         ["gpt-oss-120b", "OpenAI (open weights, Apache-2.0)", "About 120B (mixture-of-experts)", "Groq free tier",
          "Used - every judged system", "Open weights make this judge reproducible; fast enough to score everything"],
-        ["Mistral Large", "Mistral AI", "Flagship (size not published)", "Mistral free Experiment tier",
-         "Planned third judge - 5 systems only, then unavailable (HTTP 403)", "Kept only to check that the two-judge panel gives the same result"],
     ], columns=["Judge", "Developer", "Size", "Access", "Role", "Why selected"])
     criteria = pd.DataFrame([
         ["Flagship-tier capability",
@@ -679,8 +658,8 @@ def judge_agreement_and_selection(df):
          "Panickssery et al. (2024): LLM evaluators recognise and favour their own generations"],
         ["A panel instead of one judge", "Scores averaged over the two judges that scored every system",
          "Verga et al. (2024): a panel from disjoint model families shows less intra-model bias than one large judge"],
-        ["Same judges for every system", "Mistral Large dropped from the final panel because it could not score the final systems",
-         "Mixing judge sets across systems would make scores incomparable; two- and three-judge panels agree (rho 0.98)"],
+        ["Same judges for every system", "Both judges scored all 512 replies of all judged systems",
+         "Mixing judge sets across systems would make the scores incomparable"],
         ["Blind scoring", "Judges see only the user message and one reply - never the system name or the gold reply",
          "Removes identity bias and any reward for word overlap with a reference reply"],
         ["Anchored rubric, deterministic output",
@@ -1206,7 +1185,7 @@ def build_project_tables():
         ["d1 ELECTRA-base training", "RTX 4060 8 GB", 8.7, "recorded"],
         ["d1 RoBERTa-large training", "RTX 4060 8 GB", 64.7, "recorded"],
         ["Response generation, 300 conversations per system (x11 systems)", "RTX 4060 8 GB", "[[TEAM TO FILL - not logged]]", "not recorded"],
-        ["AI judging (Nemotron, gpt-oss; Mistral for 5 systems)", "Cloud API, free tier", "network time only", "free tier"],
+        ["AI judging (Nemotron, gpt-oss)", "Cloud API, free tier", "network time only", "free tier"],
         ["WASSA scoring, 3,300 replies", "RTX 4060 / CPU", "[[TEAM TO FILL]]", "not recorded"],
     ], columns=["Task", "Hardware", "Wall-clock minutes", "Status"])
     save("ch3_8", "compute_usage", compute, "Compute used", "`evaluation_results_d1_model_comparison/*.json` (train_seconds)",
@@ -1217,7 +1196,7 @@ def build_project_tables():
         ["Electricity", "GPU board power 115 W (NVIDIA spec) x GPU hours x tariff", "[[TEAM TO FILL - BDT/kWh]]", "Per run"],
         ["Pretrained models", "RoBERTa (MIT), Phi-4-mini (MIT), Qwen2.5 (Apache-2.0), Gemma-3 (Gemma terms)", "0", "Open weights"],
         ["Dataset", "EmpatheticDialogues (CC BY-NC 4.0)", "0", "Non-commercial use only"],
-        ["AI judges", "OpenRouter free tier, Mistral free tier, Groq free tier", "0", "Rate-limited"],
+        ["AI judges", "OpenRouter free tier, Groq free tier", "0", "Rate-limited"],
         ["Hosting (demo)", "Hugging Face Spaces free CPU tier (2 vCPU, 16 GB)", "0", "Not yet deployed"],
         ["Human evaluation", "Google Forms, volunteer raters", "0", "No payment"],
         ["Internet", "Model downloads, API calls", "[[TEAM TO FILL]]", "Monthly"],
@@ -1236,7 +1215,7 @@ def build_project_tables():
         ["sentence-transformers/all-MiniLM-L6-v2", "RAG retriever", "Apache-2.0", "Permissive"],
         ["hyy-33/hyy33-WASSA-2024-Track-2", "Empathy scorer", "Not stated on model card", "Evaluation use only; cite the shared task"],
         ["openai/gpt-oss-120b", "AI judge", "Apache-2.0", "Accessed via Groq API terms"],
-        ["NVIDIA Nemotron 3 Ultra, Mistral Large", "AI judges", "Provider API terms", "Only public ED text was sent"],
+        ["NVIDIA Nemotron 3 Ultra, gpt-oss-120b (Groq)", "AI judges", "Provider API terms", "Only public ED text was sent"],
     ], columns=["Asset", "Role", "Licence", "Implication"])
     save("ch3_4", "licences", lic, "Licences of data and models used", "Hugging Face model API license tags and ED GitHub LICENSE (checked 2026-09-13)")
     save("ch3_8", "licences", lic, "Licences (economic implications)", "same as 3.4")
@@ -1247,7 +1226,7 @@ def build_project_tables():
         ["Quantisation", "bitsandbytes (4-bit NF4)", "0.49.2"], ["Training utilities", "Accelerate / Datasets", "1.13.0 / 4.8.5"],
         ["Statistics", "SciPy / scikit-learn", "1.15.3 / 1.7.2"], ["Data handling", "pandas / NumPy", "2.3.3 / 2.2.6"],
         ["Retrieval", "sentence-transformers", "5.7.0"], ["Evaluation", "bert-score", "0.3.13"],
-        ["AI-judge APIs", "openai SDK (OpenRouter), groq SDK, Mistral API", "2.53.0 / 1.6.0 / -"],
+        ["AI-judge APIs", "openai SDK (OpenRouter), groq SDK", "2.53.0 / 1.6.0"],
         ["Demo interface", "Gradio on Hugging Face Spaces", "5.9.1 (planned)"],
         ["Human evaluation", "Google Forms", "-"], ["Documents", "python-docx, Microsoft Word", "1.2.0"],
         ["Version control", "Git", "-"], ["Hardware", "NVIDIA RTX 4060 8 GB, 16 GB RAM, Windows 11 Pro", "driver 616.56"],

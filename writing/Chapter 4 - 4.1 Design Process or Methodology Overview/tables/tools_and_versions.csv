@@ -9,7 +9,7 @@ Statistics,SciPy / scikit-learn,1.15.3 / 1.7.2
 Data handling,pandas / NumPy,2.3.3 / 2.2.6
 Retrieval,sentence-transformers,5.7.0
 Evaluation,bert-score,0.3.13
-AI-judge APIs,"openai SDK (OpenRouter), groq SDK, Mistral API",2.53.0 / 1.6.0 / -
+AI-judge APIs,"openai SDK (OpenRouter), groq SDK",2.53.0 / 1.6.0
 Demo interface,Gradio on Hugging Face Spaces,5.9.1 (planned)
 Human evaluation,Google Forms,-
 Documents,"python-docx, Microsoft Word",1.2.0

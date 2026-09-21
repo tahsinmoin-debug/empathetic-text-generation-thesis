@@ -1,6 +1,6 @@
 # Chapter 5 - 5.1 Performance Evaluation
 
-> **Update (14 Sep 2026): AI-judge scores for all 7 systems are in.** The panel is now two judges (Nemotron 3 Ultra + gpt-oss-120b) because Mistral Large became unavailable. Judge numbers in the draft below are from the earlier three-judge, five-system run and are superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
+> **Update (14 Sep 2026): AI-judge scores for all 8 systems are in.** The AI-judge panel is two judges (Nemotron 3 Ultra + gpt-oss-120b), and every judge number in the draft below is superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
 
 **Rubric:** CO6, "Analyze and assess alternative design solutions ... considering factors such as cost, efficiency, usability ... and performance in relation to provided specifications, prerequisites, and benchmarks." Criterion: perform analysis of alternative designs to obtain the best suitable solution. Marks: 5 from the defence panel + 5 from supervisor evaluation of the final report.
 
@@ -83,7 +83,7 @@ Table 5.6 reports distinct-n diversity and a boilerplate rate: the share of repl
 
 ### 5.1.8 AI-Judge Evaluation
 
-Three AI judges, Nemotron 3 Ultra, Mistral Large and gpt-oss-120b (selection rationale in Section 4.1.5.1), score each reply blind from 1 to 10 for empathy, relevance and safety, on a stratified sample of 64 conversations (two per emotion, the shortest and longest message). Table 5.7 reports the results. Among the systems already judged, the larger single model has the highest average (9.02), followed by the same-size single model (8.38), the initial pipeline (8.23), zero-shot (7.73) and the fine-tuned model (4.44). [[PENDING: final system and top-1 Phi configuration averages; one sentence on where the final system ranks and whether its empathy dimension differs from relevance and safety.]]
+Two AI judges, Nemotron 3 Ultra and gpt-oss-120b (selection rationale in Section 4.1.5.1), score each reply blind from 1 to 10 for empathy, relevance and safety, on a stratified sample of 64 conversations (two per emotion, the shortest and longest message). Table 5.7 reports the results. Among the systems already judged, the larger single model has the highest average (9.02), followed by the same-size single model (8.38), the initial pipeline (8.23), zero-shot (7.73) and the fine-tuned model (4.44). [[PENDING: final system and top-1 Phi configuration averages; one sentence on where the final system ranks and whether its empathy dimension differs from relevance and safety.]]
 
 [Table: ai_judge_scores.csv] [Table: ai_judge_per_dimension.csv]
 

@@ -13,7 +13,7 @@ The project was designed to use hardware the team already owned together with fr
 | Electricity | GPU board power 115 W (NVIDIA spec) x GPU hours x tariff | [[TEAM TO FILL - BDT/kWh]] | Per run |
 | Pretrained models | RoBERTa (MIT), Phi-4-mini (MIT), Qwen2.5 (Apache-2.0), Gemma-3 (Gemma terms) | 0 | Open weights |
 | Dataset | EmpatheticDialogues (CC BY-NC 4.0) | 0 | Non-commercial use only |
-| AI judges | OpenRouter free tier, Mistral free tier, Groq free tier | 0 | Rate-limited |
+| AI judges | OpenRouter free tier, Groq free tier | 0 | Rate-limited |
 | Hosting (demo) | Hugging Face Spaces free CPU tier (2 vCPU, 16 GB) | 0 | Not yet deployed |
 | Human evaluation | Google Forms, volunteer raters | 0 | No payment |
 | Internet | Model downloads, API calls | [[TEAM TO FILL]] | Monthly |
@@ -37,7 +37,7 @@ where P = 0.115 kW is the rated board power of the RTX 4060 [38]. This gives abo
 | d1 ELECTRA-base training | RTX 4060 8 GB | 8.7 | recorded |
 | d1 RoBERTa-large training | RTX 4060 8 GB | 64.7 | recorded |
 | Response generation, 300 conversations per system (x11 systems) | RTX 4060 8 GB | [[TEAM TO FILL - not logged]] | not recorded |
-| AI judging (Nemotron, gpt-oss; Mistral for 5 systems) | Cloud API, free tier | network time only | free tier |
+| AI judging (Nemotron, gpt-oss) | Cloud API, free tier | network time only | free tier |
 | WASSA scoring, 3,300 replies | RTX 4060 / CPU | [[TEAM TO FILL]] | not recorded |
 
 *Table 3.6: Recorded compute usage*

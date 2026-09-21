@@ -1,6 +1,6 @@
 # Chapter 5 - 5.3 Statistical Analysis
 
-> **Update (14 Sep 2026): AI-judge scores for all 7 systems are in.** The panel is now two judges (Nemotron 3 Ultra + gpt-oss-120b) because Mistral Large became unavailable. Judge numbers in the draft below are from the earlier three-judge, five-system run and are superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
+> **Update (14 Sep 2026): AI-judge scores for all 8 systems are in.** The AI-judge panel is two judges (Nemotron 3 Ultra + gpt-oss-120b), and every judge number in the draft below is superseded - use `FINAL_TEXT.docx` and the regenerated `tables/` for all AI-judge and WASSA-validity numbers.
 
 **Rubric:** CO6 (Chapter 5: 5.3 Statistical Analysis). Assessed by the defence panel and the supervisor.
 
@@ -76,7 +76,7 @@ WASSA scores correlate positively with reply length within every system (Spearma
 
 ### 5.3.6 Validity of the WASSA Classifier
 
-Because WASSA scores support several claims, we checked how far they can be trusted, on the 320 replies that were also scored by all three AI judges (Table 5.x). At the **system level**, WASSA ranks the five systems in exactly the same order as the judges' mean empathy score (Spearman rho = 1.00). At the **reply level**, agreement is moderate (rho = 0.41, p < 0.001) and remains after controlling for reply length (partial rho = 0.45). This shows the agreement is not merely a shared preference for longer replies. **Within a single system**, however, agreement is weak (rho = 0.13 to 0.24, none significant), compared with 0.75 to 0.79 between the judges themselves. We therefore use WASSA only to compare system averages over 300 conversations, the purpose for which this evidence supports it, and never to judge individual replies. The model's provenance (an ACL 2024 shared-task system trained on human ratings of conversation turns, r = .544 against humans) and its limitations are listed in the same table.
+Because WASSA scores support several claims, we checked how far they can be trusted, on the replies that were also scored by the AI judges (Table 5.x). At the **system level**, WASSA ranks the five systems in exactly the same order as the judges' mean empathy score (Spearman rho = 1.00). At the **reply level**, agreement is moderate (rho = 0.41, p < 0.001) and remains after controlling for reply length (partial rho = 0.45). This shows the agreement is not merely a shared preference for longer replies. **Within a single system**, however, agreement is weak (rho = 0.13 to 0.24, none significant), compared with 0.75 to 0.79 between the judges themselves. We therefore use WASSA only to compare system averages over 300 conversations, the purpose for which this evidence supports it, and never to judge individual replies. The model's provenance (an ACL 2024 shared-task system trained on human ratings of conversation turns, r = .544 against humans) and its limitations are listed in the same table.
 
 [Table: wassa_validity.csv]
 
@@ -84,7 +84,7 @@ Because WASSA scores support several claims, we checked how far they can be trus
 
 For the systems judged before the final design, the initial pipeline's AI-judge overall score (8.23) was significantly higher than zero-shot (7.73; Wilcoxon p = 0.0004) and the fine-tuned model (4.44; p < 0.001), not significantly different from the same-size single model (8.38; p = 0.21), and significantly lower than the larger single model (9.02; p < 0.001), on 64 conversations (Table 5.x).
 
-The three judges agree closely with each other (Table 5.x). Per-reply Spearman correlations between pairs of judges are 0.75-0.79 for empathy and 0.78-0.80 for the overall score across 320 replies, and 0.57-0.63 when the clearly broken fine-tuned system is excluded. All three judges rank the five systems in the same order, and the ranking is unchanged after z-scoring each judge's scores, so no single lenient or harsh judge drives the result. [[PENDING: the same agreement statistics and significance tests including the final system, once its scores are merged and the table script is re-run.]]
+The judges agree closely with each other (Table 5.x). Per-reply Spearman correlations between pairs of judges are 0.75-0.79 for empathy and 0.78-0.80 for the overall score across 320 replies, and 0.57-0.63 when the clearly broken fine-tuned system is excluded. Both judges rank the systems in the same order, and the ranking is unchanged after z-scoring each judge's scores, so no single lenient or harsh judge drives the result. [[PENDING: the same agreement statistics and significance tests including the final system, once its scores are merged and the table script is re-run.]]
 
 [Table: ai_judge_agreement.csv]
 

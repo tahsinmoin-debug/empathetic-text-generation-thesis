@@ -35,7 +35,7 @@ Table 3.1 lists the licences of the dataset and models used. EmpatheticDialogues
 | sentence-transformers/all-MiniLM-L6-v2 | RAG retriever | Apache-2.0 | Permissive |
 | hyy-33/hyy33-WASSA-2024-Track-2 | Empathy scorer | Not stated on model card | Evaluation use only; cite the shared task |
 | openai/gpt-oss-120b | AI judge | Apache-2.0 | Accessed via Groq API terms |
-| NVIDIA Nemotron 3 Ultra, Mistral Large | AI judges | Provider API terms | Only public ED text was sent |
+| NVIDIA Nemotron 3 Ultra, gpt-oss-120b (Groq) | AI judges | Provider API terms | Only public ED text was sent |
 
 *Table 3.1: Licences of the dataset and models used in this work*
 

@@ -30,7 +30,7 @@ Account for what the project cost to build and evaluate, what it would cost to r
 
 ### 3.8.1 Development Cost
 
-The project was designed to run on hardware the team already owned and on free-of-charge software, models and services (Table 3.x). All models are open-weight and all libraries are open source. The dataset is freely available for non-commercial research. The three AI judges were accessed through free API tiers, the demonstration interface targets the free Hugging Face Spaces CPU tier, and the human study uses Google Forms with volunteer participants. Direct monetary cost is therefore limited to electricity, internet access and the (pre-existing) GPU workstation: [[TEAM TO FILL: purchase price in BDT, or state that it is an existing personal asset with zero marginal cost]].
+The project was designed to run on hardware the team already owned and on free-of-charge software, models and services (Table 3.x). All models are open-weight and all libraries are open source. The dataset is freely available for non-commercial research. The two AI judges were accessed through free API tiers, the demonstration interface targets the free Hugging Face Spaces CPU tier, and the human study uses Google Forms with volunteer participants. Direct monetary cost is therefore limited to electricity, internet access and the (pre-existing) GPU workstation: [[TEAM TO FILL: purchase price in BDT, or state that it is an existing personal asset with zero marginal cost]].
 
 [Table: cost_breakdown.csv]
 

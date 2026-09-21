@@ -2,7 +2,7 @@ Criterion,How it was applied,Evidence or reason
 Flagship-tier capability,"Required by the co-supervisor; small local judges (Gemma-2-2B, Phi-3-mini) were dropped from an earlier plan",Zheng et al. (2023): strong LLM judges agree with human preferences over 80% of the time
 "Different developers, none related to our models","No judge shares a family with the generator (Phi, Microsoft) or the baselines (Qwen, Alibaba)",Panickssery et al. (2024): LLM evaluators recognise and favour their own generations
 A panel instead of one judge,Scores averaged over the two judges that scored every system,Verga et al. (2024): a panel from disjoint model families shows less intra-model bias than one large judge
-Same judges for every system,Mistral Large dropped from the final panel because it could not score the final systems,Mixing judge sets across systems would make scores incomparable; two- and three-judge panels agree (rho 0.98)
+Same judges for every system,Both judges scored all 512 replies of all judged systems,Mixing judge sets across systems would make the scores incomparable
 Blind scoring,Judges see only the user message and one reply - never the system name or the gold reply,Removes identity bias and any reward for word overlap with a reference reply
 "Anchored rubric, deterministic output","1-3 / 4-6 / 7-10 anchors for empathy, relevance and safety; temperature 0; JSON-only answer",Anchors keep judges on the same scale; temperature 0 removes sampling noise
 Free API access,"No GPU needed, so non-coding teammates could run the judging",Project resource constraint (Section 3.8)

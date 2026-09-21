@@ -52,7 +52,7 @@ Table 3.x breaks the work into ten phases, and Figure 3.x shows them as a Gantt 
 
 ### 3.6.4 Team Roles and Responsibilities
 
-[[TEAM TO FILL - one row per member: name, ID, primary responsibilities, secondary responsibilities. Reflect the real division of work, for example: model development and experiments; AI-judge evaluation runs (Nemotron short/long split, Mistral, gpt-oss) and literature review; human evaluation form, data collection and writing.]]
+[[TEAM TO FILL - one row per member: name, ID, primary responsibilities, secondary responsibilities. Reflect the real division of work, for example: model development and experiments; AI-judge evaluation runs (Nemotron short/long split, gpt-oss) and literature review; human evaluation form, data collection and writing.]]
 
 Because only one member's machine has a suitable GPU, tasks were divided so that no-GPU work (AI-judge evaluation through APIs, the human study, literature review and writing) ran in parallel with GPU experiments. Command-by-command guides were prepared so that non-coding members could run evaluations independently.
 
@@ -66,7 +66,7 @@ The plan was revised whenever evidence invalidated an assumption. The main revis
 
 1. **Dataset change (June 2026).** Early work used GoEmotions (Reddit comments, 28 labels). Because these are isolated comments rather than conversations, the project moved to EmpatheticDialogues, and the detector and generator schedules were restarted on the new data.
 2. **Evaluation expansion (July-August 2026).** After the Pre-Thesis 2 panel questioned whether multiple models were needed, single-model baselines of the same size and larger (Qwen2.5-1.5B and Qwen2.5-7B), a RAG variant and an AI-judge panel were added to the schedule before any further development.
-3. **Judge panel replacement (August 2026).** Planned judges became unavailable (Gemini quota limits, retirement of DeepSeek on GitHub Models and of Llama 3.3 on Groq). The panel was rebuilt as Nemotron 3 Ultra, Mistral Large and gpt-oss-120b, and judging was split across two accounts to work around a 50-request daily limit.
+3. **Judge panel replacement (August 2026).** Planned judges became unavailable (Gemini quota limits, retirement of DeepSeek on GitHub Models and of Llama 3.3 on Groq). The panel was rebuilt as Nemotron 3 Ultra and gpt-oss-120b, and judging was split across two accounts to work around a 50-request daily limit.
 4. **Detector redesign (late August 2026).** A train/inference mismatch was found in the detector: it was trained on situation descriptions but fed user messages. The detector was retrained and a d2 bake-off inserted into the schedule, which led to the two-stage final design.
 5. **Scope control (September 2026).** A repetition-penalty improvement was deferred to future work, and the final system's outputs were frozen, because regenerating them would have invalidated AI-judge scores already being collected.
 

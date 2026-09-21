@@ -35,7 +35,7 @@ Mitigation in the current prototype is limited to the interface: the prepared de
 
 ### 3.4.2 Privacy and Data Protection
 
-All experiments use the public EmpatheticDialogues corpus; no personal data was collected to build or tune the models. During evaluation, only ED conversation text and the corresponding generated replies were sent to third-party AI-judge APIs (OpenRouter, Mistral, Groq). No user data was involved. Both models run on local hardware, so a deployed instance does not need to send a user's disclosure to an external provider. This is one practical motivation for a small, self-hostable pipeline. The prepared demonstration interface (not yet publicly deployed) holds conversation history only in per-session memory on the server and writes nothing to disk or logs; closing the page discards it.
+All experiments use the public EmpatheticDialogues corpus; no personal data was collected to build or tune the models. During evaluation, only ED conversation text and the corresponding generated replies were sent to third-party AI-judge APIs (OpenRouter, Groq). No user data was involved. Both models run on local hardware, so a deployed instance does not need to send a user's disclosure to an external provider. This is one practical motivation for a small, self-hostable pipeline. The prepared demonstration interface (not yet publicly deployed) holds conversation history only in per-session memory on the server and writes nothing to disk or logs; closing the page discards it.
 
 ### 3.4.3 Human Evaluation
 

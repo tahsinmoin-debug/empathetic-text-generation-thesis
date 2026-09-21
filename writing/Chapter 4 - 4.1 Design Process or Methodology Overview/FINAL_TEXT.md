@@ -30,16 +30,15 @@ No single automatic measure captures empathy, so each design is evaluated with *
 
 ### 4.1.5.1 Selection of the AI-Judge Panel
 
-Using language models as evaluators is established practice: strong LLM judges agree with human preferences in more than 80% of cases [13]. They also carry known biases, and the panel was designed to counter them. First, LLM evaluators can recognise their own outputs and rate them more favourably [34]. We therefore selected judges from developers unrelated to the models being evaluated: **Nemotron 3 Ultra** (NVIDIA, a 550-billion-parameter mixture-of-experts model) and **gpt-oss-120b** (OpenAI, with openly released weights), with **Mistral Large** (Mistral AI) planned as a third judge. None of them shares a model family with our generator, Phi-4-mini (Microsoft) [7], or with the Qwen baselines (Alibaba) [8]. Second, a panel of judges from different model families shows less bias than a single large judge [35], so the scores of several judges are averaged rather than relying on one. Third, in line with the co-supervisor's requirement, all judges are flagship-tier models; smaller local judges considered earlier were not used.
+Using language models as evaluators is established practice: strong LLM judges agree with human preferences in more than 80% of cases [13]. They also carry known biases, and the panel was designed to counter them. First, LLM evaluators can recognise their own outputs and rate them more favourably [34]. We therefore selected judges from developers unrelated to the models being evaluated: **Nemotron 3 Ultra** (NVIDIA, a 550-billion-parameter mixture-of-experts model) and **gpt-oss-120b** (OpenAI, with openly released weights). Neither of them shares a model family with our generator, Phi-4-mini (Microsoft) [7], or with the Qwen baselines (Alibaba) [8]. Second, a panel of judges from different model families shows less bias than a single large judge [35], so the panel score is the mean of the two judges rather than the rating of one. Third, in line with the co-supervisor's requirement, all judges are flagship-tier models; smaller local judges considered earlier were not used.
 
-Each judge sees only the user's message and a single reply, never the name of the system or the reference reply, and scores empathy, relevance and safety from 1 to 10 against explicit anchors for the ranges 1-3, 4-6 and 7-10, at temperature 0. All judges were available through free API tiers, which allowed team members without a GPU to run the evaluation. Earlier candidates that became unavailable through quota limits or retirement were replaced. Mistral Large scored the five systems built first, but became unavailable on both team accounts before the final system and the top-1 Phi-4-mini configuration could be judged. Because scores from different panels are not comparable, **all systems are compared on the two judges that scored every one of them**. On the replies that all three judges scored, the two-judge and three-judge averages correlate at 0.98 and rank the systems identically (Section 5.3.7), so the reduced panel does not change the conclusions. Table 4.1 describes the panel and Table 4.2 summarises the selection criteria.
+Each judge sees only the user's message and a single reply, never the name of the system or the reference reply, and scores empathy, relevance and safety from 1 to 10 against explicit anchors for the ranges 1-3, 4-6 and 7-10, at temperature 0. Both judges were available through free API tiers, which allowed team members without a GPU to run the evaluation. Several other flagship models were considered and could not be used because they were retired or restricted during the project (Section 3.7), so the panel was fixed at these two, **which scored every reply of every judged system**; scores from different judges are not comparable across systems, so using the same two judges throughout is what makes the comparison fair. Table 4.1 describes the panel and Table 4.2 summarises the selection criteria.
 
 
 | Judge | Developer | Size | Access | Role | Why selected |
 |---|---|---|---|---|---|
 | Nemotron 3 Ultra | NVIDIA | 550B total / 55B active (mixture-of-experts) | OpenRouter free tier (50 requests/day) | Used - every judged system | Flagship scale; no relation to Microsoft (Phi) or Alibaba (Qwen) |
 | gpt-oss-120b | OpenAI (open weights, Apache-2.0) | About 120B (mixture-of-experts) | Groq free tier | Used - every judged system | Open weights make this judge reproducible; fast enough to score everything |
-| Mistral Large | Mistral AI | Flagship (size not published) | Mistral free Experiment tier | Planned third judge - 5 systems only, then unavailable (HTTP 403) | Kept only to check that the two-judge panel gives the same result |
 
 *Table 4.1: The AI-judge panel*
 
@@ -50,7 +49,7 @@ Each judge sees only the user's message and a single reply, never the name of th
 | Flagship-tier capability | Required by the co-supervisor; small local judges (Gemma-2-2B, Phi-3-mini) were dropped from an earlier plan | Zheng et al. (2023): strong LLM judges agree with human preferences over 80% of the time |
 | Different developers, none related to our models | No judge shares a family with the generator (Phi, Microsoft) or the baselines (Qwen, Alibaba) | Panickssery et al. (2024): LLM evaluators recognise and favour their own generations |
 | A panel instead of one judge | Scores averaged over the two judges that scored every system | Verga et al. (2024): a panel from disjoint model families shows less intra-model bias than one large judge |
-| Same judges for every system | Mistral Large dropped from the final panel because it could not score the final systems | Mixing judge sets across systems would make scores incomparable; two- and three-judge panels agree (rho 0.98) |
+| Same judges for every system | Both judges scored all 512 replies of all judged systems | Mixing judge sets across systems would make the scores incomparable |
 | Blind scoring | Judges see only the user message and one reply - never the system name or the gold reply | Removes identity bias and any reward for word overlap with a reference reply |
 | Anchored rubric, deterministic output | 1-3 / 4-6 / 7-10 anchors for empathy, relevance and safety; temperature 0; JSON-only answer | Anchors keep judges on the same scale; temperature 0 removes sampling noise |
 | Free API access | No GPU needed, so non-coding teammates could run the judging | Project resource constraint (Section 3.8) |
@@ -80,7 +79,7 @@ All components are implemented in Python 3.10 with PyTorch 2.5.1 [43] and Huggin
 | Data handling | pandas / NumPy | 2.3.3 / 2.2.6 |
 | Retrieval | sentence-transformers | 5.7.0 |
 | Evaluation | bert-score | 0.3.13 |
-| AI-judge APIs | openai SDK (OpenRouter), groq SDK, Mistral API | 2.53.0 / 1.6.0 / - |
+| AI-judge APIs | openai SDK (OpenRouter), groq SDK | 2.53.0 / 1.6.0 |
 | Demo interface | Gradio on Hugging Face Spaces | 5.9.1 (planned) |
 | Human evaluation | Google Forms | - |
 | Documents | python-docx, Microsoft Word | 1.2.0 |

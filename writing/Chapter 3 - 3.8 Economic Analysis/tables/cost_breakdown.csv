@@ -3,7 +3,7 @@ Hardware,"Personal PC with RTX 4060 8 GB, 16 GB RAM (already owned)","[[TEAM TO 
 Electricity,GPU board power 115 W (NVIDIA spec) x GPU hours x tariff,[[TEAM TO FILL - BDT/kWh]],Per run
 Pretrained models,"RoBERTa (MIT), Phi-4-mini (MIT), Qwen2.5 (Apache-2.0), Gemma-3 (Gemma terms)",0,Open weights
 Dataset,EmpatheticDialogues (CC BY-NC 4.0),0,Non-commercial use only
-AI judges,"OpenRouter free tier, Mistral free tier, Groq free tier",0,Rate-limited
+AI judges,"OpenRouter free tier, Groq free tier",0,Rate-limited
 Hosting (demo),"Hugging Face Spaces free CPU tier (2 vCPU, 16 GB)",0,Not yet deployed
 Human evaluation,"Google Forms, volunteer raters",0,No payment
 Internet,"Model downloads, API calls",[[TEAM TO FILL]],Monthly
