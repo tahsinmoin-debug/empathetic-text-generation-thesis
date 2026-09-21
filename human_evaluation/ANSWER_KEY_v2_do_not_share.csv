@@ -1,0 +1,25 @@
+item_number,conv_id,gold_emotion,ai_judge_scored,shown_as,actual_system,system_description,word_count
+1,hit:7110_conv:14220,anxious,True,Response A,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",67
+1,hit:7110_conv:14220,anxious,True,Response B,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",51
+1,hit:7110_conv:14220,anxious,True,Response C,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),73
+2,hit:8061_conv:16123,anticipating,False,Response A,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",35
+2,hit:8061_conv:16123,anticipating,False,Response B,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),40
+2,hit:8061_conv:16123,anticipating,False,Response C,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",29
+3,hit:1680_conv:3361,content,True,Response A,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",46
+3,hit:1680_conv:3361,content,True,Response B,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),50
+3,hit:1680_conv:3361,content,True,Response C,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",27
+4,hit:6423_conv:12846,prepared,False,Response A,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),50
+4,hit:6423_conv:12846,prepared,False,Response B,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",35
+4,hit:6423_conv:12846,prepared,False,Response C,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",50
+5,hit:11434_conv:22869,lonely,True,Response A,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),51
+5,hit:11434_conv:22869,lonely,True,Response B,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",31
+5,hit:11434_conv:22869,lonely,True,Response C,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",44
+6,hit:2975_conv:5950,angry,True,Response A,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),52
+6,hit:2975_conv:5950,angry,True,Response B,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",48
+6,hit:2975_conv:5950,angry,True,Response C,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",67
+7,hit:4693_conv:9386,furious,False,Response A,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",66
+7,hit:4693_conv:9386,furious,False,Response B,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",41
+7,hit:4693_conv:9386,furious,False,Response C,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),62
+8,hit:2040_conv:4081,sad,True,Response A,single_model_same_size,"Single model, same size (Qwen2.5-1.5B, no detector)",43
+8,hit:2040_conv:4081,sad,True,Response B,single_model_bigger,"Single model, bigger (Qwen2.5-7B, no detector)",47
+8,hit:2040_conv:4081,sad,True,Response C,two_stage_phi,Our system (two-stage: RoBERTa detector + Phi-4-mini),53

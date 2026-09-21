@@ -1068,20 +1068,33 @@ def build_composite_ranking(per_reply):
 
 
 def build_human_eval_placeholder():
-    key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_do_not_share_with_raters.csv")
-    items = (key.drop_duplicates("item_number")[["item_number", "gold_emotion", "is_attention_check",
-                                                 "ai_judge_scored", "student_situation"]])
-    save("ch5_1", "human_eval_item_design", items, "Human evaluation - item set design (13 items)",
-         "`human_evaluation/ANSWER_KEY_do_not_share_with_raters.csv`",
-         "3 replies per item (final system, same-size single model, bigger single model), order counterbalanced; "
-         "2 attention checks use the monolithic fine-tuned model as an obvious decoy.")
-    res = pd.DataFrame([{"System": LABEL[FINAL]}, {"System": LABEL["single_model_same_size"]},
-                        {"System": LABEL["single_model_bigger"]}])
-    for c in ["Times chosen", "Selection rate (%)", "Binomial p vs 33.3% chance"]:
+    key = pd.read_csv(ROOT / "human_evaluation" / "ANSWER_KEY_v2_do_not_share.csv")
+    items = key.drop_duplicates("item_number")[["item_number", "gold_emotion", "ai_judge_scored"]].copy()
+    items["Situation type"] = ["student situation" if e in {"prepared", "furious", "anticipating"}
+                               else "core supportive emotion" if e in {"sad", "lonely", "angry", "anxious"}
+                               else "positive emotion" for e in items["gold_emotion"]]
+    items.columns = ["Item", "Emotion", "Scored by the AI judges", "Situation type"]
+    save("ch5_1", "human_eval_item_design", items,
+         f"Human evaluation - item set design ({len(items)} situations)",
+         "`human_evaluation/ANSWER_KEY_v2_do_not_share.csv`",
+         "3 replies per situation (final system, same-size single model, bigger single model), order "
+         "counterbalanced so each system appears in each position 2 or 3 times. Every reply is rated 1-5 on "
+         "empathy, contextual relevance and supportiveness, and each situation ends with one preference "
+         "question: 24 ratings and 8 preference answers per participant. No attention-check items.")
+
+    rows = []
+    for setting in [FINAL, "single_model_same_size", "single_model_bigger"]:
+        rows.append({"System": LABEL[setting]})
+    res = pd.DataFrame(rows)
+    for c in ["Empathy (1-5)", "Contextual relevance (1-5)", "Supportiveness (1-5)",
+              "Preferred (%)", "Paired p vs final system"]:
         res[c] = "[[PENDING - human evaluation responses not yet collected]]"
-    save("ch5_1", "human_eval_results_PENDING", res, "Human evaluation results (to fill after the Google Form closes)",
-         "to be computed", "Also report: raters recruited, raters excluded by attention checks, Fleiss' kappa, "
-                           "and agreement between human majority choice and AI-judge top system.")
+    save("ch5_1", "human_eval_results_PENDING", res,
+         "Human evaluation results (to fill after the Google Form closes)",
+         "to be computed", "Also report: participants recruited and excluded, the intraclass correlation "
+                           "between raters, Fleiss' kappa on the preference question, and the correlation "
+                           "between the human mean rating and the AI-judge mean on the five situations the "
+                           "judges also scored.")
 
 
 def build_literature():
@@ -1154,7 +1167,7 @@ def build_project_tables():
         ["P5", "Design adjustment", "Aug 2026", "Sep 2026", "d1 mismatch fix (RoBERTa); d2 bake-off; two-stage + per-emotion prompts; attention cues", "`train_roberta_ed_d1/`, `emotion_prompts/`"],
         ["P6", "Conversational agent and deployment prep", "Sep 2026", "Sep 2026", "Context memory (4 / 10 turns); Hugging Face Space (not deployed)", "`conversational_agent/`, `huggingface_space/`"],
         ["P7", "Validation and robustness", "Sep 2026", "Sep 2026", "Backbone comparison; error propagation; diversity; literature comparison", "`d1_model_comparison/`, `evaluation_results_diversity/`"],
-        ["P8", "Human evaluation and final judging", "Sep 2026", "[[TEAM TO FILL]]", "Google Form (13 items); AI-judge scores for final system (completed, two-judge panel)", "`human_evaluation/`, `teammate_judge_package/`"],
+        ["P8", "Human evaluation and final judging", "Sep 2026", "[[TEAM TO FILL]]", "Google Form (8 situations, 3 replies each, rated 1-5 on three dimensions); AI-judge scores for all systems (completed, two-judge panel)", "`human_evaluation/`, `teammate_judge_package/`"],
         ["P9", "Thesis writing, defence preparation", "Sep 2026", "[[TEAM TO FILL - submission / defence date]]", "Chapters 2-5, final report, slides", "`writing/`"],
     ], columns=["Phase", "Work package", "Start", "End", "Main outputs", "Evidence in repository"])
     save("ch3_6", "project_timeline_from_repository", timeline, "Project phases reconstructed from repository file dates",

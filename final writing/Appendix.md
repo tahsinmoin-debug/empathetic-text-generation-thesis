@@ -64,21 +64,16 @@ These tables support statements in the main text and are placed here to keep the
 *Table A.2: Precision, recall and F1 of the final detector for each emotion (32 rows of per-emotion detail behind Section 5.1.2).*
 
 
-| item_number | gold_emotion | is_attention_check | ai_judge_scored | student_situation |
-|---|---|---|---|---|
-| 1 | joyful | False | True | False |
-| 2 | nostalgic | True | True | False |
-| 3 | faithful | False | True | False |
-| 4 | angry | False | True | False |
-| 5 | prepared | False | False | True |
-| 6 | anxious | False | True | False |
-| 7 | furious | False | False | True |
-| 8 | anticipating | False | False | True |
-| 9 | lonely | False | True | False |
-| 10 | disgusted | False | True | False |
-| 11 | sad | False | True | False |
-| 12 | impressed | True | True | False |
-| 13 | content | False | True | False |
+| Item | Emotion | Scored by the AI judges | Situation type |
+|---|---|---|---|
+| 1 | anxious | True | core supportive emotion |
+| 2 | anticipating | False | student situation |
+| 3 | content | True | positive emotion |
+| 4 | prepared | False | student situation |
+| 5 | lonely | True | core supportive emotion |
+| 6 | angry | True | core supportive emotion |
+| 7 | furious | False | student situation |
+| 8 | sad | True | core supportive emotion |
 
 *Table A.3: Design of the human-evaluation items (item-by-item design of the human study described in Section 5.1.9).*
 

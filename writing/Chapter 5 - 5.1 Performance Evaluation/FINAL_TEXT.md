@@ -187,34 +187,29 @@ Two AI judges, Nemotron 3 Ultra and gpt-oss-120b, selected as described in Secti
 
 ## 5.1.9 Human Evaluation
 
-To validate the automatic and AI-judge results, we conducted a forced-choice study with human participants (Table 5.8). Participants read 13 situations and, for each one, chose which of three replies "best understands and responds to how this person is feeling": the reply from the final system, from the same-size single model, or from the larger single model, presented in counterbalanced order. This three-way design adapts the pairwise preference judgements used in comparable studies [27], [28] to compare three systems within a limited number of items. The situations cover 13 different emotions, including four central to supportive conversation (sad, lonely, angry and anxious) and three drawn from student life. Two items include an obviously poor reply as an attention check. [[PENDING: number of participants; number excluded by the attention checks; selection rate of each system against the chance level of 33.3%, with binomial tests; Fleiss' kappa; and agreement between the human majority choice and the system scored highest by the AI judges.]]
+To validate the automatic and AI-judge results, we conducted a rating study with human participants (Table 5.8). Participants read 8 situations; for each one they saw three replies, presented in counterbalanced order, from the final system, the same-size single model and the larger single model. They rated every reply from 1 to 5 on three dimensions, each with written anchors: **empathy and emotional validation** ("how well does this reply recognise and validate the emotions expressed in the message?"), **contextual relevance** ("how well does this reply address the person's specific situation rather than giving a generic response?") and **supportiveness** ("if you had written this message, how supported or comforted would you feel by this reply?"). Each situation ends with one preference question, which keeps the head-to-head comparison used in similar studies [27], [28] alongside the ratings. Rating rather than choosing gives a score for every system on every situation, so the size of a difference can be measured and not only its direction. The situations cover the four emotions most central to supportive conversation (sad, lonely, angry and anxious), three drawn from student life and one positive emotion; five of the eight are also scored by the AI judges, which is what allows human and AI ratings to be compared. The study contains no attention-check items: with 24 ratings per participant, the design relies on a short questionnaire and a small group of committed volunteers rather than on decoy replies. [[PENDING: number of participants; mean rating of each system on each of the three dimensions, with paired tests; preference rate of each system against the chance level of 33.3%; agreement between participants; and agreement between the human ranking and the AI-judge ranking.]]
 
 
-| item_number | gold_emotion | is_attention_check | ai_judge_scored | student_situation |
-|---|---|---|---|---|
-| 1 | joyful | False | True | False |
-| 2 | nostalgic | True | True | False |
-| 3 | faithful | False | True | False |
-| 4 | angry | False | True | False |
-| 5 | prepared | False | False | True |
-| 6 | anxious | False | True | False |
-| 7 | furious | False | False | True |
-| 8 | anticipating | False | False | True |
-| 9 | lonely | False | True | False |
-| 10 | disgusted | False | True | False |
-| 11 | sad | False | True | False |
-| 12 | impressed | True | True | False |
-| 13 | content | False | True | False |
+| Item | Emotion | Scored by the AI judges | Situation type |
+|---|---|---|---|
+| 1 | anxious | True | core supportive emotion |
+| 2 | anticipating | False | student situation |
+| 3 | content | True | positive emotion |
+| 4 | prepared | False | student situation |
+| 5 | lonely | True | core supportive emotion |
+| 6 | angry | True | core supportive emotion |
+| 7 | furious | False | student situation |
+| 8 | sad | True | core supportive emotion |
 
 *Table 5.8: Design of the human-evaluation items*
 
 
 
-| System | Times chosen | Selection rate (%) | Binomial p vs 33.3% chance |
-|---|---|---|---|
-| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] |
-| Single model, same size: Qwen2.5-1.5B detects + responds | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] |
-| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] |
+| System | Empathy (1-5) | Contextual relevance (1-5) | Supportiveness (1-5) | Preferred (%) | Paired p vs final system |
+|---|---|---|---|---|---|
+| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] |
+| Single model, same size: Qwen2.5-1.5B detects + responds | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] |
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] | [[PENDING - human evaluation responses not yet collected]] |
 
 *Table 5.9: Human-evaluation results (to be completed)*
 

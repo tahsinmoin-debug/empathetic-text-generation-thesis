@@ -109,7 +109,7 @@ All models were developed and evaluated using the public EmpatheticDialogues cor
 
 ### 3.4.3 Human Evaluation
 
-The human evaluation described in Chapter 5 asks volunteers, mostly students together with some faculty members, to compare replies to 13 short situations. Participation is voluntary and anonymous. The questionnaire collects no names or email addresses, explains its purpose and expected duration of about 12 to 17 minutes, warns that some situations describe sad or stressful experiences, and allows participants to stop at any time. The identity of the system behind each reply is hidden and reply order is counterbalanced, so participants cannot be steered toward the authors' system. [[TEAM TO FILL: state the department's policy or the supervisor's confirmation that formal ethics review is not required for this anonymous, minimal-risk survey.]]
+The human evaluation described in Chapter 5 asks volunteers, mostly students together with some faculty members, to rate replies to 8 short situations. Participation is voluntary and anonymous. The questionnaire collects no names or email addresses, explains its purpose and expected duration of about 15 minutes, warns that some situations describe sad or stressful experiences, and allows participants to stop at any time. The identity of the system behind each reply is hidden and reply order is counterbalanced, so participants cannot be steered toward the authors' system. [[TEAM TO FILL: state the department's policy or the supervisor's confirmation that formal ethics review is not required for this anonymous, minimal-risk survey.]]
 
 ### 3.4.4 Data and Model Licensing
 
@@ -205,7 +205,7 @@ Table 3.4 divides the work into ten phases and Figure 3.1 presents them as a Gan
 | P5 | Design adjustment | Aug 2026 | Sep 2026 | d1 mismatch fix (RoBERTa); d2 bake-off; two-stage + per-emotion prompts; attention cues | `train_roberta_ed_d1/`, `emotion_prompts/` |
 | P6 | Conversational agent and deployment prep | Sep 2026 | Sep 2026 | Context memory (4 / 10 turns); Hugging Face Space (not deployed) | `conversational_agent/`, `huggingface_space/` |
 | P7 | Validation and robustness | Sep 2026 | Sep 2026 | Backbone comparison; error propagation; diversity; literature comparison | `d1_model_comparison/`, `evaluation_results_diversity/` |
-| P8 | Human evaluation and final judging | Sep 2026 | [[TEAM TO FILL]] | Google Form (13 items); AI-judge scores for final system (completed, two-judge panel) | `human_evaluation/`, `teammate_judge_package/` |
+| P8 | Human evaluation and final judging | Sep 2026 | [[TEAM TO FILL]] | Google Form (8 situations, 3 replies each, rated 1-5 on three dimensions); AI-judge scores for all systems (completed, two-judge panel) | `human_evaluation/`, `teammate_judge_package/` |
 | P9 | Thesis writing, defence preparation | Sep 2026 | [[TEAM TO FILL - submission / defence date]] | Chapters 2-5, final report, slides | `writing/` |
 
 *Table 3.4: Project phases, outputs and supporting evidence*

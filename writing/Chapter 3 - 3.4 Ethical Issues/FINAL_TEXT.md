@@ -16,7 +16,7 @@ All models were developed and evaluated using the public EmpatheticDialogues cor
 
 ## 3.4.3 Human Evaluation
 
-The human evaluation described in Chapter 5 asks volunteers, mostly students together with some faculty members, to compare replies to 13 short situations. Participation is voluntary and anonymous. The questionnaire collects no names or email addresses, explains its purpose and expected duration of about 12 to 17 minutes, warns that some situations describe sad or stressful experiences, and allows participants to stop at any time. The identity of the system behind each reply is hidden and reply order is counterbalanced, so participants cannot be steered toward the authors' system. [[TEAM TO FILL: state the department's policy or the supervisor's confirmation that formal ethics review is not required for this anonymous, minimal-risk survey.]]
+The human evaluation described in Chapter 5 asks volunteers, mostly students together with some faculty members, to rate replies to 8 short situations. Participation is voluntary and anonymous. The questionnaire collects no names or email addresses, explains its purpose and expected duration of about 15 minutes, warns that some situations describe sad or stressful experiences, and allows participants to stop at any time. The identity of the system behind each reply is hidden and reply order is counterbalanced, so participants cannot be steered toward the authors' system. [[TEAM TO FILL: state the department's policy or the supervisor's confirmation that formal ethics review is not required for this anonymous, minimal-risk survey.]]
 
 ## 3.4.4 Data and Model Licensing
 

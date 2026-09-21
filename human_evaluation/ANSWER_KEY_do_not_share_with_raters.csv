@@ -1,0 +1,40 @@
+item_number,conv_id,gold_emotion,is_attention_check,ai_judge_scored,student_situation,shown_as,actual_system,system_description,is_decoy,word_count
+1,hit:4970_conv:9941,joyful,False,True,False,Response A,single_model_same_size,"Single model, same size (no detector)",False,48
+1,hit:4970_conv:9941,joyful,False,True,False,Response B,single_model_bigger,Single bigger model (no detector),False,75
+1,hit:4970_conv:9941,joyful,False,True,False,Response C,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,48
+2,hit:801_conv:1603,nostalgic,True,True,False,Response A,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,49
+2,hit:801_conv:1603,nostalgic,True,True,False,Response B,single_model_same_size,"Single model, same size (no detector)",False,18
+2,hit:801_conv:1603,nostalgic,True,True,False,Response C,fine_tuned,Fine-tuned monolithic model (ATTENTION-CHECK DECOY),True,206
+3,hit:10645_conv:21290,faithful,False,True,False,Response A,single_model_bigger,Single bigger model (no detector),False,46
+3,hit:10645_conv:21290,faithful,False,True,False,Response B,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,43
+3,hit:10645_conv:21290,faithful,False,True,False,Response C,single_model_same_size,"Single model, same size (no detector)",False,39
+4,hit:2975_conv:5950,angry,False,True,False,Response A,single_model_same_size,"Single model, same size (no detector)",False,48
+4,hit:2975_conv:5950,angry,False,True,False,Response B,single_model_bigger,Single bigger model (no detector),False,67
+4,hit:2975_conv:5950,angry,False,True,False,Response C,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,52
+5,hit:6423_conv:12846,prepared,False,False,True,Response A,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,50
+5,hit:6423_conv:12846,prepared,False,False,True,Response B,single_model_same_size,"Single model, same size (no detector)",False,35
+5,hit:6423_conv:12846,prepared,False,False,True,Response C,single_model_bigger,Single bigger model (no detector),False,50
+6,hit:7110_conv:14220,anxious,False,True,False,Response A,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,73
+6,hit:7110_conv:14220,anxious,False,True,False,Response B,single_model_same_size,"Single model, same size (no detector)",False,67
+6,hit:7110_conv:14220,anxious,False,True,False,Response C,single_model_bigger,Single bigger model (no detector),False,51
+7,hit:4693_conv:9386,furious,False,False,True,Response A,single_model_same_size,"Single model, same size (no detector)",False,66
+7,hit:4693_conv:9386,furious,False,False,True,Response B,single_model_bigger,Single bigger model (no detector),False,41
+7,hit:4693_conv:9386,furious,False,False,True,Response C,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,62
+8,hit:8061_conv:16123,anticipating,False,False,True,Response A,single_model_bigger,Single bigger model (no detector),False,35
+8,hit:8061_conv:16123,anticipating,False,False,True,Response B,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,40
+8,hit:8061_conv:16123,anticipating,False,False,True,Response C,single_model_same_size,"Single model, same size (no detector)",False,29
+9,hit:11434_conv:22869,lonely,False,True,False,Response A,single_model_bigger,Single bigger model (no detector),False,44
+9,hit:11434_conv:22869,lonely,False,True,False,Response B,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,51
+9,hit:11434_conv:22869,lonely,False,True,False,Response C,single_model_same_size,"Single model, same size (no detector)",False,31
+10,hit:5450_conv:10900,disgusted,False,True,False,Response A,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,65
+10,hit:5450_conv:10900,disgusted,False,True,False,Response B,single_model_same_size,"Single model, same size (no detector)",False,48
+10,hit:5450_conv:10900,disgusted,False,True,False,Response C,single_model_bigger,Single bigger model (no detector),False,56
+11,hit:2040_conv:4081,sad,False,True,False,Response A,single_model_same_size,"Single model, same size (no detector)",False,43
+11,hit:2040_conv:4081,sad,False,True,False,Response B,single_model_bigger,Single bigger model (no detector),False,47
+11,hit:2040_conv:4081,sad,False,True,False,Response C,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,53
+12,hit:4982_conv:9965,impressed,True,True,False,Response A,single_model_same_size,"Single model, same size (no detector)",False,47
+12,hit:4982_conv:9965,impressed,True,True,False,Response B,fine_tuned,Fine-tuned monolithic model (ATTENTION-CHECK DECOY),True,222
+12,hit:4982_conv:9965,impressed,True,True,False,Response C,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,55
+13,hit:1680_conv:3361,content,False,True,False,Response A,two_stage_phi,"Our system (two-stage, Phi-4-mini)",False,50
+13,hit:1680_conv:3361,content,False,True,False,Response B,single_model_same_size,"Single model, same size (no detector)",False,27
+13,hit:1680_conv:3361,content,False,True,False,Response C,single_model_bigger,Single bigger model (no detector),False,46
