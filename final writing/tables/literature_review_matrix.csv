@@ -1,0 +1,13 @@
+Work,Data,Approach and result,Limitation relevant to this thesis
+"Rashkin et al., 2019 (ACL)",EmpatheticDialogues,"Introduces 25k-conversation, 32-emotion benchmark; emotion classifiers on situation text",Benchmark only; situation-text classifiers overstate real-input accuracy
+"Lin et al., 2019 - MoEL (EMNLP)",ED,Mixture of emotion-specific listeners; emotion acc 30.75%,Low recognition accuracy; small model generation
+"Majumder et al., 2020 - MIME (EMNLP)",ED,Emotion mimicry grouped by polarity,Coarse polarity groups; generic replies
+"Sabour et al., 2022 - CEM (AAAI)",ED,Adds COMET commonsense (cognitive + affective),"Human empathy 3.08/5, far below LLMs"
+"Zhou et al., 2023 - CASE (ACL)",ED,Aligns cognition and affection at coarse and fine grain,Human empathy 3.04/5
+"Qian et al., 2023 (arXiv 2310.05140)",ED,LLMs (ChatGPT) beat trained SOTA on automatic and human metrics,"Uncontrolled, verbose; no rule/format control measured"
+"Paranjape et al., 2020 - Chirpy Cardinal",ED + live Alexa users,"RoBERTa-large emotion classifier on first utterance, 61.5% top-1",Technical report; validation-set score
+"Cao et al., 2025 - TOOL-ED (COLING)",ED,LLM tool-calling for commonsense knowledge; A/B human eval,Fine-tuning 7-14B models; heavy resources
+"Wu et al., 2025 - Personality-aware ERG (COLING)",MELD-based multimodal + ED,Personality + visual cues; emotion acc 45.4% text-only,Needs multimodal input and personality labels
+"Belay et al., 2025 (COLING)",EthioEmo (4 Ethiopian languages) + SemEval-2018 English,"Encoder, encoder-decoder, decoder LLMs for multi-label emotion",Fine-tuned encoders still beat few-shot LLMs at emotion classification
+"Rasool et al., 2025 (AI, MDPI)",Psychotherapy transcripts,Emotion-aware embedding fusion into Flan-T5/Llama 2/DeepSeek-R1/GPT-4; BERT for emotion,Paired t-tests non-significant; no human evaluation
+"Wang et al., 2025 (arXiv 2507.12820)",NLPCC 2025 ESC task,"Prompting + LoRA / full fine-tuning of Qwen2.5; total 41.17 vs 30.87 base, ranked 2nd",Needs fine-tuning up to 72B parameters

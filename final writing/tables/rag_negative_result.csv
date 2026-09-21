@@ -1,0 +1,4 @@
+Variant,Ack (%),One question (%),All rules (%),WASSA SD,Source
+Initial pipeline (no retrieval),70.33,87.33,63.67,1.33,result files
+RAG attempt 1 (1-2 retrieved ED examples),,76.0,54.3,,recorded in Full_Project_Documentation (outputs overwritten by attempt 2)
+RAG attempt 2 (+ single-question filter + reminder),57.0,78.0,43.67,1.46,result files

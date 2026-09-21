@@ -1,0 +1,41 @@
+Metric,Final system vs,N,Final,Baseline,Difference,95% CI,Test,p,p (Holm-adjusted),Significant?
+All rules,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",300,60.0,73.67,-13.67,"[-21.00, -6.33]",McNemar exact,0.00048,0.00191,YES
+All rules,"Single model, same size: Qwen2.5-1.5B detects + responds",300,60.0,51.33,8.67,"[+1.00, +16.33]",McNemar exact,0.03167,0.09502,no
+All rules,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",300,60.0,82.33,-22.33,"[-29.33, -15.33]",McNemar exact,0.0,0.0,YES
+All rules,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",300,60.0,19.0,41.0,"[+34.00, +47.67]",McNemar exact,0.0,0.0,YES
+All rules,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),300,60.0,22.33,37.67,"[+30.33, +45.00]",McNemar exact,0.0,0.0,YES
+All rules,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,300,60.0,63.67,-3.67,"[-11.00, +3.67]",McNemar exact,0.37496,0.38971,no
+All rules,Initial pipeline + retrieval (RAG),300,60.0,43.67,16.33,"[+8.33, +24.00]",McNemar exact,8e-05,0.00041,YES
+All rules,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),300,60.0,65.33,-5.33,"[-13.00, +2.00]",McNemar exact,0.19486,0.38971,no
+Acknowledgement,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",300,66.33,77.33,-11.0,"[-18.00, -4.00]",McNemar exact,0.00269,0.01343,YES
+Acknowledgement,"Single model, same size: Qwen2.5-1.5B detects + responds",300,66.33,70.67,-4.33,"[-11.33, +2.67]",McNemar exact,0.24143,0.48286,no
+Acknowledgement,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",300,66.33,83.0,-16.67,"[-23.33, -10.00]",McNemar exact,0.0,2e-05,YES
+Acknowledgement,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",300,66.33,81.67,-15.33,"[-21.67, -8.67]",McNemar exact,1e-05,5e-05,YES
+Acknowledgement,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),300,66.33,30.0,36.33,"[+29.00, +43.67]",McNemar exact,0.0,0.0,YES
+Acknowledgement,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,300,66.33,70.33,-4.0,"[-10.67, +2.67]",McNemar exact,0.28069,0.48286,no
+Acknowledgement,Initial pipeline + retrieval (RAG),300,66.33,57.0,9.33,"[+2.33, +16.33]",McNemar exact,0.0126,0.05041,no
+Acknowledgement,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),300,66.33,72.0,-5.67,"[-12.67, +1.33]",McNemar exact,0.13192,0.39577,no
+One question,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",300,92.67,96.0,-3.33,"[-7.00, +0.33]",McNemar exact,0.11018,0.22037,no
+One question,"Single model, same size: Qwen2.5-1.5B detects + responds",300,92.67,73.67,19.0,"[+13.33, +25.00]",McNemar exact,0.0,0.0,YES
+One question,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",300,92.67,99.0,-6.33,"[-9.67, -3.33]",McNemar exact,7e-05,0.00026,YES
+One question,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",300,92.67,22.67,70.0,"[+64.67, +75.33]",McNemar exact,0.0,0.0,YES
+One question,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),300,92.67,74.0,18.67,"[+12.67, +24.67]",McNemar exact,0.0,0.0,YES
+One question,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,300,92.67,87.33,5.33,"[+0.67, +10.00]",McNemar exact,0.04022,0.12067,no
+One question,Initial pipeline + retrieval (RAG),300,92.67,78.0,14.67,"[+8.67, +20.33]",McNemar exact,0.0,1e-05,YES
+One question,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),300,92.67,94.67,-2.0,"[-6.00, +1.67]",McNemar exact,0.39153,0.39153,no
+Emotion validation,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",300,36.67,27.0,9.67,"[+3.67, +15.33]",McNemar exact,0.00169,0.00675,YES
+Emotion validation,"Single model, same size: Qwen2.5-1.5B detects + responds",300,36.67,25.67,11.0,"[+5.00, +17.00]",McNemar exact,0.00052,0.00262,YES
+Emotion validation,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",300,36.67,32.33,4.33,"[-1.67, +10.33]",McNemar exact,0.18746,0.18746,no
+Emotion validation,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",300,36.67,24.67,12.0,"[+6.00, +17.67]",McNemar exact,0.00011,0.00075,YES
+Emotion validation,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),300,36.67,18.33,18.33,"[+12.33, +24.33]",McNemar exact,0.0,0.0,YES
+Emotion validation,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,300,36.67,26.0,10.67,"[+5.00, +16.33]",McNemar exact,0.00038,0.00227,YES
+Emotion validation,Initial pipeline + retrieval (RAG),300,36.67,27.67,9.0,"[+3.00, +15.00]",McNemar exact,0.00611,0.01221,YES
+Emotion validation,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),300,36.67,28.33,8.33,"[+3.00, +13.67]",McNemar exact,0.00354,0.01063,YES
+WASSA empathy,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",300,5.05,4.75,0.3,"[+0.19, +0.41]",Wilcoxon signed-rank,0.0,0.0,YES
+WASSA empathy,"Single model, same size: Qwen2.5-1.5B detects + responds",300,5.05,4.84,0.21,"[+0.08, +0.35]",Wilcoxon signed-rank,0.00622,0.01245,YES
+WASSA empathy,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",300,5.05,5.76,-0.71,"[-0.84, -0.58]",Wilcoxon signed-rank,0.0,0.0,YES
+WASSA empathy,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",300,5.05,4.25,0.8,"[+0.66, +0.94]",Wilcoxon signed-rank,0.0,0.0,YES
+WASSA empathy,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),300,5.05,3.36,1.69,"[+1.48, +1.90]",Wilcoxon signed-rank,0.0,0.0,YES
+WASSA empathy,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,300,5.05,4.8,0.25,"[+0.10, +0.39]",Wilcoxon signed-rank,0.00077,0.0031,YES
+WASSA empathy,Initial pipeline + retrieval (RAG),300,5.05,4.85,0.2,"[+0.05, +0.36]",Wilcoxon signed-rank,0.00902,0.01245,YES
+WASSA empathy,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),300,5.05,4.89,0.16,"[+0.05, +0.26]",Wilcoxon signed-rank,0.00264,0.00792,YES

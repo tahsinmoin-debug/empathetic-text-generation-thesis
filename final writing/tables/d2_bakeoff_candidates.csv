@@ -1,0 +1,4 @@
+Setting ID,System,Ack (%),One question (%),Length OK (%),All rules (%),Mean words,Questions / reply,>1 question (%),WASSA empathy (0-10),WASSA SD,Emotion validation (%),Context awareness (%),N
+bakeoff_qwen,RoBERTa d1 + Qwen2.5-1.5B d2 (top-1 emotion),67.67,84.33,100.0,57.67,34.72,1.07,10.33,4.78,1.31,25.33,31.0,300
+bakeoff_gemma,RoBERTa d1 + Gemma-3-4B d2 (top-1 emotion),96.67,92.0,27.67,22.0,133.25,1.08,8.0,5.3,0.84,35.0,48.66666666666667,300
+bakeoff_phi,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),72.0,94.67,96.0,65.33,80.45,1.05,5.0,4.89,1.04,28.33,36.666666666666664,300

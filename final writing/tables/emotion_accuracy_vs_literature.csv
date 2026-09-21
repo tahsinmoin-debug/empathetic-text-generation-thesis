@@ -1,0 +1,17 @@
+System,Input and split,Top-1 (%),Top-5 (%),Source
+"EmpDG (Li et al., 2020)","Joint model, full conversation",30.64,,"Qian et al. 2023, Table 1"
+"MoEL (Lin et al., 2019)","Joint model, full conversation",30.75,,"Qian et al. 2023, Table 1"
+"MIME (Majumder et al., 2020)","Joint model, full conversation",31.21,,"Qian et al. 2023, Table 1"
+"KEMP (Li et al., 2022)","Joint model, full conversation",36.57,,"Qian et al. 2023, Table 1"
+"CEM (Sabour et al., 2022)","Joint model, full conversation",37.81,,"Qian et al. 2023, Table 1"
+"CASE (Zhou et al., 2023)","Joint model, full conversation",38.92,,"Qian et al. 2023, Table 1"
+"ESCM (Yang et al., 2023)","Joint model, full conversation",41.19,,Findings of EMNLP 2023
+"Personality-aware model (Wu et al., 2025)","Joint model, text-only ED",45.4,,"COLING 2025 main.598, Table 4"
+EmpSOA,"Joint model, text-only ED",48.3,,"COLING 2025 main.598, Table 4"
+"fastText (Rashkin et al., 2019)","Classifier, situation description",43.0,,ED paper
+"DeepMoji (Rashkin et al., 2019)","Classifier, situation description",48.0,,ED paper
+RoBERTa-GPT2 (2021),"Joint model, full conversation",51.51,,"arXiv 2109.03004, Table 3"
+"Chirpy Cardinal RoBERTa-large (Paranjape et al., 2020)","Classifier, first utterance, VALIDATION split",61.5,92.0,"arXiv 2008.12348, App. D; checkpoint verified as roberta-large, official split"
+"RoBERTa (Welivita and Pu, 2020)","Classifier, situation description",65.88,,arXiv 2012.04080
+OURS - RoBERTa-base d1,"Classifier, first utterance, TEST split",50.3,84.3,this work
+OURS - RoBERTa-large (not deployed),"Classifier, first utterance, TEST split",53.0,87.2,this work

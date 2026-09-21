@@ -1,0 +1,11 @@
+Area,"Standard, code or licence",How it was applied,Reported in
+Data licence,"EmpatheticDialogues, CC BY-NC 4.0",Used for research only; no commercial use; licence recorded and cited,Section 3.4.4
+Model licences,"MIT (Phi-4-mini), Apache-2.0 (Qwen2.5, gpt-oss), MIT (RoBERTa), Gemma Terms of Use",Each licence checked before use; terms of use respected; Gemma dropped from the final system,Section 3.4.4
+Supportive-practice standard,"EPITOME framework for empathy in text-based support (Sharma et al., 2020)","Rule R1, acknowledge the feeling, implements the emotional-reaction mechanism",Section 5.5.8
+Counselling practice,"SAMHSA TIP 35, guidance against the question-answer trap","Rule R2, exactly one question per reply",Section 5.5.8
+Empathy measurement,"WASSA 2024 shared task on empathy detection, Track 2",Replies scored with the published hyy33 system from that shared task,Section 4.1.5.2
+LLM-as-judge practice,"Blind scoring, anchored rubric, temperature 0, panel of unrelated developers","Two judges from NVIDIA and OpenAI, neither related to the models judged",Section 4.1.5.1
+Statistical reporting,Paired tests with correction for multiple comparisons,"McNemar, Wilcoxon, 10,000-sample bootstrap CIs, Holm correction",Section 5.4.1
+Safety guidance,WHO guidance on suicide prevention and crisis response,Requirement not met: no crisis filter; deployment as a mental-health service is ruled out,Sections 3.2.2 and 3.4.1
+Human-subject practice,"Informed consent, anonymity, no personal data collected, right to withdraw",Applied to the forced-choice human evaluation,Section 3.4.3
+Academic integrity,BRAC University academic conduct requirements,"All sources cited; all results from the team's own runs; errors reported, not removed; AI use disclosed",Section 3.4.6

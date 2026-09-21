@@ -1,0 +1,12 @@
+ID,Problem found,Evidence,Adjustment,Measured effect
+A1,d1 trained on situation text but fed user messages,Accuracy 56.9% -> 48.2% on real input,Retrain on first user message; switch GPT-2 -> RoBERTa-base,50.3% top-1 on real input (+2.1 pp over honest GPT-2 number)
+A2,Qwen2.5-1.5B d2 limited rule adherence,Bake-off: Phi 65.3% vs Qwen 57.7% vs Gemma 22.0% all-rules,Adopt Phi-4-mini (4-bit),Best rule adherence at equal prompt
+A3,"d1 top-1 wrong half the time, but right answer often nearby",Gold in top-3 = 76.5%,"Two-stage: d2 picks from top-3, then emotion-specific prompt",Emotion validation 28.3% -> 36.7%; WASSA 4.89 -> 5.05 (both significant)
+A4,Generic prompt gives generic replies,Boilerplate phrasing; P2 feedback on depth,32 per-emotion focus/avoid prompts,Part of A3 gain
+A5,Attention mechanism in original design not implemented,Default attention backend returned no weights,Eager attention + [CLS] attention cues passed to d2,Words that drove detection visible and used
+A6,Single message misread in conversation,"'I am okay. Well, not properly.' read as content (72%)",d1 reads last 4 user turns,Correctly read as angry with context
+A7,Fixed one-question rule becomes interrogation over many turns,Rule designed for single turn,Question optional from turn 2; no repeated phrasing,Keeps turn-1 comparability
+A8,RAG suggested by P2 panel,All rules 63.7% -> 43.7%,Not adopted,Documented negative result
+A10,Could a larger detector improve replies?,RoBERTa-large: +2.9 pp top-1 on the test split,Swapped RoBERTa-large into the final pipeline (same 300 conversations),"No reply-quality measure improved (all rules p=0.16, WASSA p=0.43, validation p=0.68); not adopted"
+A11,LoRA fine-tuned baseline never ended its replies,"99% of replies hit the 250-token limit; the padding token was the end-of-turn token (im_end), so it was masked from the loss","Retrained with Qwen's own pad token, a start-up check, and published LoRA settings (lr 2e-4, dropout 0.1, weight decay 0.01, 6% warm-up, best epoch by validation loss)","Replies 200.7 -> 10.0 words, 0% at the token limit; all rules 0.0% -> 22.3%; still far below the final system (60.0%)"
+A9,Repetition in Phi replies,Boilerplate 58.7% (two-stage),Deferred: repetition_penalty 1.1,Future work - would invalidate in-progress judging

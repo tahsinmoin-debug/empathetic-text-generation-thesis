@@ -1,0 +1,10 @@
+setting,n_replies,dist_1,dist_2,dist_3,boilerplate_rate,most_repeated_phrase,most_repeated_count
+zero_shot,300,12.48,57.15,81.96,34.7,i'm sorry to hear that,30
+fine_tuned_fixed,300,17.35,56.09,78.16,9.7,how long have you been,4
+rag_pipeline,300,12.6,53.62,76.91,26.7,is there anything specific about,25
+single_model_same_size,300,11.35,50.5,73.68,35.0,is there anything specific about,23
+prompt_engineered_pipeline,300,11.91,49.49,72.43,23.7,what would you like to,21
+two_stage_phi,300,11.5,47.84,71.54,58.7,how are you feeling right,49
+single_model_bigger,300,9.76,44.63,69.33,58.7,i can really understand how,67
+single_model_phi,300,8.62,39.12,62.4,72.3,it's completely normal to feel,65
+bakeoff_phi,300,7.57,35.97,59.63,77.0,it's completely natural to feel,55

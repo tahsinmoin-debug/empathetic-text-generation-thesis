@@ -1,0 +1,7 @@
+Metric,Value (%),Source
+Top-1 accuracy,50.28,recomputed from test_predictions.csv
+Macro-F1,49.39,recomputed from test_predictions.csv
+Weighted-F1,49.73,recomputed from test_predictions.csv
+Top-3 accuracy,76.5,recorded at training time (model card)
+Top-5 accuracy,84.3,recorded at training time (model card)
+Chance level (1 of 32),3.12,arithmetic

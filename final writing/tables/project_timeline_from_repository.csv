@@ -1,0 +1,11 @@
+Phase,Work package,Start,End,Main outputs,Evidence in repository
+P0,"Background study, dataset exploration (GoEmotions, ED)",Jan 2026,Mar 2026,GoEmotions EDA; first GPT-2 Medium training,"`GoEmotions/`, `GPT 2 medium training/`"
+P1,Detector and generator candidates,Mar 2026,May 2026,"Qwen2 / Qwen2.5 / TinyLlama detectors; Qwen2.5, Phi-2, Gemma responders","`train_qwen2/`, `train_response_*`"
+P2,Switch to EmpatheticDialogues; P2 report and presentation,Jun 2026,Jun 2026,GPT-2 d1 on ED; Chapter 3 draft v1-v6; poster; speech,"`Chapter_3_Final_Submission_v6.docx`, `Posters/`"
+P3,Initial pipeline evaluation,Jul 2026,Aug 2026,Confidence-gating ablation; zero-shot / fine-tuned baselines; interrogative bias,`evaluation_results_ablation_confidence_gating/`
+P4,External evaluation,Aug 2026,Sep 2026,AI-judge panel (3 judges); WASSA; RAG test; single-model baselines; significance tests,"`llm_judge_evaluation/`, `single_model_baseline/`"
+P5,Design adjustment,Aug 2026,Sep 2026,d1 mismatch fix (RoBERTa); d2 bake-off; two-stage + per-emotion prompts; attention cues,"`train_roberta_ed_d1/`, `emotion_prompts/`"
+P6,Conversational agent and deployment prep,Sep 2026,Sep 2026,Context memory (4 / 10 turns); Hugging Face Space (not deployed),"`conversational_agent/`, `huggingface_space/`"
+P7,Validation and robustness,Sep 2026,Sep 2026,Backbone comparison; error propagation; diversity; literature comparison,"`d1_model_comparison/`, `evaluation_results_diversity/`"
+P8,Human evaluation and final judging,Sep 2026,[[TEAM TO FILL]],"Google Form (13 items); AI-judge scores for final system (completed, two-judge panel)","`human_evaluation/`, `teammate_judge_package/`"
+P9,"Thesis writing, defence preparation",Sep 2026,[[TEAM TO FILL - submission / defence date]],"Chapters 2-5, final report, slides",`writing/`

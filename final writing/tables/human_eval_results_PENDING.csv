@@ -1,0 +1,4 @@
+System,Times chosen,Selection rate (%),Binomial p vs 33.3% chance
+FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,[[PENDING - human evaluation responses not yet collected]],[[PENDING - human evaluation responses not yet collected]],[[PENDING - human evaluation responses not yet collected]]
+"Single model, same size: Qwen2.5-1.5B detects + responds",[[PENDING - human evaluation responses not yet collected]],[[PENDING - human evaluation responses not yet collected]],[[PENDING - human evaluation responses not yet collected]]
+"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",[[PENDING - human evaluation responses not yet collected]],[[PENDING - human evaluation responses not yet collected]],[[PENDING - human evaluation responses not yet collected]]

@@ -1,0 +1,7 @@
+System,Human evaluation protocol,Empathy result,Source
+"CEM (Sabour et al., 2022)","1-5 Likert, crowd",3.08,"Qian et al. 2023, Table 2"
+"CASE (Zhou et al., 2023)","1-5 Likert, crowd",3.04,"Qian et al. 2023, Table 2"
+"KEMP (Li et al., 2022)","1-5 Likert, crowd",2.83,"Qian et al. 2023, Table 2"
+"ChatGPT (Qian et al., 2023)","1-5 Likert, crowd",4.64,"Qian et al. 2023, Table 2"
+"TOOL-ED Qwen1.5-14B (Cao et al., 2025)","A/B vs same model LoRA-tuned on ED, 3 researchers",61.3% win / 32.7% lose / 6.0% tie,"COLING 2025 main.355, Table 2 (human)"
+OURS - final system,"3-way forced choice, students and faculty",[[PENDING - human evaluation]],this work

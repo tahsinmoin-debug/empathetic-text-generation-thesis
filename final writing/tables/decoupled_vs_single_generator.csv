@@ -1,0 +1,12 @@
+Measure,Decoupled (ours),Same generator alone,Difference,95% CI,Test,p,"p, length held constant",Verdict
+WASSA empathy (0-10),5.05,4.75,0.3,"[+0.19, +0.41]",Wilcoxon signed-rank,0.0,0.0,decoupled better
+Emotion validation (%),36.67,27.0,9.67,"[+3.67, +15.33]",McNemar exact,0.00169,0.1335,decoupled better
+AI-judge empathy (1-10),7.84,8.04,-0.2,"[-0.45, +0.09]",Wilcoxon signed-rank,0.07675,0.5539,no difference
+AI-judge overall (1-10),8.68,8.78,-0.1,"[-0.32, +0.17]",Wilcoxon signed-rank,0.16262,0.4855,no difference
+All three rules (%),60.0,73.67,-13.67,"[-21.00, -6.33]",McNemar exact,0.00048,0.0405,single model better
+Acknowledgement (%),66.33,77.33,-11.0,"[-18.00, -4.00]",McNemar exact,0.00269,0.3584,single model better
+Exactly one question (%),92.67,96.0,-3.33,"[-7.00, +0.33]",McNemar exact,0.11018,0.6265,no difference
+Reply length (words),57.11,73.48,-16.37,"[-18.77, -14.01]",Wilcoxon signed-rank,0.0,0.1056,shorter replies by design
+Boilerplate rate (%),58.7,72.3,-13.6,corpus-level measure,-,-,-,decoupled better
+Distinct-2 (%),47.84,39.12,8.72,corpus-level measure,-,-,-,decoupled better
+Emotion used is visible and can be intercepted,yes,no,-,-,-,-,-,decoupled better

@@ -1,0 +1,7 @@
+comparison,n,pipeline_mean,baseline_mean,diff,ci_95_low,ci_95_high,test,p_value,significant,metric,question
+roberta-base vs google__electra-base-discriminator,2542,0.5012,0.502,-0.0008,-0.0161,0.0146,McNemar exact,0.9597,False,top1,Why RoBERTa over ELECTRA? (same size class)
+roberta-base vs google__electra-base-discriminator,2542,0.8505,0.8273,0.0232,0.0118,0.035,McNemar exact,0.0001,True,top5,Why RoBERTa over ELECTRA? (same size class)
+roberta-base vs bert-base-uncased,2542,0.5012,0.4882,0.013,-0.0024,0.0287,McNemar exact,0.109,False,top1,Why RoBERTa over BERT? (same size class)
+roberta-base vs bert-base-uncased,2542,0.8505,0.8175,0.033,0.0208,0.0452,McNemar exact,0.0,True,top5,Why RoBERTa over BERT? (same size class)
+roberta-large vs roberta-base,2542,0.5303,0.5012,0.0291,0.0142,0.0445,McNemar exact,0.0002,True,top1,Is the larger model's advantage real? (why not bigger)
+roberta-large vs roberta-base,2542,0.8718,0.8505,0.0212,0.0102,0.0323,McNemar exact,0.0002,True,top5,Is the larger model's advantage real? (why not bigger)

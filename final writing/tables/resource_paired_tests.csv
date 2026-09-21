@@ -1,0 +1,7 @@
+Final system vs,Measure,N,Final,Baseline,Difference,95% CI,Wilcoxon p,Significant?
+"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",Seconds per reply,50,4.17,3.91,0.27,"[-0.03, +0.56]",0.10111,no
+"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",ms per generated token,50,65.68,65.44,0.24,"[-1.88, +2.39]",0.9086,no
+"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",Peak GPU memory (GB),1,3.4,5.47,-2.07,-37.9% relative,,single measurement
+"Single model, same size: Qwen2.5-1.5B detects + responds",Seconds per reply,50,4.17,1.58,2.6,"[+2.36, +2.83]",0.0,YES
+"Single model, same size: Qwen2.5-1.5B detects + responds",ms per generated token,50,65.68,32.65,33.03,"[+31.04, +35.03]",0.0,YES
+"Single model, same size: Qwen2.5-1.5B detects + responds",Peak GPU memory (GB),1,3.4,2.9,0.5,+17.1% relative,,single measurement
