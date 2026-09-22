@@ -65,6 +65,20 @@ These tables support statements in the main text and are placed here to keep the
 *Table A.3: Risk register (the full risk register behind Section 3.7).*
 
 
+| Item | Details | Cost (BDT) | Type |
+|---|---|---|---|
+| Hardware | Personal PC with RTX 4060 8 GB, 16 GB RAM (already owned) | [[TEAM TO FILL - BDT purchase price, or 'existing asset']] | One-time |
+| Electricity | GPU board power 115 W (NVIDIA spec) x GPU hours x tariff | [[TEAM TO FILL - BDT/kWh]] | Per run |
+| Pretrained models | RoBERTa (MIT), Phi-4-mini (MIT), Qwen2.5 (Apache-2.0), Gemma-3 (Gemma terms) | 0 | Open weights |
+| Dataset | EmpatheticDialogues (CC BY-NC 4.0) | 0 | Non-commercial use only |
+| AI judges | OpenRouter free tier, Groq free tier | 0 | Rate-limited |
+| Hosting (demo) | Hugging Face Spaces free CPU tier (2 vCPU, 16 GB) | 0 | Not yet deployed |
+| Human evaluation | Google Forms, volunteer raters | 0 | No payment |
+| Internet | Model downloads, API calls | [[TEAM TO FILL]] | Monthly |
+
+*Table A.4: Development cost breakdown (item-by-item cost behind Section 3.8).*
+
+
 | Criterion | How it was applied | Evidence or reason |
 |---|---|---|
 | Flagship-tier capability | Required by the co-supervisor; small local judges (Gemma-2-2B, Phi-3-mini) were dropped from an earlier plan | Zheng et al. (2023): strong LLM judges agree with human preferences over 80% of the time |
@@ -76,7 +90,7 @@ These tables support statements in the main text and are placed here to keep the
 | Free API access | No GPU needed, so non-coding teammates could run the judging | Project resource constraint (Section 3.8) |
 | Documented replacements | Gemini (repeated quota failures), DeepSeek (retired on GitHub Models, removed from OpenRouter free tier), Llama 3.3 70B (decommissioned on Groq), Mistral Large (subscription tier) | See risk R7 in Section 3.7 |
 
-*Table A.4: Criteria for selecting the AI judges (selection criteria behind Section 4.1.5.1).*
+*Table A.5: Criteria for selecting the AI judges (selection criteria behind Section 4.1.5.1).*
 
 
 | Emotion | Precision (%) | Recall (%) | F1 (%) | Support |
@@ -114,7 +128,7 @@ These tables support statements in the main text and are placed here to keep the
 | ashamed | 27.3 | 18.8 | 22.2 | 64 |
 | angry | 25 | 14.3 | 18.2 | 84 |
 
-*Table A.5: Precision, recall and F1 of the final detector for each emotion (32 rows of per-emotion detail behind Section 5.1.2).*
+*Table A.6: Precision, recall and F1 of the final detector for each emotion (32 rows of per-emotion detail behind Section 5.1.2).*
 
 
 | Item | Emotion | Scored by the AI judges | Situation type |
@@ -128,7 +142,7 @@ These tables support statements in the main text and are placed here to keep the
 | 7 | furious | False | student situation |
 | 8 | sad | True | core supportive emotion |
 
-*Table A.6: Design of the human-evaluation items (item-by-item design of the human study described in Section 5.1.9).*
+*Table A.7: Design of the human-evaluation items (item-by-item design of the human study described in Section 5.1.9).*
 
 
 | Length band (words) | Gemma WASSA | Gemma n | Phi (top-1) WASSA | Phi (top-1) n | Final two-stage Phi WASSA | Final two-stage Phi n |
@@ -140,7 +154,7 @@ These tables support statements in the main text and are placed here to keep the
 | 120-150 | 5.37 | 163 | 5 | 7 |  | 0 |
 | 150+ | 5.63 | 54 | 5 | 5 |  | 0 |
 
-*Table A.7: WASSA empathy score within each reply-length band (length-band detail behind Section 5.2.3).*
+*Table A.8: WASSA empathy score within each reply-length band (length-band detail behind Section 5.2.3).*
 
 
 | comparison | n | pipeline_mean | baseline_mean | diff | ci_95_low | ci_95_high | test | p_value | significant | metric | question |
@@ -152,7 +166,7 @@ These tables support statements in the main text and are placed here to keep the
 | roberta-large vs roberta-base | 2542 | 0.53 | 0.5 | 0.03 | 0.01 | 0.04 | McNemar exact | 0 | True | top1 | Is the larger model's advantage real? (why not bigger) |
 | roberta-large vs roberta-base | 2542 | 0.87 | 0.85 | 0.02 | 0.01 | 0.03 | McNemar exact | 0 | True | top5 | Is the larger model's advantage real? (why not bigger) |
 
-*Table A.8: Paired significance tests between detector models (significance tests behind the detector comparison in Section 4.2.2).*
+*Table A.9: Paired significance tests between detector models (significance tests behind the detector comparison in Section 4.2.2).*
 
 
 | System | Mean words | Length OK (%) | WASSA mean | Spearman rho (length vs WASSA) | p |
@@ -170,7 +184,7 @@ These tables support statements in the main text and are placed here to keep the
 | Two-stage: RoBERTa top-3 -> Qwen2.5-1.5B picks + per-emotion prompt | 44.1 | 99.7 | 4.76 | 0.21 | 0 |
 | FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | 57.1 | 100 | 5.05 | 0.26 | 0 |
 
-*Table A.9: Correlation between reply length and WASSA empathy score within each system (per-system correlations behind Section 5.4.5).*
+*Table A.10: Correlation between reply length and WASSA empathy score within each system (per-system correlations behind Section 5.4.5).*
 
 
 | Aspect | Check | Result | Source |
@@ -187,7 +201,7 @@ These tables support statements in the main text and are placed here to keep the
 | Our data | For reference: judge vs judge on empathy | rho = 0.69 | computed |
 | Reproducibility | Re-implementation check after a library upgrade | 1,800 of 1,800 pre-upgrade scores reproduced exactly | `llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv` |
 
-*Table A.10: Evidence on the validity of the WASSA empathy classifier for this project (validity checks on the empathy classifier, summarised in Section 5.4.6).*
+*Table A.11: Evidence on the validity of the WASSA empathy classifier for this project (validity checks on the empathy classifier, summarised in Section 5.4.6).*
 
 
 | Metric | RoBERTa d1 + Qwen (%) | GPT-2 d1 + Qwen (%) | Difference (pp) | 95% CI (pp) | McNemar p | Significant? |
@@ -195,7 +209,7 @@ These tables support statements in the main text and are placed here to keep the
 | Emotion validation | 25.3 | 26 | -0.7 | [-6.3, +5.0] | 0.91 | no |
 | All rules | 57.7 | 63.7 | -6 | [-12.7, +0.7] | 0.09 | no |
 
-*Table A.11: Effect of a more accurate detector with the generator held fixed (detector-swap detail behind Section 5.5.3).*
+*Table A.12: Effect of a more accurate detector with the generator held fixed (detector-swap detail behind Section 5.5.3).*
 
 
 | Detector | Parameters (M) | Training time (min) | Top-1 on test (%) | Top-5 on test (%) | Final system: all rules (%) | Final system: WASSA | Final system: emotion validation (%) |
@@ -203,7 +217,7 @@ These tables support statements in the main text and are placed here to keep the
 | roberta-base | 125 | 8.8 | 50.1 | 85 | 60 | 5.05 | 36.7 |
 | roberta-large | 355 | 64.7 | 53 | 87.2 | 54.7 | 5.01 | 38 |
 
-*Table A.12: Detector size, detection accuracy and final-system reply quality for RoBERTa-base and RoBERTa-large (detector-level figures behind Section 5.5.7).*
+*Table A.13: Detector size, detection accuracy and final-system reply quality for RoBERTa-base and RoBERTa-large (detector-level figures behind Section 5.5.7).*
 
 
 | Final system vs | Measure | N | Final | Baseline | Difference | 95% CI | Wilcoxon p | Significant? |
@@ -215,5 +229,5 @@ These tables support statements in the main text and are placed here to keep the
 | Single model, same size: Qwen2.5-1.5B detects + responds | ms per generated token | 50 | 65.68 | 32.65 | 33.03 | [+31.04, +35.03] | 0 | YES |
 | Single model, same size: Qwen2.5-1.5B detects + responds | Peak GPU memory (GB) | 1 | 3.4 | 2.9 | 0.5 | +17.1% relative |  | single measurement |
 
-*Table A.13: Paired comparison of response time and memory between the final system and each single model (paired tests behind the resource figures in Section 5.5.7).*
+*Table A.14: Paired comparison of response time and memory between the final system and each single model (paired tests behind the resource figures in Section 5.5.7).*
 

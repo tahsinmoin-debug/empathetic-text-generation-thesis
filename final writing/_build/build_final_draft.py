@@ -58,7 +58,6 @@ CHAPTERS = [
 # a table with no marker at all is not used in this draft.
 MAIN_TABLES = {
     "literature_review_matrix.csv",
-    "cost_breakdown.csv", "compute_usage.csv", "d1_backbone_cost_benefit.csv",
     "ai_judge_panel.csv", "d1_evolution_mismatch_fix.csv", "d1_backbone_comparison.csv",
     "d2_bakeoff_candidates.csv", "integration_variant_ablation.csv", "rag_negative_result.csv",
     "configuration_and_hyperparameters.csv",
@@ -73,6 +72,7 @@ MAIN_TABLES = {
 }
 # Why each of these is not in the running text.
 APPENDIX_REASON = {
+    "cost_breakdown.csv": "item-by-item cost behind Section 3.8",
     "licences.csv": "licence of every dataset and model, named in Section 3.4.5",
     "requirements_verification.csv": "requirement-by-requirement verification behind Section 3.1",
     "risk_register.csv": "the full risk register behind Section 3.7",

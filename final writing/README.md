@@ -14,7 +14,7 @@ This folder holds the **first draft of the full report**, written to the section
 | `Appendix.docx` | Tools and Technologies Used (CO8) + 10 supplementary tables |
 | `References.docx` | 49 references, numbered in order of first citation |
 
-Total: about 25,300 words, 32 tables and 7 figures in the chapters, 13 tables in the appendix. Chapter 3 is 9 pages.
+Total: about 25,100 words, 31 tables and 7 figures in the chapters, 14 tables in the appendix. Chapter 3 is 9 pages.
 
 ## Course outcome to section
 
@@ -49,6 +49,7 @@ The writing kit in `writing/` holds 70 table placements. A thesis cannot print a
 | Requirement verification | the requirements themselves are listed in 3.1; the test evidence is supporting detail |
 | Risk register | the three risks that mattered are described in 3.7; the full twelve-row table is detail |
 | Licences of data and models | every licence is named in the text of 3.4.5 |
+| Development cost breakdown | the text of 3.8 states what was spent and on what |
 | Per-emotion precision/recall of the detector | 32 rows of detail behind one sentence in 5.1.2 |
 | Human-evaluation item design | the design is described in the text of 5.1.9 |
 | WASSA scores by length band | the length control is summarised in 5.2.3 and in Table 5.21 |
