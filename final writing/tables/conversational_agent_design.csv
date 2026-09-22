@@ -1,0 +1,8 @@
+Part of the agent,Setting,Why this setting
+Detector input,"Last 4 user turns, joined, user text only","4 was the widest window that degraded no scenario, and 6 turns flipped two of four (Section 5.3.4); d1 was never trained on assistant replies"
+Attention cues,Extracted from the current message only,"Cues should point at what the person has just said, not at turns they have moved past"
+Generator memory,"Last 10 exchanges, kept verbatim","Support conversations are short, and summarising is exactly where emotional detail would be lost"
+First-turn rules,"The three single-turn rules, unchanged",Keeps the first exchange comparable with every single-turn result in Chapter 5
+Later-turn rules,"At most one question, answer what is new, do not reuse earlier phrasing","A mandatory question on every turn turns the conversation into an interrogation, the failure mode the interrogative-bias check measures"
+Emotion shift,"Previous emotion recorded; the prompt names the change and asks for a reply to the current feeling",Feelings move during a conversation and a reply to the earlier one reads as not listening
+Audit trail,"Per turn: the three candidates with their probabilities, the chosen emotion, the cue words, whether the emotion shifted, and the reply","This trail is the inspectability the design exists for; it is printed each turn and can be exported as a transcript"

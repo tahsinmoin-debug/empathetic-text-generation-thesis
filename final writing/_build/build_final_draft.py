@@ -63,7 +63,8 @@ MAIN_TABLES = {
     "d2_bakeoff_candidates.csv", "integration_variant_ablation.csv", "rag_negative_result.csv",
     "d1_candidates_design.csv", "d2_candidates_design.csv", "integration_variants_design.csv",
     "baseline_designs.csv", "detector_training_config.csv", "generation_config.csv",
-    "preprocessed_data_summary.csv",
+    "preprocessed_data_summary.csv", "conversational_agent_design.csv",
+    "context_window_long_scenarios.csv",
     "all_systems_master_comparison.csv", "d1_final_overall.csv",
     "two_stage_selection_accuracy.csv", "ai_judge_scores.csv",
     "human_eval_results_PENDING.csv", "composite_ranking.csv",
@@ -87,6 +88,7 @@ APPENDIX_REASON = {
     "resource_paired_tests.csv": "paired tests behind the resource figures in Section 5.5.7",
     "ai_judge_selection_criteria.csv": "selection criteria behind Section 4.1.3.1",
     "tools_and_versions.csv": "software and hardware inventory for the tools appendix",
+    "context_window_shift_scenarios.csv": "the ten short emotion-shift conversations behind Section 5.3.4",
     "design_adjustment_log.csv": "the full adjustment log narrated in Section 5.3",
     "d1_most_confused_pairs.csv": "counts behind the error chart in Section 5.1.2",
     "diversity_and_repetition.csv": "diversity and repetition detail behind Section 5.1.7",
@@ -143,6 +145,17 @@ def plan_numbers(texts):
     marker = re.compile(r"\[\[(TABLE|FIGURE) ([0-9.A-Z]+) \| ([^|\]]+?) \| ([^\]]+?)\]\]")
     inline = re.compile(r"^\*(Table|Figure) ([0-9]+\.[0-9]+): ", re.M)
     tmap, fmap, appendix, counters = {}, {}, [], {}
+
+    # Numbers are the key of the old -> new mapping, so the same number must never be used
+    # twice: a repeat silently gives one table the other's final number.
+    seen = {}
+    for p, text in texts.items():
+        for m in marker.finditer(text):
+            key = (m.group(1), m.group(2))
+            if key in seen and seen[key] != m.group(3).strip():
+                raise SystemExit(f"{m.group(1)} {m.group(2)} is used twice: "
+                                 f"{seen[key]} and {m.group(3).strip()} (in {p})")
+            seen[key] = m.group(3).strip()
 
     def take(prefix, kind, num):
         book = tmap if kind == "TABLE" else fmap

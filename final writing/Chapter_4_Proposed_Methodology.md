@@ -172,11 +172,11 @@ To test whether a separate detector is needed at all, six designs without one we
 
 ### 4.2.6 Specification of the Selected Design
 
-**Detector:** RoBERTa-base with a 32-way classification head, fine-tuned on first messages with the settings of Table 4.7. In conversation it reads the user's last four turns joined together: context is known to matter for recognising emotion in dialogue, and among the windows tested on long scenarios four turns was best or joint best in three of four, whereas six turns let emotions from earlier turns compete with the current one.
+**Detector:** RoBERTa-base with a 32-way classification head, fine-tuned on first messages with the settings of Table 4.8. It reads one message when answering a single message, and the user's last four turns joined together when holding a conversation; Section 4.2.7 specifies the conversational form and Section 5.3.4 gives the measurements behind the four-turn window.
 
 **Stage 1, emotion choice:** Phi-4-mini receives the message and the three candidates with the instruction: *"An automatic detector narrowed the person's likely feeling down to these options: {a}, {b}, {c}. Read their message and decide which ONE of those options best fits what they are actually expressing. Reply with ONLY that single word."* Decoding is greedy with at most 10 new tokens. If the answer does not name one of the three, the system falls back to the detector's own top choice; in simulation every answer named a valid candidate.
 
-**Stage 2, reply generation:** The system prompt is assembled in a fixed order from the chosen emotion, the cue words, the guidance written for that emotion, and the three universal rules (Figure 4.4). For *lonely*, for example, the guidance asks the model to "acknowledge the isolation itself, gently - the weight of it, not just 'you seem sad'" and not to "offer a surface-level fix like 'go meet people'", after which the rules require it to acknowledge and validate the feeling in two or three sentences, offer a reassuring thought specific to that feeling, and end with exactly one short question, all within 100 words. Guidance of this kind exists for all 32 emotions [[TEAM TO FILL: name the source document from which the per-emotion guidance was adapted]]. Decoding settings are given in Table 4.8.
+**Stage 2, reply generation:** The system prompt is assembled in a fixed order from the chosen emotion, the cue words, the guidance written for that emotion, and the three universal rules (Figure 4.4). For *lonely*, for example, the guidance asks the model to "acknowledge the isolation itself, gently - the weight of it, not just 'you seem sad'" and not to "offer a surface-level fix like 'go meet people'", after which the rules require it to acknowledge and validate the feeling in two or three sentences, offer a reassuring thought specific to that feeling, and end with exactly one short question, all within 100 words. Guidance of this kind exists for all 32 emotions [[TEAM TO FILL: name the source document from which the per-emotion guidance was adapted]]. Decoding settings are given in Table 4.9.
 
 
 ![Figure 4.4](figures/fig_prompt_construction.png)
@@ -184,7 +184,31 @@ To test whether a separate detector is needed at all, six designs without one we
 *Figure 4.4: Assembly of the stage-2 system prompt from four inputs*
 
 
-**Conversation memory:** The generator receives the last ten exchanges verbatim rather than a summary, so that emotional detail is not lost in compression. From the second turn onward the question becomes optional and the model is asked not to reuse its earlier phrasing, so that a long conversation does not turn into an interrogation; the first turn keeps the original rules, which is what makes single-turn results comparable across systems.
+### 4.2.7 The Conversational Agent
+
+The evaluation in Chapter 5 answers one message at a time, but the system people actually use holds a conversation. The agent is the same two-stage pipeline run once per turn, with four additions that a single-reply system does not need (Table 4.6).
+
+**Two different memories, for two different models:** The detector and the generator do not receive the same history, because they are different kinds of model. The detector is a classifier fine-tuned on single short messages, so it reads a bounded window, the user's last four turns joined together, and only the user's own text, since it was never trained on a listener's replies. The generator is an instruction-following model with a large context window, so it receives the last ten exchanges of the conversation verbatim: summarising them would compress away exactly the emotional detail the reply depends on. The attention cues are taken from the current message alone, so that they point at what the person has just said rather than at something they have moved past.
+
+**Rules that change after the first turn:** The first turn keeps the three response rules exactly as they are measured throughout this thesis, which is what makes the first exchange comparable with every single-turn result in Chapter 5. From the second turn the mandatory question becomes optional, the generator is asked to answer what is new rather than repeat an acknowledgement it has already given, and it is told not to reuse phrasing from its earlier replies. A question on every turn, however well meant, turns a conversation into an interrogation.
+
+**Emotions that move:** Each turn's emotion is compared with the previous turn's. When it changes, the prompt names the change and asks for a reply to the feeling the person has now, because answering the earlier one reads as not having listened.
+
+**An audit trail for every turn:** The agent records the detector's three candidates with their probabilities, the emotion chosen in stage 1, the cue words, whether the emotion shifted, and the reply. It prints this before each reply and can export the whole conversation. This trail is the concrete form of the argument running through this thesis: an end-to-end model can produce the same reply, but it cannot show which feeling it answered, or let anyone intervene before it answers.
+
+
+| Part of the agent | Setting | Why this setting |
+|---|---|---|
+| Detector input | Last 4 user turns, joined, user text only | 4 was the widest window that degraded no scenario, and 6 turns flipped two of four (Section 5.3.4); d1 was never trained on assistant replies |
+| Attention cues | Extracted from the current message only | Cues should point at what the person has just said, not at turns they have moved past |
+| Generator memory | Last 10 exchanges, kept verbatim | Support conversations are short, and summarising is exactly where emotional detail would be lost |
+| First-turn rules | The three single-turn rules, unchanged | Keeps the first exchange comparable with every single-turn result in Chapter 5 |
+| Later-turn rules | At most one question, answer what is new, do not reuse earlier phrasing | A mandatory question on every turn turns the conversation into an interrogation, the failure mode the interrogative-bias check measures |
+| Emotion shift | Previous emotion recorded; the prompt names the change and asks for a reply to the current feeling | Feelings move during a conversation and a reply to the earlier one reads as not listening |
+| Audit trail | Per turn: the three candidates with their probabilities, the chosen emotion, the cue words, whether the emotion shifted, and the reply | This trail is the inspectability the design exists for; it is printed each turn and can be exported as a transcript |
+
+*Table 4.6: The conversational agent: what each setting is and why*
+
 
 ## 4.3 Data Collection and Preparation
 
@@ -218,7 +242,7 @@ Two kinds of record are joined for the response experiments. Each evaluation con
 
 ### 4.3.6 Summary of the Prepared Data
 
-Table 4.6 lists what the preparation produces. In total the work uses 17,839 labelled messages to train a detector, 2,763 to select its checkpoint, 2,542 to measure it, 300 conversations answered by every system, 64 of those scored by both AI judges, and 8 placed before human raters.
+Table 4.7 lists what the preparation produces. In total the work uses 17,839 labelled messages to train a detector, 2,763 to select its checkpoint, 2,542 to measure it, 300 conversations answered by every system, 64 of those scored by both AI judges, and 8 placed before human raters.
 
 
 | Dataset produced | Size | Unit | Used for |
@@ -231,14 +255,14 @@ Table 4.6 lists what the preparation produces. In total the work uses 17,839 lab
 | AI-judge sample | 64 | Test conversation | Blind scoring by both judges, 2 per emotion |
 | Human-study sample | 8 | Test conversation | The forced-choice rating study of Chapter 5 |
 
-*Table 4.6: The datasets produced by preparation and what each is used for*
+*Table 4.7: The datasets produced by preparation and what each is used for*
 
 
 ## 4.4 Implementation of the Selected Design
 
 ### 4.4.1 Detector Training
 
-Each detector candidate was fine-tuned end to end with a cross-entropy loss over the 32 emotions, under the settings of Table 4.7. Training runs for at most four epochs with early stopping after one epoch without improvement, and the checkpoint reported is the one with the best validation accuracy rather than the last, so that a run that begins to over-fit is not the run that gets measured. The learning rate warms up linearly over the first 6% of steps: this is RoBERTa's own fine-tuning setting, and it is not cosmetic, since without it the RoBERTa-large run diverged to 5.0% accuracy before the cause was found (Section 3.7). Mixed 16-bit precision and gradient accumulation keep the effective batch at 16 inside 8 GB of memory. Every run uses seed 42, and all five candidates were trained by the same script with only the model name changed, so the comparison in Chapter 5 is between architectures and not between training recipes.
+Each detector candidate was fine-tuned end to end with a cross-entropy loss over the 32 emotions, under the settings of Table 4.8. Training runs for at most four epochs with early stopping after one epoch without improvement, and the checkpoint reported is the one with the best validation accuracy rather than the last, so that a run that begins to over-fit is not the run that gets measured. The learning rate warms up linearly over the first 6% of steps: this is RoBERTa's own fine-tuning setting, and it is not cosmetic, since without it the RoBERTa-large run diverged to 5.0% accuracy before the cause was found (Section 3.7). Mixed 16-bit precision and gradient accumulation keep the effective batch at 16 inside 8 GB of memory. Every run uses seed 42, and all five candidates were trained by the same script with only the model name changed, so the comparison in Chapter 5 is between architectures and not between training recipes.
 
 
 | Setting | Value | Reason |
@@ -253,12 +277,12 @@ Each detector candidate was fine-tuned end to end with a cross-entropy loss over
 | Weight decay / gradient clipping | 0.01 / 1.0 | Standard regularisation for this family |
 | Precision / seed | 16-bit mixed precision / 42 | Fits the memory budget and keeps runs reproducible |
 
-*Table 4.7: Detector training configuration*
+*Table 4.8: Detector training configuration*
 
 
 ### 4.4.2 Generator Configuration
 
-The generator is never trained in the final system: it is used zero-shot and steered entirely by its system prompt. Two implementation decisions make that practical within the memory budget. The model is loaded with 4-bit NF4 quantisation, double quantisation and 16-bit computation [23], which keeps the quality of 16-bit weights at about a quarter of the memory. And decoding is fixed for every system in the thesis, with sampling at temperature 0.7 and top-p 0.9 rather than greedy or beam search, which are known to produce repetitive text [47]. Table 4.8 lists the settings; because they are identical everywhere, any difference between systems comes from the design rather than from decoding.
+The generator is never trained in the final system: it is used zero-shot and steered entirely by its system prompt. Two implementation decisions make that practical within the memory budget. The model is loaded with 4-bit NF4 quantisation, double quantisation and 16-bit computation [23], which keeps the quality of 16-bit weights at about a quarter of the memory. And decoding is fixed for every system in the thesis, with sampling at temperature 0.7 and top-p 0.9 rather than greedy or beam search, which are known to produce repetitive text [47]. Table 4.9 lists the settings; because they are identical everywhere, any difference between systems comes from the design rather than from decoding.
 
 
 | Setting | Value | Reason |
@@ -273,7 +297,7 @@ The generator is never trained in the final system: it is used zero-shot and ste
 | Attention cues | Final-layer [CLS] attention, top 40% of words | Gives the generator the words the detector actually used |
 | Seed | 42 | Identical decoding for every system, so differences come from the design |
 
-*Table 4.8: Generation configuration, identical for every system compared*
+*Table 4.9: Generation configuration, identical for every system compared*
 
 
 ### 4.4.3 Implementing the Two Stages
@@ -286,7 +310,7 @@ The monolithic baselines share the pipeline's scaffolding so that only the inten
 
 ### 4.4.5 Complete Parameter Listing
 
-Every parameter of the final system, of the baselines and of the evaluation was fixed before the final comparison, and each is justified by one of three things: published practice, a measurement on our own data, or an explicit hardware constraint. Settings that were never tuned are marked as such rather than presented as choices. The complete listing, with the justification and the evidence for each value, is given in Table A.5.
+Every parameter of the final system, of the baselines and of the evaluation was fixed before the final comparison, and each is justified by one of three things: published practice, a measurement on our own data, or an explicit hardware constraint. Settings that were never tuned are marked as such rather than presented as choices. The complete listing, with the justification and the evidence for each value, is given in Table A.6.
 
 
 ### 4.4.6 Verification and Safeguards
