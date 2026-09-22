@@ -1,0 +1,4 @@
+Variant,Ack (%),One question (%),All rules (%),Mean words,WASSA empathy,Emotion validation (%)
+Without retrieval,70.3,87.3,63.7,35.2,4.80 (SD 1.33),26.0
+"With retrieval, attempt 1: 1-2 retrieved examples",not recoverable,76.0,54.3,not recoverable,not recoverable,not recoverable
+"With retrieval, attempt 2: filtered examples + rule reminder",57.0,78.0,43.7,34.0,4.85 (SD 1.46),27.7

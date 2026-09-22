@@ -29,7 +29,7 @@ All twelve generation systems answer the same 300 conversations, drawn with seed
 
 ### 5.1.2 Emotion Detection
 
-The detector reaches **50.3% top-1**, **76.5% top-3** and **84.3% top-5** accuracy over 32 emotions, with a macro-F1 of 49.4% against a chance level of 3.1% (Table 5.2). Accuracy is uneven across the emotion set: *caring* (F1 70.1%), *lonely* (69.5%) and *jealous* (64.7%) are recognised reliably, while *angry* (18.2%), *ashamed* (22.2%) and *joyful* (30.9%) are the hardest. Per-emotion figures for all 32 classes are in Table A.7.
+The detector reaches **50.3% top-1**, **76.5% top-3** and **84.3% top-5** accuracy over 32 emotions, with a macro-F1 of 49.4% against a chance level of 3.1% (Table 5.2). Accuracy is uneven across the emotion set: *caring* (F1 70.1%), *lonely* (69.5%) and *jealous* (64.7%) are recognised reliably, while *angry* (18.2%), *ashamed* (22.2%) and *joyful* (30.9%) are the hardest, a spread of 52 points with 7 of the 32 emotions below 40%. Macro-F1 is reported for exactly that reason: it counts every emotion equally, so a detector that scored well by neglecting the harder classes could not hide behind its accuracy. Accuracy (50.3%), weighted-F1 (49.7%) and macro-F1 (49.4%) agree to within 0.9 points, which says the result is not produced by the commoner emotions; the test partition is close to balanced, with 50 to 127 conversations per emotion. Per-emotion figures for all 32 classes are in Table A.7.
 
 The shape of the errors matters more than their number. Figure 5.1 shows the twelve most frequent mistakes, and every one of them is a near neighbour: *sentimental* read as *nostalgic*, *afraid* as *terrified*, *angry* as *furious*, *sad* as *devastated*. These are differences of intensity or shade within one family of feeling, not confusions between unrelated emotions, which is the same error pattern reported for a comparable classifier [31]. Two consequences follow, and both shaped the design: the correct emotion is usually close to the predicted one, so a reply built on the wrong label is rarely built on the wrong *kind* of feeling; and the correct label is far more often inside the top three than at the top, which is why the final design passes three candidates to the generator instead of one.
 
@@ -243,16 +243,18 @@ One limitation is worth stating plainly: this comparison removes three things at
 
 ### 5.2.5 Retrieval Augmentation
 
-Showing the generator one or two similar conversations from the training set [25] lowered rule adherence in both versions we built, to 54.3% and 43.7% against 63.7% without retrieval (Table 5.9). The reason is visible in the data: real listener replies satisfy all three rules in only 4.3% of cases, so the retrieved examples teach a style that contradicts the instructions given in the same prompt. Compliance with the one-question rule fell to 76.0% in the first version; filtering the examples and repeating the rule recovered that but cut acknowledgement from 70.3% to 57.0%. Retrieval also produced the least consistent empathy scores of any system. For this task, examples of how people actually reply work against explicit behavioural rules rather than reinforcing them.
+Showing the generator one or two similar conversations from the training set [25] lowered rule adherence in both versions we built, to 54.3% and 43.7% against 63.7% without retrieval (Table 5.9). The reason is visible in the data: real listener replies satisfy all three rules in only 4.3% of cases, so the retrieved examples teach a style that contradicts the instructions given in the same prompt. Compliance with the one-question rule fell to 76.0% in the first version; filtering the examples and repeating the rule recovered that but cut acknowledgement from 70.3% to 57.0%.
+
+**What the cost bought was nothing:** Table 5.9 reports retrieval on the same measures as every other system, not on the rules alone, because a design that loses rule adherence could still be worth keeping if it gained elsewhere. It did not. Empathy is 4.85 against 4.80 without retrieval and emotion fidelity is 27.7% against 26.0%, differences well inside the confidence intervals of Figure 5.2, while the spread of its empathy scores is the widest of any system (SD 1.46). Retrieval therefore cost 20 points of rule adherence and returned no measurable gain, which is why it was rejected before the AI-judge panel was run; it is the one design in Table 5.1 that the judges never scored, and it is absent from Table A.8 and the composite in Table 5.11 for that reason rather than by selection. Three cells of the first attempt cannot be recovered, because its outputs were overwritten by the second attempt before those measures were computed, and the table says so instead of leaving the cells blank. For this task, examples of how people actually reply work against explicit behavioural rules rather than reinforcing them.
 
 
-| Variant | Ack (%) | One question (%) | All rules (%) | WASSA SD | Source |
-|---|---|---|---|---|---|
-| Initial pipeline (no retrieval) | 70.33 | 87.33 | 63.67 | 1.33 | result files |
-| RAG attempt 1 (1-2 retrieved ED examples) |  | 76 | 54.3 |  | recorded in Full_Project_Documentation (outputs overwritten by attempt 2) |
-| RAG attempt 2 (+ single-question filter + reminder) | 57 | 78 | 43.67 | 1.46 | result files |
+| Variant | Ack (%) | One question (%) | All rules (%) | Mean words | WASSA empathy | Emotion validation (%) |
+|---|---|---|---|---|---|---|
+| Without retrieval | 70.3 | 87.3 | 63.7 | 35.2 | 4.80 (SD 1.33) | 26.0 |
+| With retrieval, attempt 1: 1-2 retrieved examples | not recoverable | 76 | 54.3 | not recoverable | not recoverable | not recoverable |
+| With retrieval, attempt 2: filtered examples + rule reminder | 57.0 | 78 | 43.7 | 34.0 | 4.85 (SD 1.46) | 27.7 |
 
-*Table 5.9: Effect of retrieval augmentation on rule adherence*
+*Table 5.9: Retrieval augmentation on every measure, against the same pipeline without it*
 
 
 ### 5.2.6 Assessment against Criteria beyond Performance
