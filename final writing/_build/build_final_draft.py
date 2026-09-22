@@ -47,7 +47,8 @@ CHAPTERS = [
     ("Chapter_2_Literature_Review", "Chapter 2: Literature Review", ["ch2_1", "ch2_2", "ch2_3"]),
     ("Chapter_3_Requirements_Impacts_Constraints", "Chapter 3: Requirements, Impacts and Constraints",
      ["ch3_1", "ch3_2", "ch3_3", "ch3_4", "ch3_5", "ch3_6", "ch3_7", "ch3_8"]),
-    ("Chapter_4_Proposed_Methodology", "Chapter 4: Proposed Methodology", ["ch4_1", "ch4_2"]),
+    ("Chapter_4_Proposed_Methodology", "Chapter 4: Proposed Methodology",
+     ["ch4_1", "ch4_2", "ch4_3", "ch4_4"]),
     ("Chapter_5_Results_and_Analysis", "Chapter 5: Results and Analysis",
      ["ch5_1", "ch5_2a", "ch5_2b", "ch5_3", "ch5_4", "ch5_6"]),
     ("Chapter_6_Conclusion", "Chapter 6: Conclusion and Future Work", ["ch6"]),
@@ -60,7 +61,9 @@ MAIN_TABLES = {
     "literature_review_matrix.csv",
     "ai_judge_panel.csv", "d1_evolution_mismatch_fix.csv", "d1_backbone_comparison.csv",
     "d2_bakeoff_candidates.csv", "integration_variant_ablation.csv", "rag_negative_result.csv",
-    "configuration_and_hyperparameters.csv",
+    "d1_candidates_design.csv", "d2_candidates_design.csv", "integration_variants_design.csv",
+    "baseline_designs.csv", "detector_training_config.csv", "generation_config.csv",
+    "preprocessed_data_summary.csv",
     "all_systems_master_comparison.csv", "d1_final_overall.csv", "d1_most_confused_pairs.csv",
     "two_stage_selection_accuracy.csv", "diversity_and_repetition.csv", "ai_judge_scores.csv",
     "human_eval_results_PENDING.csv", "composite_ranking.csv", "design_adjustment_log.csv",
@@ -72,6 +75,7 @@ MAIN_TABLES = {
 }
 # Why each of these is not in the running text.
 APPENDIX_REASON = {
+    "configuration_and_hyperparameters.csv": "the full parameter listing behind Chapter 4",
     "cost_breakdown.csv": "item-by-item cost behind Section 3.8",
     "licences.csv": "licence of every dataset and model, named in Section 3.4.5",
     "requirements_verification.csv": "requirement-by-requirement verification behind Section 3.1",

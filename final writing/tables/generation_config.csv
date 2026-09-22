@@ -1,0 +1,10 @@
+Setting,Value,Reason
+Generator,Phi-4-mini-instruct (3.8B),Selected in Section 5.2.3
+Quantisation,"4-bit NF4, double quantisation, 16-bit compute",Keeps 16-bit quality at about a quarter of the memory; measured peak 3.40 GB
+Stage-1 decoding,"Greedy, at most 10 new tokens",The emotion choice must be deterministic and short
+Stage-2 temperature,0.7,The developer's default for instruction models of this family
+Stage-2 top-p,0.9,Nucleus sampling avoids the repetition of greedy decoding
+Maximum new tokens,250,Well above the 100-word request; the longest reply reached 119 tokens
+Candidates passed to stage 1,Top 3 emotions,The true emotion is among the top three far more often than first
+Attention cues,"Final-layer [CLS] attention, top 40% of words",Gives the generator the words the detector actually used
+Seed,42,"Identical decoding for every system, so differences come from the design"

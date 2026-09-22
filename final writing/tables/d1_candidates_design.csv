@@ -1,0 +1,6 @@
+Candidate,Architecture,Parameters,Input it was trained on,Why it was included
+GPT-2 Medium,Decoder-only transformer,355M,Situation description,The detector of the initial pipeline; kept as the starting point to be improved on
+BERT-base,Bidirectional encoder,110M,First user message,"The original masked-language-model encoder, a standard classification baseline"
+ELECTRA-base,Bidirectional encoder,110M,First user message,"Trained by replaced-token detection, often stronger than BERT at the same size"
+RoBERTa-base,Bidirectional encoder,125M,First user message,Longer pre-training than BERT on 160 GB of text; the size the memory budget favours
+RoBERTa-large,Bidirectional encoder,355M,First user message,Tests whether a larger detector is worth its training and inference cost

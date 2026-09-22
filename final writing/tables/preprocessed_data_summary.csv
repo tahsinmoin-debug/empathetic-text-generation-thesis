@@ -1,0 +1,8 @@
+Dataset produced,Size,Unit,Used for
+Detector training set,"17,839",First message with its emotion label,Fine-tuning every detector candidate
+Detector validation set,"2,763",First message with its emotion label,Early stopping and checkpoint selection
+Detector test set,"2,542",First message with its emotion label,Reported detector accuracy
+Generator training pairs,"17,749",First message with the human reply,The LoRA fine-tuned baseline only
+Reply evaluation set,300,Test conversation,"Every generation experiment, identical across systems"
+AI-judge sample,64,Test conversation,"Blind scoring by both judges, 2 per emotion"
+Human-study sample,8,Test conversation,The forced-choice rating study of Chapter 5

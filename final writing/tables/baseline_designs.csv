@@ -1,0 +1,7 @@
+Baseline,How it is built,What it is there to test
+Zero-shot generator,Qwen2.5-1.5B with a generic caring prompt and no detector,Whether a detector adds anything over plain prompting
+Fine-tuned monolithic,Qwen2.5-1.5B fine-tuned with LoRA on message and human reply pairs,Whether learning the dataset's replies beats prompting
+"Single model, same size","Qwen2.5-1.5B told to identify the emotion silently, then reply",The core question: decoupled against monolithic at equal size
+"Single model, larger",Qwen2.5-7B in 4-bit form with the same prompt,What is given up by staying inside the 8 GB budget
+"Single model, our generator",Phi-4-mini alone with the same prompt and no detector,Whether the gains come from the design or from the generator
+Retrieval-augmented,Similar training conversations retrieved with all-MiniLM-L6-v2 and shown to the generator as examples,Whether human examples of the same emotion improve the reply

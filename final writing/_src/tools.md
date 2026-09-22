@@ -1,6 +1,6 @@
 # Tools and Technologies Used
 
-> Note for the team (delete before submission): the rubric assesses this item (CO8) through the presentation, demonstration and final report. Use the paragraph below in the report, for example within Section 4.1.6, and Table 4.3 on a presentation slide.
+> Note for the team (delete before submission): the rubric assesses this item (CO8) through the presentation, demonstration and final report. Use the paragraph below in the report, for example within Section 4.4, and the table on a presentation slide.
 
 The system was implemented in Python 3.10 using PyTorch 2.5.1 and Hugging Face Transformers 5.16.1. Transformers provides pre-trained encoders, namely RoBERTa, BERT and ELECTRA, and instruction-tuned decoders, namely Phi-4-mini, Qwen2.5 and Gemma-3, behind a common interface, which allowed design alternatives to be exchanged without rewriting code. The bitsandbytes library provided 4-bit NF4 quantisation, allowing generators of 3.8 to 7.6 billion parameters to run on a single NVIDIA GeForce RTX 4060 with 8 GB of memory, and the PEFT library provided LoRA for the monolithic fine-tuning baseline.
 

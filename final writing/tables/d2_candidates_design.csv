@@ -1,0 +1,5 @@
+Candidate,Parameters,Loading,Chat template,Why it was included
+Qwen2.5-1.5B-Instruct,1.5B,16-bit,Yes,The generator of the initial pipeline and the size a small GPU runs comfortably
+Gemma-3-4B-it,4B,4-bit NF4,"Yes, but with no system role",A strong instruction model of a different family; tests whether size alone helps
+Phi-4-mini-instruct,3.8B,4-bit NF4,Yes,"Trained with an emphasis on instruction following, which the three rules demand"
+Phi-2,2.7B,16-bit,No,Considered and dropped: without a chat template it cannot be steered by a system prompt

@@ -7,6 +7,28 @@ The system was implemented in Python 3.10 using PyTorch 2.5.1 and Hugging Face T
 
 Evaluation combined SciPy and scikit-learn for paired statistical tests and classification metrics, sentence-transformers for the retrieval baseline, the WASSA 2024 empathy classifier, and two AI judges accessed through the OpenRouter and Groq APIs, selected from different developers to avoid self-preference bias. A Gradio interface was prepared for demonstration on Hugging Face Spaces, the human study was conducted with Google Forms, and all tables and figures in this report were generated from saved experiment outputs by scripts using pandas and matplotlib, so that every reported number can be reproduced.
 
+
+| Purpose | Tool | Version |
+|---|---|---|
+| Language | Python | 3.10.9 |
+| Deep learning | PyTorch (CUDA 12.1) | 2.5.1 |
+| Models and training | Hugging Face Transformers | 5.16.1 |
+| Parameter-efficient tuning | PEFT | 0.18.1 |
+| Quantisation | bitsandbytes (4-bit NF4) | 0.49.2 |
+| Training utilities | Accelerate / Datasets | 1.13.0 / 4.8.5 |
+| Statistics | SciPy / scikit-learn | 1.15.3 / 1.7.2 |
+| Data handling | pandas / NumPy | 2.3.3 / 2.2.6 |
+| Retrieval | sentence-transformers | 5.7.0 |
+| Evaluation | bert-score | 0.3.13 |
+| AI-judge APIs | openai SDK (OpenRouter), groq SDK | 2.53.0 / 1.6.0 |
+| Demo interface | Gradio on Hugging Face Spaces | 5.9.1 (planned) |
+| Human evaluation | Google Forms | - |
+| Documents | python-docx, Microsoft Word | 1.2.0 |
+| Version control | Git | - |
+| Hardware | NVIDIA RTX 4060 8 GB, 16 GB RAM, Windows 11 Pro | driver 616.56 |
+
+*Table 4.3: Software and hardware used in this work*
+
 ## A. Supplementary Tables
 
 These tables support statements in the main text and are placed here to keep the chapters readable. Each caption states where the result is used.
@@ -79,18 +101,51 @@ These tables support statements in the main text and are placed here to keep the
 *Table A.4: Development cost breakdown (item-by-item cost behind Section 3.8).*
 
 
-| Criterion | How it was applied | Evidence or reason |
-|---|---|---|
-| Flagship-tier capability | Required by the co-supervisor; small local judges (Gemma-2-2B, Phi-3-mini) were dropped from an earlier plan | Zheng et al. (2023): strong LLM judges agree with human preferences over 80% of the time |
-| Different developers, none related to our models | No judge shares a family with the generator (Phi, Microsoft) or the baselines (Qwen, Alibaba) | Panickssery et al. (2024): LLM evaluators recognise and favour their own generations |
-| A panel instead of one judge | Scores averaged over the two judges that scored every system | Verga et al. (2024): a panel from disjoint model families shows less intra-model bias than one large judge |
-| Same judges for every system | Both judges scored all 512 replies of all judged systems | Mixing judge sets across systems would make the scores incomparable |
-| Blind scoring | Judges see only the user message and one reply - never the system name or the gold reply | Removes identity bias and any reward for word overlap with a reference reply |
-| Anchored rubric, deterministic output | 1-3 / 4-6 / 7-10 anchors for empathy, relevance and safety; temperature 0; JSON-only answer | Anchors keep judges on the same scale; temperature 0 removes sampling noise |
-| Free API access | No GPU needed, so non-coding teammates could run the judging | Project resource constraint (Section 3.8) |
-| Documented replacements | Gemini (repeated quota failures), DeepSeek (retired on GitHub Models, removed from OpenRouter free tier), Llama 3.3 70B (decommissioned on Groq), Mistral Large (subscription tier) | See risk R7 in Section 3.7 |
+| Component | Parameter | Value | Justification | Evidence |
+|---|---|---|---|---|
+| d1 detector | Backbone | RoBERTa-base (125M) | Highest top-5 accuracy (85.0%) of the base-size encoders at equal top-1; RoBERTa-large adds 2.9 pp but has 2.8x the parameters, 7.4x the training time and gives no reply gain | Our measurement (Tables 4.5, 5.16, 5.25) |
+| d1 detector | Training input | First user utterance | A detector trained on situation descriptions fell from 56.9% to 48.2% on the user messages it actually receives | Our measurement (Table 4.4) |
+| d1 detector | Maximum input length | 128 tokens | 99.7% of training first utterances fit (mean 46.5 tokens) | Our measurement |
+| d1 detector | Learning rate | 2e-5 | Inside the fine-tuning ranges recommended for BERT (2e-5 to 5e-5) and used for RoBERTa (1e-5 to 3e-5) | Devlin et al. (2019); Liu et al. (2019) |
+| d1 detector | Effective batch size | 16 (8 per step x 2 accumulation) | Batch size recommended for BERT/RoBERTa fine-tuning; 8 per step fits in 8 GB | Devlin et al. (2019); Liu et al. (2019); hardware limit |
+| d1 detector | Epochs and selection | Up to 4, early stopping (patience 1), best checkpoint by validation accuracy | BERT recommends 2-4 fine-tuning epochs; keeping the best validation checkpoint prevents over-fitting | Devlin et al. (2019) |
+| d1 detector | Warm-up | Linear, 6% of steps | RoBERTa's fine-tuning setting; without warm-up our RoBERTa-large run diverged to 5.0% accuracy | Liu et al. (2019); our observation |
+| d1 detector | Weight decay / gradient clipping | 0.01 / 1.0 | Weight decay as used for BERT; clipping at 1.0 is the Transformers default and keeps updates stable | Devlin et al. (2019); library default |
+| d1 detector | Precision / seed | fp16 mixed precision / 42 | Fits the 8 GB GPU and trains faster; fixed seed for reproducibility | Hardware limit; convention |
+| d1 detector (comparison only) | RoBERTa-large learning rate / batch | 1e-5 / 4 | The base settings diverged; 1e-5 is the lowest value of RoBERTa's fine-tuning range and batch 4 fits in memory | Liu et al. (2019); our observation |
+| Two-stage selection | Candidates passed to d2 | Top-3 emotions | The true emotion is in the top-3 for 76.5% of messages against 50.3% for top-1, and most errors are neighbouring emotions | Our measurement (Tables 5.2, 5.4) |
+| Two-stage selection | Stage-1 decoding | Greedy, at most 10 new tokens, fall back to d1 top-1 | A classification decision should be deterministic; 100% of stage-1 outputs named a valid candidate | Our measurement (Table 5.4) |
+| Attention cues | Attention source | Final-layer attention from the [CLS] token, eager attention | RoBERTa classifies from [CLS]; the default sdpa attention returns no weights, so eager attention is required | Liu et al. (2019); our verification |
+| Attention cues | Amount | Top 40% of tokens, at most 3 phrases | Design choice to keep the prompt short; not tuned (listed as a limitation) | Design choice |
+| d2 generator | Model | Phi-4-mini-instruct (3.8B) | Highest rule adherence in the bake-off with detector and prompt fixed (65.3% vs 57.7% Qwen2.5-1.5B, 22.0% Gemma-3-4B) | Our measurement (Table 4.7) |
+| d2 generator | Quantisation | 4-bit NF4, double quantisation, fp16 compute | NF4 preserves 16-bit quality while cutting memory about fourfold; measured peak use 3.40 GB on the 8 GB GPU | Dettmers et al. (2023); our measurement (Table 5.24) |
+| d2 generator | Temperature | 0.7 | The developer's default for Qwen2.5-Instruct; identical for every system so differences come from design, not decoding | Qwen2.5 generation_config; fairness |
+| d2 generator | Top-p (nucleus sampling) | 0.9 | Nucleus sampling avoids the repetitive, degenerate text of pure greedy or beam decoding; identical for every system | Holtzman et al. (2020) |
+| d2 generator | Maximum new tokens | 250 | The prompt asks for under 100 words (about 130 tokens); the longest final reply is 119 tokens, so no reply is cut off | Our measurement |
+| d2 generator | Word limit | Under 100 words in the prompt, scored at 120 | Short replies reduce burden on a distressed user; the 20-word margin tolerates small overshoots | Design choice |
+| d2 generator | Repetition penalty |  | Kept identical for all systems; a penalty of 1.1 is deferred because it would change the judged outputs | Fairness; future work |
+| Conversational agent | d1 context window | Last 4 user turns | Context matters for emotion recognition in conversation; 4 turns was best or joint best in 3 of 4 long scenarios, 6 turns degraded 2 | Poria et al. (2019); our scenario tests |
+| Conversational agent | d2 memory | Last 10 exchanges, verbatim | Support conversations are short; verbatim history avoids losing emotional detail through summarisation | Design choice |
+| Conversational agent | Question rule | Mandatory on turn 1, optional afterwards | A question in every reply turns a long conversation into an interrogation; turn 1 keeps the evaluated rules | Design choice |
+| LoRA baseline | Rank / alpha | 16 / 32 | Low ranks are sufficient to adapt attention weights; alpha = 2 x rank scales the update | Hu et al. (2022) |
+| LoRA baseline | Target modules | q, k, v, o attention projections | The weight matrices studied for adaptation in LoRA | Hu et al. (2022) |
+| LoRA baseline | Learning rate / dropout / weight decay | 2e-4 / 0.1 / 0.01 | LoRA's GPT-2 settings; QLoRA uses 2e-4 and dropout 0.1 for models up to 13B | Hu et al. (2022); Dettmers et al. (2023) |
+| LoRA baseline | Warm-up / effective batch / optimiser | 6% linear / 16 (2 x 8) / paged AdamW 32-bit | Same warm-up rule as the detector; batch fits 8 GB; paged optimisers avoid memory spikes | Liu et al. (2019); Dettmers et al. (2023) |
+| LoRA baseline | Epochs and selection | Up to 3, best epoch by validation loss, early stopping (patience 1) | Validation loss rose after epoch 1 (1.4607 to 1.4626), so epoch 1 was kept | Our training log |
+| LoRA baseline | Maximum length | 256 tokens | The longest training pair is 177 tokens, so nothing is truncated | Our measurement |
+| LoRA baseline | Padding token | Qwen end-of-text token (endoftext) | Using the end-of-turn token as padding masked it from the loss: the original run never learned to stop (99% of replies hit the token limit) | Our finding (adjustment A11) |
+| AI judges | Decoding | Temperature 0, JSON-only answer | Removes sampling noise so the same reply always gets the same score | Design choice |
+| AI judges | Sample | 64 conversations: shortest and longest per emotion | Covers all 32 emotions and both short and long messages within the 50-requests-per-day limit | Design choice; resource limit |
+| AI judges | Panel | Nemotron 3 Ultra + gpt-oss-120b, blind | Different developers from our models avoid self-preference; a panel reduces single-judge bias | Panickssery et al. (2024); Verga et al. (2024) |
+| WASSA classifier | Model | hyy33, WASSA 2024 Track 2 | Trained on human empathy ratings of conversation turns; r = 0.544 with human ratings | Giorgi et al. (2024); Yang et al. (2024) |
+| Statistics | Evaluation sample | 300 test conversations, seed 42 | Fixed before any experiment and identical for every system, so all comparisons are paired | Design choice |
+| Statistics | Tests | McNemar exact (binary), Wilcoxon signed-rank (scores) | Paired tests matched to the data type; Wilcoxon does not assume normal differences | McNemar (1947); Wilcoxon (1945) |
+| Statistics | Confidence intervals | Paired bootstrap, 10,000 resamples | More than the 1,000 resamples recommended for percentile intervals, giving stable limits | Efron and Tibshirani (1993) |
+| Statistics | Multiple comparisons | Holm correction; significant only if adjusted p < 0.05 and CI excludes zero | Controls the family-wise error rate with more power than Bonferroni | Holm (1979) |
+| Human evaluation | Design | 13 items (11 scored + 2 attention checks), 3-way forced choice | Keeps the form short enough to avoid rater fatigue; preference judgements follow comparable studies | Cao et al. (2025); Wu et al. (2025) |
+| Resource benchmark | Protocol | 50 messages, 3 warm-up, one system per run | Warm-up removes first-call overhead; separate runs keep memory readings clean | Design choice |
 
-*Table A.5: Criteria for selecting the AI judges (selection criteria behind Section 4.1.5.1).*
+*Table A.5: Every parameter used in this work, its value, justification and evidence (the full parameter listing behind Chapter 4).*
 
 
 | Emotion | Precision (%) | Recall (%) | F1 (%) | Support |

@@ -1,0 +1,10 @@
+Setting,Value,Reason
+Backbone,"RoBERTa-base, 32-way classification head",Selected in Section 5.2.2
+Training input,First user message of each conversation,The text the detector receives in use
+Maximum input length,128 tokens,Covers 99.7% of first messages (mean 46.5 tokens)
+Learning rate,2e-5,Inside the range recommended for fine-tuning BERT-family encoders
+Effective batch size,16 (8 per step x 2 accumulation),Largest that fits in 8 GB at this length
+Epochs,"Up to 4, early stopping with patience 1",Best checkpoint chosen by validation accuracy
+Warm-up,Linear over the first 6% of steps,RoBERTa's own fine-tuning setting; without it a large run diverged
+Weight decay / gradient clipping,0.01 / 1.0,Standard regularisation for this family
+Precision / seed,16-bit mixed precision / 42,Fits the memory budget and keeps runs reproducible

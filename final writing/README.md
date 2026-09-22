@@ -8,13 +8,13 @@ This folder holds the **first draft of the full report**, written to the section
 | `Chapter_1_Introduction.docx` | 1.1 Background, 1.2 Rationale, 1.3 Problem Statement, 1.4 Objectives, 1.5 Methodology in Brief, 1.6 Scopes and Challenges, 1.7 Thesis Structure |
 | `Chapter_2_Literature_Review.docx` | 2.1 Preliminaries, 2.2 Review of Existing Research, 2.3 Summary of Key Findings |
 | `Chapter_3_Requirements_Impacts_Constraints.docx` | 3.1 Final Specifications and Requirements, 3.2 Societal Impact, 3.3 Environmental Impact, 3.4 Ethical Issues, 3.5 Standards, 3.6 Project Management Plan, 3.7 Risk Management, 3.8 Economic Analysis |
-| `Chapter_4_Proposed_Methodology.docx` | 4.1 Design Process or Methodology Overview, 4.2 Preliminary Design or Design (Model) Specification |
+| `Chapter_4_Proposed_Methodology.docx` | 4.1 Design Process or Methodology Overview, 4.2 Preliminary Design or Design (Model) Specification, 4.3 Data Collection and Preparation, 4.4 Implementation of the Selected Design |
 | `Chapter_5_Results_and_Analysis.docx` | 5.1 Performance Evaluation, 5.2 Analysis of Design Solutions, 5.3 Final Design Adjustments, 5.4 Statistical Analysis, 5.5 Comparisons and Relationships, 5.6 Discussion |
 | `Chapter_6_Conclusion.docx` | 6.1 Conclusion, 6.2 Future Work |
 | `Appendix.docx` | Tools and Technologies Used (CO8) + 10 supplementary tables |
 | `References.docx` | 49 references, numbered in order of first citation |
 
-Total: about 25,100 words, 31 tables and 7 figures in the chapters, 14 tables in the appendix. Chapter 3 is 9 pages.
+Total: about 25,800 words, 36 tables and 10 figures in the chapters, 14 tables in the appendix. Chapter 3 is 9 pages and Chapter 4 is 14.
 
 ## Course outcome to section
 
@@ -23,7 +23,7 @@ Total: about 25,100 words, 31 tables and 7 figures in the chapters, 14 tables in
 | CO2 | Final specifications and requirements | 3.1 (+ Table 3.1, requirement-by-requirement verification) |
 | CO3 | Societal impact | 3.2 |
 | CO4 | Environmental impact | 3.3 |
-| CO5 | Design process; preliminary design specification | 4.1, 4.2 |
+| CO5 | Design process; preliminary design specification | 4.1, 4.2, 4.3, 4.4 |
 | CO6 | Analysis of alternative design solutions | 5.1, 5.2, 5.3, 5.4, 5.5, 5.6 |
 | CO7 | Final design adjustments after evaluation | 5.3 (+ Table 5.10, the adjustment log) |
 | CO8 | Contemporary tools | Appendix, Tools and Technologies Used (+ presentation) |
@@ -70,6 +70,10 @@ Four tables that exist in the kit are **not printed anywhere**, because every nu
 - **Front matter (4):** member names and IDs, final title, supervisor/approval block, acknowledgements.
 - **Human evaluation (14, marked PENDING):** 5.1.9 results and Table 5.7, 5.4.8 statistics, 5.5.2 comparison with published human studies, 5.6.6 participant count, 5.6.8 closing paragraph. Everything else is complete; paste the numbers and rebuild.
 - **Team facts (23):** helpline number, ethics-review position, BRAC AI declaration, member roles, six dates, GPU price, electricity tariff, two unlogged GPU-hour rows, commercial API price with date, the source of the per-emotion guidance, case-study conversations (5.1.10) and the demo URL.
+
+## Chapter 4 figures
+
+The five Chapter 4 figures are drawn by `_build/make_ch4_figures.py`: the design loop, the system pipeline, the cue-extraction mechanism, the prompt assembly and the data pipeline. Two of them replace the writing-kit versions through `figures_override/`. Re-run that script before the main build if a figure needs changing.
 
 ## Table overrides
 

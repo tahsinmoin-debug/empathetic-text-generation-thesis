@@ -1,0 +1,6 @@
+Variant,What reaches the generator,Design rationale,Risk it carries
+Argmax,The single most probable emotion,The simplest link; one emotion gives one coherent instruction,A wrong top-1 label sends the whole reply in the wrong direction
+Confidence-gated,"The top emotion, with tentative wording when d1 is unsure",Lets the reply hedge instead of asserting a feeling the detector doubts,Depends on the generator actually changing its wording when told to
+Distribution,Every emotion above probability 0.05,Passes the detector's uncertainty on in full,Several emotions at once give the generator contradictory guidance
+Candidate-pick,"The top three emotions, resolved inside the generation call","One call, so no extra latency",The model must resolve the emotion and obey the rules in a single pass
+Two-stage (selected),"The top three emotions, resolved in a separate short call","The correct emotion is among the top three far more often than it is first, and a separate call leaves the generation prompt coherent","One extra model call per reply, measured at 0.31 s"
