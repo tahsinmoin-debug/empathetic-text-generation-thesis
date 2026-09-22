@@ -14,10 +14,10 @@ The contribution of this work is therefore not a new record on a benchmark. It i
 
 Four directions follow directly from the results.
 
-**Close the rule-adherence gap.** The decoupled system follows its own response rules less often than a single model because the rules share the prompt with emotion-specific guidance. Separating rule enforcement from generation, by checking and repairing the reply after it is written, should recover the gap without giving up the emotional guidance.
+**Close the rule-adherence gap:** the decoupled system follows its own response rules less often than a single model because the rules share the prompt with emotion-specific guidance. Separating rule enforcement from generation, by checking and repairing the reply after it is written, should recover the gap without giving up the emotional guidance.
 
-**Reduce repetition.** The system reuses stock supportive phrases in 58.7% of replies. This is better than the single-model baselines but still high, and a repetition penalty or a decoding constraint is the obvious next step; it was deliberately deferred in this project so that the evaluated outputs would remain fixed.
+**Reduce repetition:** the system reuses stock supportive phrases in 58.7% of replies. This is better than the single-model baselines but still high, and a repetition penalty or a decoding constraint is the obvious next step; it was deliberately deferred in this project so that the evaluated outputs would remain fixed.
 
-**Evaluate multi-turn behaviour.** All reported measurements are single-turn. The multi-turn agent works, but nothing here measures whether the emotional tracking across turns helps a real conversation.
+**Evaluate multi-turn behaviour:** all reported measurements are single-turn. The multi-turn agent works, but nothing here measures whether the emotional tracking across turns helps a real conversation.
 
-**Test the design in Bangla and with real users.** The dataset, the models and the evaluation are entirely in English, and the evaluation uses crowd-sourced situations rather than people seeking support. Both would have to change before any claim about usefulness in Bangladesh could be made, and a crisis safeguard would have to be added first.
+**Test the design in Bangla and with real users:** the dataset, the models and the evaluation are entirely in English, and the evaluation uses crowd-sourced situations rather than people seeking support. Both would have to change before any claim about usefulness in Bangladesh could be made, and a crisis safeguard would have to be added first.

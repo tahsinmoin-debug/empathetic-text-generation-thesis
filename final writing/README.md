@@ -14,7 +14,7 @@ This folder holds the **first draft of the full report**, written to the section
 | `Appendix.docx` | Tools and Technologies Used (CO8) + 10 supplementary tables |
 | `References.docx` | 49 references, numbered in order of first citation |
 
-Total: about 25,900 words, 40 tables and 7 figures in the chapters, 10 tables in the appendix.
+Total: about 25,300 words, 32 tables and 7 figures in the chapters, 13 tables in the appendix. Chapter 3 is 9 pages.
 
 ## Course outcome to section
 
@@ -46,6 +46,9 @@ The writing kit in `writing/` holds 70 table placements. A thesis cannot print a
 
 | Moved to appendix | Reason |
 |---|---|
+| Requirement verification | the requirements themselves are listed in 3.1; the test evidence is supporting detail |
+| Risk register | the three risks that mattered are described in 3.7; the full twelve-row table is detail |
+| Licences of data and models | every licence is named in the text of 3.4.5 |
 | Per-emotion precision/recall of the detector | 32 rows of detail behind one sentence in 5.1.2 |
 | Human-evaluation item design | the design is described in the text of 5.1.9 |
 | WASSA scores by length band | the length control is summarised in 5.2.3 and in Table 5.21 |
@@ -66,6 +69,10 @@ Four tables that exist in the kit are **not printed anywhere**, because every nu
 - **Front matter (4):** member names and IDs, final title, supervisor/approval block, acknowledgements.
 - **Human evaluation (14, marked PENDING):** 5.1.9 results and Table 5.7, 5.4.8 statistics, 5.5.2 comparison with published human studies, 5.6.6 participant count, 5.6.8 closing paragraph. Everything else is complete; paste the numbers and rebuild.
 - **Team facts (23):** helpline number, ethics-review position, BRAC AI declaration, member roles, six dates, GPU price, electricity tariff, two unlogged GPU-hour rows, commercial API price with date, the source of the per-emotion guidance, case-study conversations (5.1.10) and the demo URL.
+
+## Table overrides
+
+A table that needs fewer columns or shorter cells for this draft lives in `tables_override/` and wins over the writing kit's copy. Everything else is taken from the kit, so a rebuilt number flows through automatically.
 
 ## Rebuilding
 

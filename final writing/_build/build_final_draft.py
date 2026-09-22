@@ -58,8 +58,6 @@ CHAPTERS = [
 # a table with no marker at all is not used in this draft.
 MAIN_TABLES = {
     "literature_review_matrix.csv",
-    "requirements_verification.csv", "standards_applied.csv", "licences.csv",
-    "project_timeline_from_repository.csv", "risk_register.csv",
     "cost_breakdown.csv", "compute_usage.csv", "d1_backbone_cost_benefit.csv",
     "ai_judge_panel.csv", "d1_evolution_mismatch_fix.csv", "d1_backbone_comparison.csv",
     "d2_bakeoff_candidates.csv", "integration_variant_ablation.csv", "rag_negative_result.csv",
@@ -75,6 +73,9 @@ MAIN_TABLES = {
 }
 # Why each of these is not in the running text.
 APPENDIX_REASON = {
+    "licences.csv": "licence of every dataset and model, named in Section 3.4.5",
+    "requirements_verification.csv": "requirement-by-requirement verification behind Section 3.1",
+    "risk_register.csv": "the full risk register behind Section 3.7",
     "d1_final_per_class.csv": "32 rows of per-emotion detail behind Section 5.1.2",
     "human_eval_item_design.csv": "item-by-item design of the human study described in Section 5.1.9",
     "gemma_length_band_analysis.csv": "length-band detail behind Section 5.2.3",
@@ -90,6 +91,11 @@ APPENDIX_REASON = {
 
 
 def find_asset(kind, name):
+    """A table trimmed for this draft (fewer columns, shorter cells) lives in
+    tables_override/ and wins; otherwise the file comes from the writing kit."""
+    override = OUT / f"{kind}_override" / name
+    if override.exists():
+        return override
     hits = sorted(KIT.glob(f"*/{kind}/{name}")) + sorted((OUT / kind).glob(name))
     if not hits:
         raise SystemExit(f"Missing {kind[:-1]} file: {name}")

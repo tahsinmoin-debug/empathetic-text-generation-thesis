@@ -1,0 +1,13 @@
+ID,Risk,Likelihood,Impact,Mitigation
+R1,"GPU out-of-memory / system freeze on 8 GB VRAM, 16 GB RAM",High,High,4-bit NF4 quantisation; pre-flight VRAM/RAM checks; heavy jobs run only when RAM is free
+R2,"Library upgrade breaks code (transformers 5.x removed StableDropout, warmup_ratio)",Medium,High,"Compatibility shim; pinned versions; WASSA re-validated at 100% match on 1,800 pre-upgrade scores"
+R3,Silent failure - default 'sdpa' attention returned no attention weights,Low,High,Forced 'eager' attention + hard-fail assertion so the feature cannot silently switch off
+R4,"Train/inference mismatch in d1 (trained on situation text, fed user messages)",Medium,High,Retrained on first user message; honest accuracy reported
+R5,Unstable training of larger model (roberta-large diverged to 5.0%),Medium,Medium,Warmup 0.06 + lr 1e-5; failed run not reported as a result
+R6,Non-reproducible generation (no fixed seed),Medium,Medium,Fixed seed 42 for sampling and data; earlier noisy numbers discarded
+R7,"Free API models retired or withdrawn mid-project (Llama 3.3 on Groq, DeepSeek on GitHub Models, Gemini quota, Mistral Large 403 on both team accounts)",High,Medium,"Judge panel from several providers; final comparison on the two judges that scored every system; two- vs three-judge panel checked (rho 0.98, same ranking)"
+R8,API rate limits (OpenRouter 50 requests/day),High,Medium,Stratified short/long split across two teammates' accounts with dedup merge
+R9,Late design changes invalidate in-progress judging,Medium,High,Freeze the final system outputs while teammates judge; repetition penalty moved to future work
+R10,"Automatic metrics reward length or keywords, not empathy",High,Medium,"Multiple independent signals: rules, WASSA, AI-judge panel, human study; length-matched analysis"
+R11,Unsafe reply to crisis disclosure (no self-harm category in ED labels),Low,Very high,Disclaimer and helplines in demo UI; stated as limitation; crisis gate listed as future work
+R12,Only one member can run GPU work,High,Medium,"No-GPU tasks (judging, writing, human eval) assigned to teammates with written command guides"

@@ -12,11 +12,11 @@ Two lines of work have grown from this. The first builds a single neural model t
 
 Three practical problems motivated this thesis.
 
-**The emotional decision is invisible.** When one model reads the message and writes the reply, nothing in the system states which emotion it believed the person was feeling. If the reply strikes the wrong tone, there is no intermediate decision to inspect, log or correct. For any application that a supervisor, a clinician or a university would have to stand behind, this is a serious limitation, and it cannot be solved by making the model larger.
+**The emotional decision is invisible:** when one model reads the message and writes the reply, nothing in the system states which emotion it believed the person was feeling. If the reply strikes the wrong tone, there is no intermediate decision to inspect, log or correct. For any application that a supervisor, a clinician or a university would have to stand behind, this is a serious limitation, and it cannot be solved by making the model larger.
 
-**Good models are expensive.** The strongest conversational models are served from data centres, which puts them beyond a student project, a small clinic or a campus counselling service, and means that a person's disclosure must leave the device. Our own measurements show the size of the gap: the 7.6-billion-parameter model used as a reference in this thesis needs 5.47 GB of GPU memory, whereas the proposed system needs 3.40 GB and runs on a single 8 GB consumer graphics card.
+**Good models are expensive:** the strongest conversational models are served from data centres, which puts them beyond a student project, a small clinic or a campus counselling service, and means that a person's disclosure must leave the device. Our own measurements show the size of the gap: the 7.6-billion-parameter model used as a reference in this thesis needs 5.47 GB of GPU memory, whereas the proposed system needs 3.40 GB and runs on a single 8 GB consumer graphics card.
 
-**Fluency is not the same as understanding.** In our evaluation, the same generator prompted as a single model reused stock supportive phrases in 72.3% of its replies and named the user's actual emotion in only 27.0% of them. The replies read well; they simply were not specific to the person.
+**Fluency is not the same as understanding:** in our evaluation, the same generator prompted as a single model reused stock supportive phrases in 72.3% of its replies and named the user's actual emotion in only 27.0% of them. The replies read well; they simply were not specific to the person.
 
 These three problems share a cause: the emotion is never treated as a separate decision. This thesis asks whether making it separate, and small enough to run locally, helps.
 
@@ -32,9 +32,9 @@ The question is answered with measurements rather than impressions, and the trad
 
 ## 1.4 Objectives
 
-**General objective.** To design, build and evaluate a decoupled empathetic response system in which emotion detection and response generation are performed by separate, individually inspectable components that together fit within a consumer hardware budget.
+**General objective:** to design, build and evaluate a decoupled empathetic response system in which emotion detection and response generation are performed by separate, individually inspectable components that together fit within a consumer hardware budget.
 
-**Specific objectives.**
+**Specific objectives:**
 
 1. To train an emotion detector on the 32 emotion categories of EmpatheticDialogues that reads the user's own message, and to select its backbone by controlled comparison rather than by assumption.
 2. To design a way of passing the detector's decision to the generator that improves the reply, and to compare the alternatives (single emotion, top-3 candidates, emotion-specific guidance, attention cues) against each other.
@@ -51,11 +51,11 @@ Evaluation uses four automatic signals and one human signal: automatic checks of
 
 ## 1.6 Scopes and Challenges
 
-**What this study covers.** Single-turn English replies to a person describing an emotional situation; 32 emotion categories; models small enough for one 8 GB consumer GPU; a comparison against single-model baselines of 1.5, 3.8 and 7.6 billion parameters; and a working multi-turn agent built from the same components.
+**What this study covers:** single-turn English replies to a person describing an emotional situation; 32 emotion categories; models small enough for one 8 GB consumer GPU; a comparison against single-model baselines of 1.5, 3.8 and 7.6 billion parameters; and a working multi-turn agent built from the same components.
 
-**What this study does not cover.** It is not a mental-health service and has no crisis-detection safeguard; the emotion label set contains no category for suicidal ideation. It does not cover languages other than English, spoken interaction, long-term memory across sessions, or clinical outcomes of any kind.
+**What this study does not cover:** it is not a mental-health service and has no crisis-detection safeguard; the emotion label set contains no category for suicidal ideation. It does not cover languages other than English, spoken interaction, long-term memory across sessions, or clinical outcomes of any kind.
 
-**Challenges.** Four difficulties shaped the work. The dataset gives one emotion label per conversation, although a message can carry several feelings at once. The text the detector was originally trained on was not the text it receives in use, a mismatch that cost 8.7 points of accuracy before it was found and corrected. Automatic measures of empathy are proxies: the empathy classifier and the AI judges both give higher scores to longer replies, which has to be controlled for rather than ignored. Finally, the free AI-judge services used for evaluation were withdrawn or rate-limited during the project, which constrained the size of the judged sample.
+**Challenges:** four difficulties shaped the work. The dataset gives one emotion label per conversation, although a message can carry several feelings at once. The text the detector was originally trained on was not the text it receives in use, a mismatch that cost 8.7 points of accuracy before it was found and corrected. Automatic measures of empathy are proxies: the empathy classifier and the AI judges both give higher scores to longer replies, which has to be controlled for rather than ignored. Finally, the free AI-judge services used for evaluation were withdrawn or rate-limited during the project, which constrained the size of the judged sample.
 
 ## 1.7 Thesis Structure
 
