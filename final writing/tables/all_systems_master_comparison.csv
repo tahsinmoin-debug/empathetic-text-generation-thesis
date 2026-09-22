@@ -1,13 +1,13 @@
-Setting ID,System,Ack (%),One question (%),Length OK (%),All rules (%),Mean words,Questions / reply,>1 question (%),WASSA empathy (0-10),WASSA SD,Emotion validation (%),Context awareness (%),N
-zero_shot,"Zero-shot Qwen2.5-1.5B (no detector, generic prompt)",81.67,22.67,83.67,19.0,75.92,0.42,9.33,4.25,1.31,24.67,,300
-fine_tuned_fixed,Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector),30.0,74.0,100.0,22.33,9.95,0.81,3.67,3.36,1.9,18.33,,300
-single_model_same_size,"Single model, same size: Qwen2.5-1.5B detects + responds",70.67,73.67,100.0,51.33,41.96,1.02,13.33,4.84,1.26,25.67,,300
-single_model_phi,"Single model, same generator: Phi-4-mini (4-bit) detects + responds",77.33,96.0,99.33,73.67,73.48,1.04,4.0,4.75,1.13,27.0,,300
-single_model_bigger,"Single model, bigger: Qwen2.5-7B (4-bit) detects + responds",83.0,99.0,100.0,82.33,52.95,1.01,1.0,5.76,1.09,32.33,,300
-prompt_engineered_pipeline,Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2,70.33,87.33,100.0,63.67,35.21,1.07,9.33,4.8,1.33,26.0,28.333333333333332,300
-rag_pipeline,Initial pipeline + retrieval (RAG),57.0,78.0,100.0,43.67,34.0,1.13,16.33,4.85,1.46,27.67,29.333333333333332,300
-bakeoff_qwen,RoBERTa d1 + Qwen2.5-1.5B d2 (top-1 emotion),67.67,84.33,100.0,57.67,34.72,1.07,10.33,4.78,1.31,25.33,31.0,300
-bakeoff_gemma,RoBERTa d1 + Gemma-3-4B d2 (top-1 emotion),96.67,92.0,27.67,22.0,133.25,1.08,8.0,5.3,0.84,35.0,48.66666666666667,300
-bakeoff_phi,RoBERTa d1 + Phi-4-mini d2 (top-1 emotion),72.0,94.67,96.0,65.33,80.45,1.05,5.0,4.89,1.04,28.33,36.666666666666664,300
-two_stage_qwen,Two-stage: RoBERTa top-3 -> Qwen2.5-1.5B picks + per-emotion prompt,47.0,74.33,99.67,36.67,44.15,1.17,18.67,4.76,1.29,27.0,38.0,300
-two_stage_phi,FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt,66.33,92.67,100.0,60.0,57.11,1.06,6.67,5.05,1.16,36.67,54.333333333333336,300
+System,Ack (%),One question (%),All rules (%),Mean words,WASSA empathy (0-10),Emotion validation (%)
+Single model Qwen-7B,83.0,99.0,82.33,52.95,5.76,32.33
+Single model Phi-4-mini,77.33,96.0,73.67,73.48,4.75,27.0
+RoBERTa + Phi-4-mini (top-1),72.0,94.67,65.33,80.45,4.89,28.33
+Initial pipeline (GPT-2 + Qwen),70.33,87.33,63.67,35.21,4.8,26.0
+FINAL: two-stage Phi-4-mini,66.33,92.67,60.0,57.11,5.05,36.67
+RoBERTa + Qwen (top-1),67.67,84.33,57.67,34.72,4.78,25.33
+Single model Qwen-1.5B,70.67,73.67,51.33,41.96,4.84,25.67
+Initial pipeline + retrieval,57.0,78.0,43.67,34.0,4.85,27.67
+Two-stage Qwen-1.5B,47.0,74.33,36.67,44.15,4.76,27.0
+Fine-tuned Qwen-1.5B,30.0,74.0,22.33,9.95,3.36,18.33
+RoBERTa + Gemma-4B (top-1),96.67,92.0,22.0,133.25,5.3,35.0
+Zero-shot Qwen-1.5B,81.67,22.67,19.0,75.92,4.25,24.67

@@ -1,0 +1,4 @@
+Generator,Ack (%),One question (%),Length OK (%),All rules (%),Mean words,WASSA empathy (0-10),Emotion validation (%)
+Qwen (top-1),67.67,84.33,100.0,57.67,34.72,4.78,25.33
+Gemma-4B (top-1),96.67,92.0,27.67,22.0,133.25,5.3,35.0
+Phi-4-mini (top-1),72.0,94.67,96.0,65.33,80.45,4.89,28.33

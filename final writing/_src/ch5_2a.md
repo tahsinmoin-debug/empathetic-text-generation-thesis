@@ -1,74 +1,86 @@
 # 5.2 Analysis of Design Solutions
 
-> Note for the team (delete before submission): the rubric lists both this section and "Final Design Adjustments" as 5.2. Confirm the numbering with the supervisor and adjust headings and cross-references together.
+Section 5.1 reported what each design achieved. This section explains why they differ, taking one design question at a time, and ends by weighing the alternatives against criteria that performance figures do not capture.
 
-Section 5.1 reported how each design performs. This section compares the design alternatives, explains the differences between them, and closes with an assessment against criteria beyond raw performance.
+## 5.2.1 Decoupled against Monolithic Designs
 
-## 5.2.1 Decoupled versus Monolithic Designs
+The central question of the thesis is whether emotion detection deserves a model of its own. Four designs without a detector answer the same conversations, and they fail in three different ways.
 
-The central design question is whether emotion detection should be performed by a separate model. To answer it, we compare the decoupled designs with four monolithic alternatives responding to the same conversations (Table 5.1).
+**Fine-tuning a single model teaches the dataset's style, not the wanted behaviour:** the LoRA-tuned generator writes short, casual replies (10.0 words) that usually ask a question (74.0%) but seldom acknowledge the feeling (30.0%). It has the lowest empathy score (3.36), the lowest emotion fidelity (18.3%) and the lowest judge scores (5.96) of any system. It learned its training data correctly; the training data simply does not contain the behaviour we want.
 
-**Fine-tuning a single model end to end teaches the dataset's style, not the desired behaviour.** The generator fine-tuned with LoRA writes short, casual replies (10.0 words on average) that usually ask a question (74.0% ask exactly one) but seldom acknowledge the user's feeling (30.0%), so it follows all rules in only 22.3% of replies and has the lowest WASSA score (3.36), emotion validation (18.3%) and AI-judge scores (empathy 3.88, overall 5.96) of all systems. It faithfully learns its training data: real listener replies in EmpatheticDialogues acknowledge the feeling in only 10.6% of cases and satisfy all three rules in 4.3%. **Zero-shot prompting without an emotion or rules** keeps replies to a moderate length but asks the required single question in only 22.7% of replies (19.0% satisfy all rules), and has the second-lowest empathy score (WASSA 4.25). **A same-size single model instructed to detect the emotion and respond in one step** closes part of the gap (51.3% of replies satisfy all rules, WASSA 4.84), but its replies are barely more faithful to the true emotion than those of zero-shot prompting (25.7% against 24.7% emotion validation). The final decoupled system, whose generator is about 2.5 times the size of this baseline, reaches 60.0% rule adherence, WASSA 5.05 and 36.7% emotion validation. The improvements in empathy and emotion validation are statistically significant after correction for multiple comparisons, whereas the improvement in rule adherence is not (Section 5.4).
+**Prompting without an emotion leaves the model nothing to work from:** zero-shot prompting keeps replies to a reasonable length but asks the required single question in only 22.7% of them, and scores 4.25 on empathy.
 
-**The decoupled design, not the generator, produces the empathy gain:** the strongest test of the design is the single model built on the final system's own generator, Phi-4-mini, prompted to detect the emotion and respond in one pass. It reaches high rule adherence (73.7%), but its empathy and emotional fidelity stay at the level of the smaller single model (WASSA 4.75 against 4.84; emotion validation 27.0% against 25.7%). Adding the detector and emotion-specific guidance to that same generator raises WASSA to 5.05 and emotion validation to 36.7%, both significant after correction (Section 5.5.9). The decoupled system does, however, follow all three rules less often than this baseline (60.0% against 73.7%), because its prompt must carry emotion-specific guidance as well as the rules. At an equal generator the design therefore buys empathy and emotional fidelity at some cost in rule adherence.
+**Asking one model to do both jobs closes part of the gap, but not the part that matters here:** the same-size single model satisfies all rules in 51.3% of replies and scores 4.84 on empathy, yet its replies are barely more faithful to the true emotion than zero-shot prompting (25.7% against 24.7%). The final system, whose generator is about 2.5 times larger, reaches 60.0%, 5.05 and 36.7%.
 
-**A larger single model remains stronger:** Qwen2.5-7B {cite:qwen2024}, prompted to detect the emotion and respond in one step, achieves the best rule adherence (82.3%) and WASSA score (5.76) of all systems, and the highest AI-judge score of all judged systems (8.90, against 8.68 for the final system). The same-size and larger single models use the same prompt, so model capacity, rather than the decoupled structure, explains most of this difference. The advantage of the decoupled design is therefore not raw output quality. It lies in making the emotional reasoning explicit and inspectable at a smaller scale, and in allowing the generator to receive emotion-specific guidance, which Section 5.2.4 shows to be important.
+Because that comparison changes the generator as well as the design, we built the test that changes only the design: **the final system's own generator, given the single-model prompt and no detector at all.** It follows the rules more often than the decoupled system (73.7% against 60.0%), but its empathy and emotional fidelity stay at the level of the smaller single model (4.75 and 27.0%); adding the detector and the per-emotion guidance to that same generator raises them to 5.05 and 36.7%. Section 5.5.7 reports it in full, and it is the strongest evidence in this thesis that the second model earns its place.
+
+**A larger single model is still stronger overall:** Qwen2.5-7B leads on rule adherence (82.3%), empathy (5.76) and the judges (8.90). The same-size and larger single models share one prompt, so capacity, not structure, explains that gap. The case for decoupling is therefore not that separation beats scale. It is that separation makes the emotional decision explicit, inspectable and replaceable at a scale that fits an ordinary GPU, which Section 5.2.6 weighs against the performance it costs.
 
 ## 5.2.2 Detector Alternatives
 
-Two findings shaped the choice of detector. First, **the text a detector is trained on matters more than the network used**. Training GPT-2 Medium on situation descriptions but deploying it on user messages cost about nine percentage points of accuracy (56.9% against 48.2%), and retraining on the input received in use was the largest single improvement to the detector (Table 5.31). Second, among encoders trained on the correct input, **models of the same size are statistically indistinguishable on top-1 accuracy** (48.8-50.2%), and RoBERTa-base differs only in the quality of its ranking, with top-5 accuracy of 85.0% against 81.7-82.7% (Table 5.32, Figure 5.40). RoBERTa-large adds 2.9 points of top-1 accuracy at 7.4 times the training cost. When RoBERTa-large was substituted into the final pipeline, rule adherence, WASSA empathy and emotion validation were all unchanged (Section 5.4.3), so RoBERTa-base offers the best balance.
+Two findings settled the detector. First, **what the detector is trained on matters more than which network is used.** Training GPT-2 Medium on the dataset's situation descriptions but deploying it on the user's own message cost about nine points of accuracy (56.9% against 48.2%); retraining on the text the model actually receives was the single largest improvement made to the detector (Table 5.10).
 
-[[TABLE 5.31 | d1_evolution_mismatch_fix.csv | Effect of training the detector on the text it receives in use]]
+Second, **among encoders trained on the right input, models of the same size are indistinguishable on top-1 accuracy** (48.8-50.2%); RoBERTa-base separates itself only on the quality of its ranking, with 85.0% top-5 against 81.7-82.7% for BERT and ELECTRA (Figure 5.4, Tables 5.11 and 5.12). Ranking is exactly what the two-stage design consumes. RoBERTa-large adds 2.9 points of top-1 accuracy for 7.4 times the training cost and changed no measure of reply quality inside the pipeline (Section 5.4.3), so RoBERTa-base was kept.
 
-[[TABLE 5.32 | d1_backbone_comparison.csv | Detector candidates trained and tested under identical settings]]
+[[TABLE 5.10 | d1_evolution_mismatch_fix.csv | Effect of training the detector on the text it actually receives]]
 
-[[FIGURE 5.40 | fig_d1_backbone_comparison.png | Top-1 and top-5 accuracy of the detector candidates]]
+[[FIGURE 5.4 | fig_d1_backbone_comparison.png | Top-1 and top-5 accuracy of the detector candidates under identical training]]
+
+[[TABLE 5.11 | d1_backbone_comparison.csv | Detector candidates trained and tested under identical settings]]
+
+[[TABLE 5.12 | d1_backbone_significance.csv | Paired significance tests between the detector candidates]]
 
 ## 5.2.3 Generator Alternatives
 
-With the detector and prompt held fixed, the choice of generator determines rule adherence: 65.3% for Phi-4-mini, 57.7% for Qwen2.5-1.5B and 22.0% for Gemma-3-4B (Table 5.33). Gemma is the instructive case. It acknowledges feelings in 96.7% of replies and has a higher WASSA score than Phi-4-mini (5.30 against 4.89), which might suggest that it is the more empathetic model. However, it disregards the length rule, averaging 133 words with 72% of replies over the limit, and WASSA scores rise with reply length in every system (Section 5.5). When replies of similar length are compared (Figure 5.3, Table 5.10), Phi-4-mini matches or exceeds Gemma in every length band in which both have replies, and Gemma's advantage appears only above 120 words. Gemma's apparent advantage in empathy is therefore an effect of reply length, echoing the observation that longer LLM responses may be mistaken for greater empathy {cite:sorin2024jmir}. Its failure to respect the length constraint rules it out for a support setting in which brevity is a requirement.
+With the detector, the prompt and the conversations held fixed, the generator decides how well the rules are followed: 65.3% for Phi-4-mini, 57.7% for Qwen2.5-1.5B and 22.0% for Gemma-3-4B (Table 5.13).
 
-[[FIGURE 5.3 | fig_wassa_by_length_band.png | WASSA empathy score by reply length for Gemma-3-4B, Phi-4-mini (top-1) and the final system]]
+Gemma is the instructive case, because on the surface it looks like the most empathetic model: it acknowledges the feeling in 96.7% of replies and scores higher than Phi-4-mini on the empathy classifier (5.30 against 4.89). But it averages 133 words, with 72% of replies over the limit, and the classifier rewards length in every system we measured (Section 5.4.4). Figure 5.5 removes that advantage by comparing replies of similar length: in every band where both have replies, Phi-4-mini matches or beats Gemma, and Gemma leads only above 120 words, where Phi-4-mini has no replies at all. Its apparent empathy is verbosity, and a system meant to answer someone in distress briefly cannot ignore the length rule.
 
-[[TABLE 5.33 | d2_bakeoff_candidates.csv | Generator candidates with the detector, prompt and conversations held fixed]]
+[[TABLE 5.13 | d2_bakeoff_candidates.csv | Generator candidates with the detector, prompt and conversations held fixed]]
 
-[[TABLE 5.10 | gemma_length_band_analysis.csv | WASSA empathy score within each reply-length band]]
+[[FIGURE 5.5 | fig_wassa_by_length_band.png | Empathy score by reply length for Gemma-3-4B, Phi-4-mini and the final system]]
+
+[[TABLE 5.14 | gemma_length_band_analysis.csv | Empathy score within each reply-length band, with the number of replies in each]]
 
 ## 5.2.4 Integration Alternatives
 
-To assess the contribution of the two-stage design, we compare it with a system that uses the same detector and generator but passes only the top-1 emotion with a generic prompt. With Phi-4-mini, the two-stage design raises emotion validation from 28.3% to 36.7% and WASSA empathy from 4.89 to 5.05, both significant after correction, and shortens replies from 80.4 to 57.1 words. Its rule adherence is 5.3 points lower (60.0% against 65.3%), a difference that is not statistically significant. The benefit depends on the capacity of the generator: with Qwen2.5-1.5B, two-stage prompting lowers rule adherence to 36.7% (against 57.7% with top-1) and acknowledgement to 47.0%, consistent with the earlier finding that a small model loses rule-following when given more to reason about, as with the candidate-pick variant (54.0%, Table 5.34). The larger instruction-tuned generator can use the richer, emotion-specific prompt without losing control of the output format. This comparison removes three elements together: the top-3 selection, the emotion-specific guidance and the attention cues. Their individual contributions were not separated, so the improvement is attributed to the combined design.
+The link between the two models is itself a design choice, and the four ways of making it differ mainly in how much reasoning they ask of the generator (Table 5.15). Against the same detector and generator with only the top-1 emotion and a generic prompt, the two-stage design raises emotion fidelity from 28.3% to 36.7% and empathy from 4.89 to 5.05, both reliable after correction, and shortens replies from 80.4 to 57.1 words. It costs 5.3 points of rule adherence, which is not a reliable difference.
 
-[[TABLE 5.34 | integration_variant_ablation.csv | Rule adherence of the four ways of passing the detector's output to the generator]]
+The benefit depends on the generator's capacity. The same change applied to Qwen2.5-1.5B *lowers* rule adherence to 36.7% and acknowledgement to 47.0%, which repeats what the earlier candidate-pick variant showed for that model (54.0%): a small model given more to reason about loses control of the output format. Only the larger instruction-tuned generator can absorb a richer prompt without dropping the rules.
+
+One limitation is worth stating plainly: this comparison removes three things at once, the top-3 selection, the emotion-specific guidance and the attention cues. Their individual contributions were not separated, so the improvement is credited to the combined design, and separating them is listed as future work (Section 5.6.7).
+
+[[TABLE 5.15 | integration_variant_ablation.csv | The four ways of passing the detector's output to the generator]]
 
 ## 5.2.5 Retrieval Augmentation
 
-Providing the generator with one or two similar training conversations {cite:lewis2020rag} reduced rule adherence in both versions tested, to 54.3% and 43.7% against 63.7% without retrieval (Table 5.35). The retrieved listener replies model a different style from the one the rules require, since only 4.3% of EmpatheticDialogues listener replies satisfy all three rules, and compliance with the one-question rule fell to 76.0% in the first version. Filtering the examples and adding a further reminder about questions instead reduced acknowledgement from 70.3% to 57.0%. Retrieval also produced the least consistent empathy scores of any system, with a WASSA standard deviation of 1.46. For this task, examples of real human replies conflict with explicit behavioural rules rather than reinforcing them.
+Showing the generator one or two similar conversations from the training set {cite:lewis2020rag} lowered rule adherence in both versions we built, to 54.3% and 43.7% against 63.7% without retrieval (Table 5.16). The reason is visible in the data: real listener replies satisfy all three rules in only 4.3% of cases, so the retrieved examples teach a style that contradicts the instructions given in the same prompt. Compliance with the one-question rule fell to 76.0% in the first version; filtering the examples and repeating the rule recovered that but cut acknowledgement from 70.3% to 57.0%. Retrieval also produced the least consistent empathy scores of any system. For this task, examples of how people actually reply work against explicit behavioural rules rather than reinforcing them.
 
-[[TABLE 5.35 | rag_negative_result.csv | Effect of retrieval augmentation on rule adherence]]
+[[TABLE 5.16 | rag_negative_result.csv | Effect of retrieval augmentation on rule adherence]]
 
-## 5.2.6 Multi-Criteria Assessment
+## 5.2.6 Assessment against Criteria beyond Performance
 
-Table 5.11 assesses the main alternatives against criteria beyond performance: cost, efficiency, usability and maintainability.
+Performance is not the only criterion a design has to meet. Table 5.17 sets the main alternatives against cost, efficiency, inspectability and maintainability.
 
-| Design | Performance (all rules / WASSA / emotion validation) | Cost to build | Efficiency (model size, GPU memory) | Usability and inspectability | Maintainability |
-|---|---|---|---|---|---|
-| Monolithic fine-tuned 1.5B | 22.3% / 3.36 / 18.3% | GPU training | 1.5B | No emotion exposed; casual replies that rarely acknowledge feelings | Retraining needed to change behaviour |
-| Zero-shot 1.5B | 19.0% / 4.25 / 24.7% | None | 1.5B | No emotion exposed | Prompt edit |
-| Single model 1.5B (detect and respond) | 51.3% / 4.84 / 25.7% | None | 1.5B | Emotion hidden inside the model | Prompt edit |
-| Single model 7.6B (detect and respond) | 82.3% / 5.76 / 32.3% | None | 7.6B, about 5.6 GB (4-bit) | Emotion hidden inside the model | Prompt edit |
-| Initial pipeline (GPT-2 + Qwen 1.5B) | 63.7% / 4.80 / 26.0% | Detector training | 0.36B + 1.5B | Top-1 emotion visible | Components independent |
-| Initial pipeline with retrieval | 43.7% / 4.85 / 27.7% | Retrieval index | Adds an embedding model | Retrieved examples visible | Additional component |
-| RoBERTa + Gemma-3-4B | 22.0% / 5.30 / 35.0% | Detector training | 0.13B + 4B (4-bit) | Top-1 emotion visible | Components independent |
-| **Final: two-stage RoBERTa + Phi-4-mini** | 60.0% / 5.05 / 36.7% | Detector training (8.8 min) | 0.13B + 3.8B (4-bit) | Top-3 candidates, chosen emotion and cue words visible | Detector, prompts and generator independently replaceable |
+| Design | Rules / empathy / fidelity | Size and memory | What can be inspected | Maintainability |
+|---|---|---|---|---|
+| Monolithic fine-tuned 1.5B | 22.3% / 3.36 / 18.3% | 1.5B | Nothing; the emotion is never named | Retraining needed for any change |
+| Zero-shot 1.5B | 19.0% / 4.25 / 24.7% | 1.5B | Nothing | Prompt edit |
+| Single model 1.5B | 51.3% / 4.84 / 25.7% | 1.5B | Nothing; the emotion stays inside the model | Prompt edit |
+| Single model 7.6B | 82.3% / 5.76 / 32.3% | 7.6B, 5.47 GB peak | Nothing; the emotion stays inside the model | Prompt edit |
+| Initial pipeline (GPT-2 + Qwen) | 63.7% / 4.80 / 26.0% | 0.36B + 1.5B | The top-1 emotion | Components independent |
+| Initial pipeline with retrieval | 43.7% / 4.85 / 27.7% | Adds an embedding model | Emotion and retrieved examples | An extra component to maintain |
+| RoBERTa + Gemma-3-4B | 22.0% / 5.30 / 35.0% | 0.13B + 4B | The top-1 emotion | Components independent |
+| **Final: two-stage RoBERTa + Phi-4-mini** | 60.0% / 5.05 / 36.7% | 0.13B + 3.8B, 3.40 GB peak | Three candidates, the chosen emotion and the cue words | Detector, prompts and generator replaceable one at a time |
 
-*Table 5.11: Assessment of the main design alternatives against multiple criteria*
+*Table 5.17: The main design alternatives against criteria beyond raw performance*
 
-We select the two-stage design with a RoBERTa-base detector and a Phi-4-mini generator. Among designs of comparable size, it produces the most emotionally faithful replies and the highest empathy scores, its rule adherence is statistically indistinguishable from that of the best small configuration, and it is the only design that exposes its complete emotional reasoning. The larger single model outperforms it in raw quality. This trade-off is reported openly, and Section 5.6 discusses when the larger model would be the better choice.
+Because the measures disagree with one another, Table 5.18 combines five of them into one ranking: rule adherence, empathy, emotion fidelity, judge-rated empathy and freedom from boilerplate, each standardised across the systems and averaged with equal weight. Nothing is tuned: the weights are equal, every judged system is included, and the measures are those already in Table 5.1. Figure 5.6 shows the same five for the four strongest systems.
 
-Because the measures disagree with one another, Table 5.30 summarises them in a single ranking. Each of five independent measures, namely rule adherence, WASSA empathy, emotion validation, AI-judge empathy and freedom from boilerplate, is standardised across the systems and the five standardised values are averaged with equal weight. Nothing is tuned: the weights are equal, every judged system is included, and the measures are the ones already reported in Table 5.1.
+The final system ranks **second of eight**, behind only the 7.6-billion-parameter single model, which needs 1.9 times as many parameters and 62% more GPU memory. It is ahead of the single model built on its own generator (+0.50 against +0.09), of top-1 prompting with that generator (+0.04) and of the same-size single model (+0.06). **Among the systems that fit the 8 GB budget set as requirement N1 in Section 3.1.2, it ranks first.** The result does not rest on one favourable measure: dropping any single measure leaves it second or third, always behind the larger single model.
 
-The final system ranks **second of eight**, behind only the 7.6-billion-parameter single model, which requires 1.9 times as many parameters and 62% more GPU memory (Section 5.5.7). It is ahead of the single model built on its own generator (+0.50 against +0.09), of top-1 prompting with that generator (+0.04) and of the same-size single model (+0.06). **Among the systems that fit the 8 GB budget set as requirement N1 in Section 3.1.2, the final system ranks first.** The ranking is not an artefact of one favourable measure: removing any single measure leaves the final system in second or third place, always behind the larger single model.
+A composite depends on what goes into it, so we report it as a summary of the per-measure results and not as evidence in its own right. The per-measure comparisons in Sections 5.4.2 and 5.5.7, with their significance tests, remain the basis for every claim in this thesis.
 
-A composite of this kind depends on which measures are included, so it is reported as a summary of the per-measure results rather than as evidence in its own right. The per-measure comparisons in Sections 5.4.2 and 5.5.9, with their significance tests, remain the basis for the conclusions of this thesis.
+[[TABLE 5.18 | composite_ranking.csv | Equal-weight composite of five independent measures across the judged systems]]
 
-[[TABLE 5.30 | composite_ranking.csv | Equal-weight composite of five independent measures across the judged systems]]
+[[FIGURE 5.6 | fig_radar_composite.png | Five measures at once for the four strongest systems; each axis runs from the weakest to the best of the eight]]

@@ -1,0 +1,9 @@
+System,Nemotron 3 Ultra overall,gpt-oss-120b overall,Panel empathy,Panel relevance,Panel safety,Panel overall
+Single model Qwen-7B,8.87,8.92,8.15,8.68,9.86,8.9
+Single model Phi-4-mini,8.67,8.9,8.04,8.48,9.83,8.78
+FINAL: two-stage Phi-4-mini,8.58,8.79,7.84,8.45,9.76,8.68
+RoBERTa + Phi-4-mini (top-1),8.42,8.88,7.84,8.29,9.81,8.65
+Single model Qwen-1.5B,8.02,8.46,7.15,8.02,9.56,8.24
+Initial pipeline (GPT-2 + Qwen),7.78,8.29,6.98,7.63,9.5,8.04
+Zero-shot Qwen-1.5B,6.79,8.23,5.98,7.23,9.31,7.51
+Fine-tuned Qwen-1.5B,5.69,6.23,3.88,5.33,8.67,5.96

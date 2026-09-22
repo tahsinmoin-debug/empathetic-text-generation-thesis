@@ -39,6 +39,8 @@ SHORT = {
     "bakeoff_qwen": "RoBERTa + Qwen (top-1)", "bakeoff_gemma": "RoBERTa + Gemma-4B (top-1)",
     "bakeoff_phi": "RoBERTa + Phi-4-mini (top-1)", "two_stage_qwen": "Two-stage Qwen",
     "two_stage_phi": "FINAL: two-stage Phi-4-mini",
+    "single_model_phi": "Single model Phi-4-mini",
+    "two_stage_phi_robertalarge": "Final with RoBERTa-large",
 }
 
 
@@ -107,6 +109,7 @@ def fig_wassa_ci():
     root = W.parent
     per = pd.read_csv(root / "llm_judge_evaluation" / "wassa_empathy_scores.csv")
     rng = np.random.default_rng(42)
+    per = per[per["setting"] != "fine_tuned"]   # superseded by fine_tuned_fixed
     rows = []
     for key, g in per.groupby("setting"):
         v = g["wassa_empathy_0_10"].to_numpy(float)

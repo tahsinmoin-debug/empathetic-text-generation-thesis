@@ -1,0 +1,9 @@
+System,All rules (%),WASSA empathy,Emotion validation (%),AI-judge empathy,Non-repetition (%),Composite (equal weights)
+Single model Qwen-7B,82.33,5.76,32.33,8.15,41.3,0.79
+FINAL: two-stage Phi-4-mini,60.0,5.05,36.67,7.84,41.3,0.5
+Initial pipeline (GPT-2 + Qwen),63.67,4.8,26.0,6.98,76.3,0.24
+Single model Phi-4-mini,73.67,4.75,27.0,8.04,27.7,0.09
+Single model Qwen-1.5B,51.33,4.84,25.67,7.15,65.0,0.06
+RoBERTa + Phi-4-mini (top-1),65.33,4.89,28.33,7.84,23.0,0.04
+Zero-shot Qwen-1.5B,19.0,4.25,24.67,5.98,65.3,-0.59
+Fine-tuned Qwen-1.5B,22.33,3.36,18.33,3.88,90.3,-1.13

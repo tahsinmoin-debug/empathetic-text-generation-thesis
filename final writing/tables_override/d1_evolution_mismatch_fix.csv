@@ -1,0 +1,4 @@
+d1 version,Trained on,Evaluated on,Top-1 (%),Top-5 (%)
+GPT-2 Medium (initial),situation `prompt` field,situation text,56.9,90.5
+GPT-2 Medium (initial),situation `prompt` field,first user message (real input),48.2,82.7
+RoBERTa-base (final),first user message,first user message (real input),50.3,84.3

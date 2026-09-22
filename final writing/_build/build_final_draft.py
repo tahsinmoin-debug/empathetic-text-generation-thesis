@@ -59,19 +59,15 @@ CHAPTERS = [
 # a table with no marker at all is not used in this draft.
 MAIN_TABLES = {
     "literature_review_matrix.csv",
-    "ai_judge_panel.csv", "d1_evolution_mismatch_fix.csv", "d1_backbone_comparison.csv",
+    "ai_judge_panel.csv", "d1_evolution_mismatch_fix.csv",
     "d2_bakeoff_candidates.csv", "integration_variant_ablation.csv", "rag_negative_result.csv",
     "d1_candidates_design.csv", "d2_candidates_design.csv", "integration_variants_design.csv",
     "baseline_designs.csv", "detector_training_config.csv", "generation_config.csv",
     "preprocessed_data_summary.csv",
-    "all_systems_master_comparison.csv", "d1_final_overall.csv", "d1_most_confused_pairs.csv",
-    "two_stage_selection_accuracy.csv", "diversity_and_repetition.csv", "ai_judge_scores.csv",
-    "human_eval_results_PENDING.csv", "composite_ranking.csv", "design_adjustment_log.csv",
-    "final_system_vs_baselines_significance.csv", "error_propagation.csv",
-    "detector_sensitivity_robertalarge.csv", "final_system_vs_baselines_judges.csv",
-    "ai_judge_agreement.csv", "emotion_accuracy_vs_literature.csv", "human_empathy_vs_literature.csv",
-    "parameter_efficiency_systems.csv", "resource_efficiency.csv", "rules_validity.csv",
-    "decoupled_vs_single_generator.csv", "tools_and_versions.csv",
+    "all_systems_master_comparison.csv", "d1_final_overall.csv",
+    "two_stage_selection_accuracy.csv", "ai_judge_scores.csv",
+    "human_eval_results_PENDING.csv", "composite_ranking.csv",
+    "ai_judge_agreement.csv", "emotion_accuracy_vs_literature.csv", "human_empathy_vs_literature.csv", "tools_and_versions.csv",
 }
 # Why each of these is not in the running text.
 APPENDIX_REASON = {
@@ -89,8 +85,20 @@ APPENDIX_REASON = {
     "controlled_d1_swap_same_d2.csv": "detector-swap detail behind Section 5.5.3",
     "parameter_efficiency_detector.csv": "detector-level figures behind Section 5.5.7",
     "resource_paired_tests.csv": "paired tests behind the resource figures in Section 5.5.7",
-    "ai_judge_selection_criteria.csv": "selection criteria behind Section 4.1.5.1",
+    "ai_judge_selection_criteria.csv": "selection criteria behind Section 4.1.3.1",
     "tools_and_versions.csv": "software and hardware inventory for the tools appendix",
+    "design_adjustment_log.csv": "the full adjustment log narrated in Section 5.3",
+    "d1_most_confused_pairs.csv": "counts behind the error chart in Section 5.1.2",
+    "diversity_and_repetition.csv": "diversity and repetition detail behind Section 5.1.7",
+    "d1_backbone_comparison.csv": "the numbers behind the detector chart in Section 5.2.2",
+    "final_system_vs_baselines_significance.csv": "every test behind the forest plot in Section 5.4.2",
+    "error_propagation.csv": "error-propagation detail behind Section 5.4.3",
+    "detector_sensitivity_robertalarge.csv": "the RoBERTa-large substitution behind Section 5.4.3",
+    "final_system_vs_baselines_judges.csv": "every judge comparison behind Section 5.4.6",
+    "parameter_efficiency_systems.csv": "the numbers behind the cost chart in Section 5.5.5",
+    "resource_efficiency.csv": "memory and timing measurements behind Section 5.5.5",
+    "rules_validity.csv": "origin and measured effect of each rule, summarised in Section 5.5.6",
+    "decoupled_vs_single_generator.csv": "the numbers behind the comparison in Section 5.5.7",
 }
 
 
