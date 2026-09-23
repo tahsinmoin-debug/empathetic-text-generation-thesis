@@ -59,16 +59,16 @@ CHAPTERS = [
 # a table with no marker at all is not used in this draft.
 MAIN_TABLES = {
     "literature_review_matrix.csv",
-    "ai_judge_panel.csv", "d1_evolution_mismatch_fix.csv",
-    "d2_bakeoff_candidates.csv", "integration_variant_ablation.csv", "rag_negative_result.csv",
+    "ai_judge_panel.csv",
+    "rag_negative_result.csv",
     "d1_candidates_design.csv", "d2_candidates_design.csv", "integration_variants_design.csv",
     "baseline_designs.csv", "detector_training_config.csv", "generation_config.csv",
     "preprocessed_data_summary.csv", "conversational_agent_design.csv",
     "context_window_long_scenarios.csv", "head_to_head_three_systems.csv",
     "all_systems_master_comparison.csv",
     "ai_judge_scores.csv",
-    "human_eval_results_PENDING.csv", "composite_ranking.csv",
-    "ai_judge_agreement.csv", "emotion_accuracy_vs_literature.csv", "human_empathy_vs_literature.csv", "tools_and_versions.csv",
+    "human_eval_results_PENDING.csv",
+    "emotion_accuracy_vs_literature.csv", "tools_and_versions.csv",
 }
 # Why each of these is not in the running text.
 APPENDIX_REASON = {
@@ -88,6 +88,12 @@ APPENDIX_REASON = {
     "resource_paired_tests.csv": "paired tests behind the resource figures in Section 5.5.7",
     "ai_judge_selection_criteria.csv": "selection criteria behind Section 4.1.3.1",
     "tools_and_versions.csv": "software and hardware inventory for the tools appendix",
+    "d2_bakeoff_candidates.csv": "the generator bake-off reported in Section 5.2.3",
+    "integration_variant_ablation.csv": "the four integration variants compared in Section 5.2.4",
+    "composite_ranking.csv": "the equal-weight composite ranking summarised in Section 5.2.6",
+    "human_empathy_vs_literature.csv": "human empathy studies compared with ours, in Section 5.5.1",
+    "ai_judge_agreement.csv": "the judge agreement checks behind Section 5.4.5",
+    "d1_evolution_mismatch_fix.csv": "the training-input mismatch, quoted in Section 5.2.2",
     "two_stage_selection_accuracy.csv": "the stage-1 breakdown behind Section 5.1.6",
     "d1_final_overall.csv": "the detector's headline numbers, quoted in Section 5.1.2",
     "context_window_shift_scenarios.csv": "the ten short emotion-shift conversations behind Section 5.3.4",
