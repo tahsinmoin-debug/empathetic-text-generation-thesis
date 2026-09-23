@@ -1,0 +1,15 @@
+What a reader wants to know,Our system,The same generator alone,The bigger single model
+What is it?,"A detector and a generator, two short calls per reply","One model, one call per reply","One model, one call per reply"
+Models it loads,RoBERTa-base + Phi-4-mini (4-bit),Phi-4-mini (4-bit),Qwen2.5-7B (4-bit)
+Total parameters,3.96 billion,3.84 billion,7.62 billion
+Peak GPU memory,3.40 GB,not measured,5.47 GB
+Seconds per reply,4.17 s,not measured,3.91 s
+Follows all three rules,60.0%,73.7%,82.3%
+Empathy classifier (0-10),5.05,4.75,5.76
+Reply expresses the true feeling,36.7%,27.0%,32.3%
+"AI judges, overall (1-10)",8.68,8.78,8.90
+"AI judges, empathy (1-10)",7.84,8.04,8.15
+Replies using a stock phrase,58.7%,72.3%,58.7%
+Words per reply,57,73,53
+Shows which emotion it answered,"Yes: three candidates, the chosen one, and the cue words",No,No
+A safeguard can run before the reply is written,Yes,No,No

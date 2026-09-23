@@ -184,6 +184,14 @@ To test whether a separate detector is needed at all, six designs without one we
 *Figure 4.4: Assembly of the stage-2 system prompt from four inputs*
 
 
+Figure 4.5 prints that prompt exactly as the generator receives it, for a message read as *lonely*, so that the wording can be checked rather than described.
+
+
+![Figure 4.5](figures/fig_pipeline_prompt.png)
+
+*Figure 4.5: The system prompt as the generator actually receives it*
+
+
 ### 4.2.7 The Conversational Agent
 
 The evaluation in Chapter 5 answers one message at a time, but the system people actually use holds a conversation. The agent is the same two-stage pipeline run once per turn, with four additions that a single-reply system does not need (Table 4.6).
@@ -214,12 +222,12 @@ The evaluation in Chapter 5 answers one message at a time, but the system people
 
 ### 4.3.1 Source of the Data
 
-All data comes from EmpatheticDialogues [2], a corpus in which one crowdworker describes a situation tied to one of 32 emotions and a second replies as a listener. The released files hold 23,144 conversations and 88,687 utterances, already divided by the authors into training, validation and test partitions that keep every conversation started by the same speaker inside a single partition, so no speaker's style can leak from training into testing. The corpus is used under its non-commercial research licence [20]. Figure 4.5 shows the path from those files to the four datasets this work actually uses.
+All data comes from EmpatheticDialogues [2], a corpus in which one crowdworker describes a situation tied to one of 32 emotions and a second replies as a listener. The released files hold 23,144 conversations and 88,687 utterances, already divided by the authors into training, validation and test partitions that keep every conversation started by the same speaker inside a single partition, so no speaker's style can leak from training into testing. The corpus is used under its non-commercial research licence [20]. Figure 4.6 shows the path from those files to the four datasets this work actually uses.
 
 
-![Figure 4.5](figures/fig_data_pipeline.png)
+![Figure 4.6](figures/fig_data_pipeline.png)
 
-*Figure 4.5: From the released corpus to the datasets used in this work*
+*Figure 4.6: From the released corpus to the datasets used in this work*
 
 
 ### 4.3.2 Data Cleaning
@@ -229,6 +237,14 @@ Three cleaning steps are applied, each for a specific defect of the released fil
 ### 4.3.3 Data Reduction
 
 The corpus records a whole conversation, but the detector is asked to read one message. For every conversation the first utterance is kept, paired with the conversation's emotion label, and the rest is discarded. This single decision is the most consequential preparation step in the project, and it replaces the initial pipeline's choice of training on the *situation description*. The description is written after the event and names the feeling almost explicitly, whereas the first message is what a user actually types; training on the description therefore teaches the detector an easier task than the one it must perform, and Section 5.2.2 measures what that mismatch cost.
+
+Figure 4.7 shows one conversation before and after the whole of this preparation, with the released rows on one side and the single labelled message that reaches the detector on the other.
+
+
+![Figure 4.7](figures/fig_preprocessing.png)
+
+*Figure 4.7: One conversation before and after preparation*
+
 
 A second reduction defines the evaluation set. Reply quality is measured on 300 conversations drawn from the test partition with seed 42, and every generation experiment in this thesis answers those same 300 conversations. From them, 64 are drawn for the AI judges, two per emotion, the shortest and the longest message in each category, which keeps every emotion represented while fitting inside the judges' daily request limits.
 
