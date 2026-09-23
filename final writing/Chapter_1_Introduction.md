@@ -53,12 +53,14 @@ The proposed system has two components, which is where its name comes from, and 
 
 **The alternatives:** Because a design is only as convincing as what it was compared against, six designs without a detector were also built and measured on the same conversations: zero-shot prompting, a model fine-tuned with LoRA on the dataset's own listener replies, single models of 1.5, 3.8 and 7.6 billion parameters prompted to detect and respond in one step, and a retrieval-augmented pipeline.
 
-**The evaluation:** Every system answers the same 300 conversations with identical decoding settings, and is measured by five independent signals: automatic checks of the three response rules; the WASSA 2024 shared-task empathy classifier [26], [27]; emotional fidelity, which reads the reply back through the detector and compares it with the conversation's true emotion; a blind panel of two large language models from unrelated developers [28], [29]; and a human rating study. Differences are tested with paired statistics and corrected for multiple comparisons. Figure 1.1 shows the complete system; Chapter 4 specifies it in detail.
+**The evaluation:** Every system answers the same 300 conversations with identical decoding settings, and is measured by five independent signals: automatic checks of the three response rules; the WASSA 2024 shared-task empathy classifier [26], [27]; emotional fidelity, which reads the reply back through the detector and compares it with the conversation's true emotion; a blind panel of two large language models from unrelated developers [28], [29]; and a human rating study. Differences are tested with paired statistics and corrected for multiple comparisons.
+
+Figure 1.1 sets out the whole of this work on one page: the data it starts from, the two strands of building the system and testing it against the alternatives, the design that was measured and rejected, the two findings that settled the argument, and the system that was finally adopted. Chapter 4 specifies that system in detail, and Chapter 5 reports the measurement behind every box.
 
 
-![Figure 1.1](figures/fig_final_architecture.png)
+![Figure 1.1](figures/fig_workflow.png)
 
-*Figure 1.1: The complete two-stage system, from the user's message to the reply and its audit trail*
+*Figure 1.1: The workflow of this thesis, from the corpus to the adopted system*
 
 
 ## 1.6 Scopes and Challenges
