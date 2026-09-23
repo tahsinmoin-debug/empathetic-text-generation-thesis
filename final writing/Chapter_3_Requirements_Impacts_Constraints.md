@@ -8,7 +8,7 @@ This work had to satisfy technical and methodological criteria at once. Technica
 
 ### 3.1.1 Functional Requirements
 
-- **F1 - Emotion detection from the user's own words:** the emotion is read from the message the user actually writes, among the 32 categories of EmpatheticDialogues [2].
+- **F1 - Emotion detection from the user's own words:** the emotion is read from the message the user actually writes, among the 32 categories of EmpatheticDialogues [4].
 - **F2 - Candidate emotions, not a single guess:** the detector returns several likely emotions with a confidence each.
 - **F3 - A visible emotional decision:** every reply carries the candidates, the emotion used and the words behind it.
 - **F4 - Guided generation:** the generator receives wording prepared for the selected emotion.
@@ -17,7 +17,7 @@ This work had to satisfy technical and methodological criteria at once. Technica
 
 ### 3.1.2 Non-Functional Requirements
 
-- **N1 - Hardware budget:** the whole system runs on one consumer GPU with 8 GB of memory [34].
+- **N1 - Hardware budget:** the whole system runs on one consumer GPU with 8 GB of memory [47].
 - **N2 - Privacy by locality:** no user message has to leave the device.
 - **N3 - Response time:** a reply arrives within a few seconds on that hardware.
 - **N4 - Reproducibility:** every number can be regenerated from saved outputs, with fixed seeds.
@@ -28,11 +28,11 @@ This work had to satisfy technical and methodological criteria at once. Technica
 
 **Hardware specifications:** all training, generation and benchmarking ran on one machine with an NVIDIA GeForce RTX 4060 holding 8 GB of video memory, 16 GB of system memory and a solid-state disk for the model cache, under Windows 11. That card is a requirement rather than a limitation, because the design target was a system a counselling service could host on an ordinary computer. It sets the ceiling the design works under, since the detector, the quantised generator and their activations must fit in 8 GB together, and it is the hardware on which the 3.40 GB peak memory and 4.17 seconds per reply of Chapter 5 were measured.
 
-**Software requirements:** the system was built in Python 3.10 with PyTorch 2.5.1 on CUDA 12.1 [35] and Hugging Face Transformers 5.16.1 [36], which supply the pre-trained encoder and the instruction-tuned generator. Fine-tuning used PEFT for low-rank adaptation and bitsandbytes for 4-bit NF4 quantisation, without which the generator would not fit in 8 GB. Evaluation used SciPy [37] and scikit-learn [38] for the paired tests and classification metrics, sentence-transformers for the retrieval baseline, the WASSA 2024 empathy classifier [17], and the OpenRouter and Groq APIs for the judges. The demonstration uses Gradio and the human study Google Forms, and exact library versions are listed in the appendix.
+**Software requirements:** the system was built in Python 3.10 with PyTorch 2.5.1 on CUDA 12.1 [48] and Hugging Face Transformers 5.16.1 [49], which supply the pre-trained encoder and the instruction-tuned generator. Fine-tuning used PEFT for low-rank adaptation and bitsandbytes for 4-bit NF4 quantisation, without which the generator would not fit in 8 GB. Evaluation used SciPy [50] and scikit-learn [51] for the paired tests and classification metrics, sentence-transformers for the retrieval baseline, the WASSA 2024 empathy classifier [27], and the OpenRouter and Groq APIs for the judges. The demonstration uses Gradio and the human study Google Forms, and exact library versions are listed in the appendix.
 
 ### 3.1.4 Data Requirements
 
-The work needed conversational data labelled with fine-grained emotions, which EmpatheticDialogues supplies: 23,144 conversations and 88,687 utterances, each conversation carrying one of 32 emotion labels, split by its authors into 17,839 conversations for training, 2,763 for validation and 2,542 for testing [2]. The detector is trained on the first message of each conversation, the text it receives in use, giving 17,780 training pairs. Reply quality is measured on 300 held-out conversations answered by every system, of which the AI judges score a stratified sample of 64. The corpus is released under a non-commercial research licence [20].
+The work needed conversational data labelled with fine-grained emotions, which EmpatheticDialogues supplies: 23,144 conversations and 88,687 utterances, each conversation carrying one of 32 emotion labels, split by its authors into 17,839 conversations for training, 2,763 for validation and 2,542 for testing [4]. The detector is trained on the first message of each conversation, the text it receives in use, giving 17,780 training pairs. Reply quality is measured on 300 held-out conversations answered by every system, of which the AI judges score a stratified sample of 64. The corpus is released under a non-commercial research licence [5].
 
 ### 3.1.5 Design Constraints
 
@@ -56,15 +56,15 @@ The system is built for the moment when someone wants to be heard and no trained
 
 A system that sounds understanding can be trusted further than it deserves, so three risks are stated plainly.
 
-- **Substitution for real help:** a person in distress may keep talking to a machine instead of contacting a professional. The emotion categories contain nothing for suicidal thinking and there is no crisis filter, so the system must never be presented as a mental-health service; any deployment needs a reviewed filter, a referral path and a visible helpline number [39].
+- **Substitution for real help:** a person in distress may keep talking to a machine instead of contacting a professional. The emotion categories contain nothing for suicidal thinking and there is no crisis filter, so the system must never be presented as a mental-health service; any deployment needs a reviewed filter, a referral path and a visible helpline number [52].
 - **Wrong or shallow empathy:** the detector's first choice is correct 50.3% of the time and the reply names the user's true emotion in 36.7% of cases, and a reply built on the wrong emotion can feel dismissive. Passing three candidates instead of one reduces that cost, but for one person on one occasion the risk is real.
-- **Cultural and linguistic fit:** EmpatheticDialogues was written by English-speaking crowdworkers [2], and how feelings are expressed differs across languages, so use in Bangladesh would require data and evaluation in Bangla first.
+- **Cultural and linguistic fit:** EmpatheticDialogues was written by English-speaking crowdworkers [4], and how feelings are expressed differs across languages, so use in Bangladesh would require data and evaluation in Bangla first.
 
 In short, the design gives an institution what a large hosted model cannot, namely privacy, affordability and an auditable emotional decision, and pays for it with replies the AI judges rate no higher than a single model's.
 
 ## 3.3 Environmental Impact
 
-The environmental cost of this work is the electricity used to train and evaluate the models, and it is small because every model involved is small. All training and local inference ran on one RTX 4060 with a rated board power of 115 W [34]. Taking rated power times measured GPU hours, which overstates the true draw, training the final detector used about 0.017 kWh and the RoBERTa-large alternative about 0.124 kWh. The heaviest items were generation for fourteen configurations over 300 conversations each and the repeated fine-tuning runs, a few kilowatt-hours in total, comparable to running a desktop for a few days. No cloud GPU was rented and nothing was trained from scratch.
+The environmental cost of this work is the electricity used to train and evaluate the models, and it is small because every model involved is small. All training and local inference ran on one RTX 4060 with a rated board power of 115 W [47]. Taking rated power times measured GPU hours, which overstates the true draw, training the final detector used about 0.017 kWh and the RoBERTa-large alternative about 0.124 kWh. The heaviest items were generation for fourteen configurations over 300 conversations each and the repeated fine-tuning runs, a few kilowatt-hours in total, comparable to running a desktop for a few days. No cloud GPU was rented and nothing was trained from scratch.
 
 The design also has a direct environmental consequence in use: within statistical error the system matches the AI-judge scores of a single model with 1.9 times its parameters while using 38% less GPU memory, so a service that would otherwise need a data-centre GPU can run on a mid-range consumer card, and because everything runs locally no message travels to a data centre and back.
 
@@ -76,7 +76,7 @@ Responding to someone who is upset carries obligations that an accuracy score do
 
 ### 3.4.1 Scope and User Safety
 
-The system is meant for supportive listening in low-risk conversations, and is neither a therapeutic nor a diagnostic nor a crisis service. The gravest risk is a user disclosing suicidal thoughts, and the 32 emotion categories of EmpatheticDialogues [2] contain no label for suicidal ideation, so the detector cannot represent such a message at all. In testing, "I want to die" was read as *afraid* (45%) and *terrified* (28%): the reply was warm but named no crisis service, while commercial assistants answered mainly with helpline information. Neither is adequate alone, since World Health Organization guidance asks for both understanding and accurate information on where to find help [39]. Mitigation here is limited to the interface, which states that the system is an unmonitored student project and lists crisis services ([[TEAM TO FILL: current Kaan Pete Roi number, verified on its official website]]; findahelpline.com). A pre-generation crisis filter is essential before any deployment, and the decoupled design makes it easy to add, because the emotion is decided before any text is written.
+The system is meant for supportive listening in low-risk conversations, and is neither a therapeutic nor a diagnostic nor a crisis service. The gravest risk is a user disclosing suicidal thoughts, and the 32 emotion categories of EmpatheticDialogues [4] contain no label for suicidal ideation, so the detector cannot represent such a message at all. In testing, "I want to die" was read as *afraid* (45%) and *terrified* (28%): the reply was warm but named no crisis service, while commercial assistants answered mainly with helpline information. Neither is adequate alone, since World Health Organization guidance asks for both understanding and accurate information on where to find help [52]. Mitigation here is limited to the interface, which states that the system is an unmonitored student project and lists crisis services ([[TEAM TO FILL: current Kaan Pete Roi number, verified on its official website]]; findahelpline.com). A pre-generation crisis filter is essential before any deployment, and the decoupled design makes it easy to add, because the emotion is decided before any text is written.
 
 ### 3.4.2 Clinical Responsibility
 
@@ -92,7 +92,7 @@ The human evaluation in Chapter 5 asks volunteers, mostly students with some fac
 
 ### 3.4.5 Data and Model Licensing
 
-EmpatheticDialogues is released under CC BY-NC 4.0 [20], which requires attribution and forbids commercial use, so the detector trained on it may be shared for research but not built into a commercial product. Phi-4-mini-instruct and the RoBERTa backbone are MIT-licensed, the Qwen2.5 baselines Apache-2.0, and the Gemma-3 candidate carries Google's Gemma Terms of Use [40]. The WASSA empathy model states no licence and is used for evaluation only, with credit to its authors; Table A.3 lists every licence and what it permits.
+EmpatheticDialogues is released under CC BY-NC 4.0 [5], which requires attribution and forbids commercial use, so the detector trained on it may be shared for research but not built into a commercial product. Phi-4-mini-instruct and the RoBERTa backbone are MIT-licensed, the Qwen2.5 baselines Apache-2.0, and the Gemma-3 candidate carries Google's Gemma Terms of Use [53]. The WASSA empathy model states no licence and is used for evaluation only, with credit to its authors; Table A.3 lists every licence and what it permits.
 
 
 ### 3.4.6 Bias and Fairness
@@ -105,7 +105,7 @@ Failed experiments were treated as failures rather than results, and negative fi
 
 ## 3.5 Standards
 
-No engineering standard governs an empathetic dialogue system, so the project followed the published practice that applies to its parts. The data and every model are used under their own licences (Table A.3), with EmpatheticDialogues restricted to non-commercial research. The response rules follow established guidance on supportive conversation: acknowledging the feeling implements the emotional-reaction mechanism of the EPITOME framework [1], and the single-question rule follows counselling guidance against the question-answer trap [41]. Empathy is measured with the classifier from the WASSA 2024 shared task [16], and the AI-judge evaluation follows accepted practice: blind scoring, an anchored rubric, temperature 0 and judges from unrelated developers [19]. Statistical claims use paired tests with correction for multiple comparisons (Section 5.4.1). World Health Organization guidance sets the one standard the system does not meet, since it has no crisis safeguard and must not be deployed as a mental-health service [39]. The work also follows BRAC University's academic conduct requirements: sources cited, results from the team's own runs, errors reported rather than removed.
+No engineering standard governs an empathetic dialogue system, so the project followed the published practice that applies to its parts. The data and every model are used under their own licences (Table A.3), with EmpatheticDialogues restricted to non-commercial research. The response rules follow established guidance on supportive conversation: acknowledging the feeling implements the emotional-reaction mechanism of the EPITOME framework [2], and the single-question rule follows counselling guidance against the question-answer trap [3]. Empathy is measured with the classifier from the WASSA 2024 shared task [26], and the AI-judge evaluation follows accepted practice: blind scoring, an anchored rubric, temperature 0 and judges from unrelated developers [29]. Statistical claims use paired tests with correction for multiple comparisons (Section 5.4.1). World Health Organization guidance sets the one standard the system does not meet, since it has no crisis safeguard and must not be deployed as a mental-health service [52]. The work also follows BRAC University's academic conduct requirements: sources cited, results from the team's own runs, errors reported rather than removed.
 
 ## 3.6 Project Management Plan
 
@@ -141,7 +141,7 @@ Because only one member's computer had the GPU described in Section 3.1.3, every
 
 The plan was revised whenever evidence overturned an assumption, four times in all.
 
-1. **Change of dataset (June 2026):** GoEmotions [42] holds isolated Reddit comments rather than conversations, so the project moved to EmpatheticDialogues.
+1. **Change of dataset (June 2026):** GoEmotions [31] holds isolated Reddit comments rather than conversations, so the project moved to EmpatheticDialogues.
 2. **Expanded evaluation (July to August 2026):** once the question arose of whether two models were needed at all, single-model baselines, a retrieval variant and an AI-judge panel were added.
 3. **Redesign of the detector (late August 2026):** the detector had been trained on different text from the input it received in use, so it was retrained and a generator comparison was added, leading to the two-stage design.
 4. **Scope control (September 2026):** a repetition-penalty improvement was deferred and the final outputs frozen, because regenerating them would have invalidated judge scores already being collected.
