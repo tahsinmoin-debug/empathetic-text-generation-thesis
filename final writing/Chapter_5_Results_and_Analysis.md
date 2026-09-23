@@ -8,25 +8,25 @@ Every design built in Chapter 4 answered the same conversations and was measured
 
 All twelve generation systems answer the same 300 conversations, drawn with seed 42 from the EmpatheticDialogues test partition, with identical decoding settings (Section 4.4.2). The detector is measured on all 2,542 test conversations. Nothing else changes between runs, so any difference is a property of the design rather than of the sample.
 
-Table 5.1 is the scoreboard for the chapter, and its seven columns are used throughout. **Ack** is the share of replies that acknowledge the feeling, from a keyword check; **one question** the share asking exactly one; **all rules** the share passing all three checks at once, which is the strictest column and the one quoted in the text. **Mean words** is the average reply length, which matters because both the empathy classifier and the judges reward length (Section 5.4.4). **WASSA empathy** is the 0-10 score of an independent empathy classifier, and **emotion validation** the share of replies that, read back by the detector, express the conversation's true emotion. Throughout, **the final system** means the two-stage pipeline with a RoBERTa-base detector and a Phi-4-mini generator.
+The chapter reports two tables, because two different questions are being asked. Table 5.1 records **what a reply does**, which can be checked mechanically: whether it acknowledges the feeling, from a keyword check; whether it asks exactly one question; whether it stays within 120 words; whether it does all three at once, which is the strictest column and the one quoted in the text; how long it is, which matters because every empathy rater rewards length (Section 5.4.4); and whether, read back by the detector, it expresses the conversation's true emotion. Table A.7 records **how empathetic it is judged to be**, by the panel described in Section 5.1.5. Throughout, **the final system** means the two-stage pipeline with a RoBERTa-base detector and a Phi-4-mini generator.
 
 
-| System | Ack (%) | One question (%) | All rules (%) | Mean words | WASSA empathy (0-10) | Emotion validation (%) |
+| System | Acknowledges the feeling (%) | Exactly one question (%) | Within the length limit (%) | All three rules (%) | Mean words | Expresses the true emotion (%) |
 |---|---|---|---|---|---|---|
-| Single model Qwen-7B | 83 | 99 | 82.33 | 52.95 | 5.76 | 32.33 |
-| Single model Phi-4-mini | 77.33 | 96 | 73.67 | 73.48 | 4.75 | 27 |
-| RoBERTa + Phi-4-mini (top-1) | 72 | 94.67 | 65.33 | 80.45 | 4.89 | 28.33 |
-| Initial pipeline (GPT-2 + Qwen) | 70.33 | 87.33 | 63.67 | 35.21 | 4.8 | 26 |
-| FINAL: two-stage Phi-4-mini | 66.33 | 92.67 | 60 | 57.11 | 5.05 | 36.67 |
-| RoBERTa + Qwen (top-1) | 67.67 | 84.33 | 57.67 | 34.72 | 4.78 | 25.33 |
-| Single model Qwen-1.5B | 70.67 | 73.67 | 51.33 | 41.96 | 4.84 | 25.67 |
-| Initial pipeline + retrieval | 57 | 78 | 43.67 | 34 | 4.85 | 27.67 |
-| Two-stage Qwen-1.5B | 47 | 74.33 | 36.67 | 44.15 | 4.76 | 27 |
-| Fine-tuned Qwen-1.5B | 30 | 74 | 22.33 | 9.95 | 3.36 | 18.33 |
-| RoBERTa + Gemma-4B (top-1) | 96.67 | 92 | 22 | 133.25 | 5.3 | 35 |
-| Zero-shot Qwen-1.5B | 81.67 | 22.67 | 19 | 75.92 | 4.25 | 24.67 |
+| Single model Qwen-7B | 83.0 | 99.0 | 100.0 | 82.3 | 53 | 32.3 |
+| Single model Phi-4-mini | 77.3 | 96.0 | 99.3 | 73.7 | 73 | 27.0 |
+| RoBERTa + Phi-4-mini (top-1) | 72.0 | 94.7 | 96.0 | 65.3 | 80 | 28.3 |
+| Initial pipeline (GPT-2 + Qwen) | 70.3 | 87.3 | 100.0 | 63.7 | 35 | 26.0 |
+| FINAL: two-stage Phi-4-mini | 66.3 | 92.7 | 100.0 | 60.0 | 57 | 36.7 |
+| RoBERTa + Qwen (top-1) | 67.7 | 84.3 | 100.0 | 57.7 | 35 | 25.3 |
+| Single model Qwen-1.5B | 70.7 | 73.7 | 100.0 | 51.3 | 42 | 25.7 |
+| Initial pipeline + retrieval | 57.0 | 78.0 | 100.0 | 43.7 | 34 | 27.7 |
+| Two-stage Qwen-1.5B | 47.0 | 74.3 | 99.7 | 36.7 | 44 | 27.0 |
+| Fine-tuned Qwen-1.5B | 30.0 | 74.0 | 100.0 | 22.3 | 10 | 18.3 |
+| RoBERTa + Gemma-4B (top-1) | 96.7 | 92.0 | 27.7 | 22.0 | 133 | 35.0 |
+| Zero-shot Qwen-1.5B | 81.7 | 22.7 | 83.7 | 19.0 | 76 | 24.7 |
 
-*Table 5.1: Every system on the same 300 conversations: rule adherence, reply length, empathy and emotion fidelity*
+*Table 5.1: What every reply does: the three rule checks, its length, and whether it expresses the person's real emotion*
 
 
 ### 5.1.2 Emotion Detection
@@ -37,21 +37,13 @@ The shape of the errors matters more than their number. The twelve most frequent
 
 
 
-### 5.1.3 Rules, Empathy and Emotional Fidelity
+### 5.1.3 What the Replies Do
 
-Figure 5.1 carries the three headline measures for every system.
+Table 5.1 carries the measures that can be checked mechanically; how empathetic the replies are judged to be follows in Section 5.1.5.
 
-**Rule adherence:** a reply passes only if it acknowledges the feeling, asks exactly one question and stays within 120 words. The final system passes in **60.0%** of replies, from 66.3% acknowledgement, 92.7% exactly one question and 100% within the limit, averaging 57.1 words. Among systems of its own scale it sits behind top-1 Phi-4-mini prompting (65.3%) and the initial pipeline (63.7%), well ahead of the same-size single model (51.3%), the fine-tuned model (22.3%) and zero-shot prompting (19.0%); the largest single model leads at 82.3%. Two results are worth reading carefully. The fine-tuned model reproduces the style it was trained on rather than the behaviour the rules ask for, averaging 10.0 words and acknowledging the feeling in only 30.0% of replies, which is faithful learning, because the human listener replies it was trained on satisfy all three rules in 4.3% of cases. And Gemma-3-4B fails almost entirely (22.0%) not because its replies are poor but because it ignores the length limit at 133 words (Section 5.2.3).
-
-**Empathy:** the empathy measure is not ours, and that is the point of using it. It is the hyy33 system from the WASSA 2024 shared task [17], [16], a transformer trained on conversation turns that people had rated for empathy, returning one score from 0 to 10. It shares no model family with any generator compared here, so it has no way to prefer our design, and Section 5.4.4 tests rather than assumes it. The final system scores **5.05**, the highest of any system no larger than Phi-4-mini, above the same-size single model (4.84), the initial pipeline (4.80) and zero-shot prompting (4.25); only Gemma-3-4B (5.30) and the 7.6-billion-parameter single model (5.76) score higher.
+**Rule adherence:** a reply passes only if it acknowledges the feeling, asks exactly one question and stays within 120 words. The final system passes in **60.0%** of replies, behind the largest single model (82.3%), its own generator prompted directly (73.7%) and top-1 prompting (65.3%), and well ahead of the same-size single model (51.3%) and the two untrained-for-this baselines. Two rows are worth reading carefully. The fine-tuned model reproduces the style it was trained on rather than the behaviour the rules ask for, at 10 words a reply and acknowledgement in 30.0%, which is faithful learning, because the human replies it was trained on satisfy all three rules in 4.3% of cases. And Gemma-3-4B fails almost entirely not because its replies are poor but because it ignores the length limit at 133 words (Section 5.2.3).
 
 **Emotional fidelity:** a reply can be well formed and still answer the wrong feeling, so each reply is passed back through the detector and compared with the conversation's true label. The final system is the highest of all twelve at **36.7%**, ahead of the largest single model (32.3%), top-1 Phi-4-mini prompting (28.3%) and the same-size single model (25.7%). A second measure, context awareness, compares the reply with the emotion the system conditioned on, where it reaches 54.3%; we prefer the first, because the detector reads replies it was never trained on and because context awareness uses the very detector that fed our pipelines.
-
-
-![Figure 5.1](figures/fig_headline_scoreboard.png)
-
-*Figure 5.1: The three headline measures for every system: rule adherence, empathy with 95% confidence intervals, and emotion fidelity*
-
 
 ### 5.1.4 Inside the Two-Stage Decision, and Repetition
 
@@ -59,44 +51,50 @@ The true emotion is among the detector's three candidates in 78.0% of the evalua
 
 Repetitiveness is the most common complaint about machine-written empathy [15], so we measure it as a **boilerplate rate**: the share of replies containing one of that system's ten most frequent five-word phrases. The final system's rate is 58.7%, with "how are you feeling right" appearing in 49 replies. The comparison that matters is the same generator prompted generically, at 77.0%: per-emotion prompts reduce repetition in an identical model without curing it.
 
-### 5.1.5 The AI-Judge Panel
+### 5.1.5 The Empathy Panel
 
-**Why these two models:** three requirements fixed the panel. A judge had to be flagship-scale, because only strong judges track human preference reliably [18]; it could not share a family with anything it judges, because LLM evaluators favour their own generations [33]; and one judge is not enough, because a panel from different developers shows less of any single model's bias [19]. Nemotron 3 Ultra (NVIDIA) and gpt-oss-120b (OpenAI, open weights) meet all three, neither is related to Phi-4-mini (Microsoft) or Qwen (Alibaba), and both are reachable on free tiers, which a project with no compute budget needs. Four further candidates were prepared and lost to circumstances outside the work (Table A.9).
+Empathy is the one thing this system exists to produce and the one thing no single measure settles, so it is judged by a panel of three raters rather than by any one of them: two large language models reading the replies, and a classifier trained on human empathy ratings. They are reported together, in Table A.7, because they are three answers to the same question.
 
-Each judge scores every reply from 1 to 10 for empathy, relevance and safety, and the panel score is the mean of the two. The ordering is led by the largest single model (**8.90**), then the single model built on our own generator (8.78), the **final system (8.68)** and top-1 Phi-4-mini prompting (8.65), followed by the same-size single model (8.24), the initial pipeline (8.04), zero-shot prompting (7.51) and the fine-tuned model (5.96). One pattern repeats in every system: safety is easy to satisfy (9.31 to 9.86 for all but the fine-tuned model), relevance is harder, and empathy hardest; the final system scores 7.84, 8.45 and 9.76.
+**The two model judges:** three requirements fixed them. A judge had to be flagship-scale, because only strong judges track human preference reliably [18]; it could not share a family with anything it judges, because LLM evaluators favour their own generations [33]; and one judge is not enough, because a panel from different developers shows less of any single model's bias [19]. Nemotron 3 Ultra (NVIDIA) and gpt-oss-120b (OpenAI, open weights) meet all three, neither is related to Phi-4-mini (Microsoft) or Qwen (Alibaba), and both are reachable on free tiers, which a project with no compute budget needs. Four further candidates were prepared and lost to circumstances outside the work (Table A.9). Each scores every reply from 1 to 10 for empathy, relevance and safety.
 
-**How we checked that the scoring was fair:** Figure 5.2 prints the prompt a judge receives and the five controls around it. The judge sees the user's message and one reply and nothing else, so it cannot know which design wrote the text or whether that design is ours. Both judges scored all 512 replies, so no system was rated by a different judge from another. The rubric fixes what each band of the scale means, the temperature is zero so the same reply always receives the same score, and the answer is constrained to JSON with every parse recorded. Finally the judges are compared against each other rather than trusted: they agree at rho = 0.69 on empathy and order the eight systems the same way (Section 5.4.5).
+**The third rater is not a language model at all,** which is why it is in the panel: the hyy33 system from the WASSA 2024 shared task [17], [16], a transformer trained on conversation turns that people had rated for empathy, returning one score from 0 to 10. It shares no family with any generator compared here and cannot be swayed by the fluency and length preferences large models have in common, and Section 5.4.4 tests rather than assumes it. It is also the only rater that scored all twelve systems, the two judges having been run on the stratified sample of 64 conversations.
 
-**Every emotion was judged, not a favourable subset:** the sample holds two conversations for each of the 32 emotions, the shortest and the longest message in that category, so no emotion is missing and no length band is over-represented; the judged messages run from 4 to 54 words. Figure 5.3 gives the final system's judge empathy for each emotion, and the spread is wide and patterned: above its own mean on acute distress (*terrified* 9.0, *sad*, *devastated*, *afraid*, *angry*), below it on positive or settled states (*confident* 5.5, *trusting*, *grateful*, *hopeful*). That is what a system built for support should look like, and it also marks where it is weakest. With two conversations behind each value, these are indicative and no significance is claimed for them.
+**Combining them:** the raters do not share a scale, since the judges use 3.9 to 8.2 of their range and the classifier 3.4 to 5.8 of its own, so averaging the raw numbers would let the judges' wider spread decide the ranking by itself. Each rater is therefore standardised across the eight judged systems before the three are averaged with equal weight, which is the **panel score** in Table A.7. Nothing is tuned, and weighting the classifier as half the panel rather than one third changes the ordering hardly at all (rank agreement 0.98).
 
-**What the ranking settles, and what it does not:** the final system is third of eight, and that has to be read against what the panel can separate at all. The four leaders all use a generator of 3.8 billion parameters or more, lie within 0.22 points of one another, and none of the differences among them survives correction (Section 5.4.5); what the panel does separate is scale, since every system below them uses 1.5 billion parameters or fewer. The judges therefore rate the two-stage design and the same generator prompted directly as equal (8.68 against 8.78, p = 0.16), and the choice between them rests on the measures that do separate them (Section 5.5.5).
+**What the panel says:** the 7.6-billion-parameter single model leads (+1.11), and **the final system is second of eight (+0.59)**, ahead of the same generator used alone (+0.53), top-1 prompting with that generator (+0.51), the same-size single model (+0.15), the initial pipeline (+0.05), zero-shot prompting (-0.72) and the fine-tuned model (-2.22). **Among the systems that fit the 8 GB budget of requirement N1, it is first.** The ordering matters for the central question of this thesis, because the two-stage design and the same generator prompted directly swap places depending on who is asked: the model judges put that single model slightly ahead on empathy (8.04 against 7.84), the classifier puts our system clearly ahead (5.05 against 4.75), and across the three raters together ours comes out in front. That is a narrow result and we do not claim significance for it (Section 5.4.5); what it does show is that the decoupled design is not bought at the cost of empathy.
 
+**How we checked that the scoring was fair:** Figure 5.1 prints the prompt a judge receives and the five controls around it, of which the first matters most: the judge sees the user's message and one reply and nothing else, so it cannot know which design wrote the text or whether that design is ours. The raters are then checked against each other rather than trusted: the two judges agree at rho = 0.69 reply by reply and order the systems almost identically, and the classifier, which shares nothing with them, agrees on the ordering across systems at rho = 0.74 (Section 5.4.4). Three raters that disagree on individual replies but agree on which systems are better is what a panel is for.
 
+**Every emotion was judged, not a favourable subset:** the sample holds two conversations for each of the 32 emotions, the shortest and the longest message in that category, so no emotion is missing and no length band is over-represented; the judged messages run from 4 to 54 words. Figure 5.2 gives the final system's judge empathy for each emotion, and the spread is wide and patterned: above its own mean on acute distress (*terrified* 9.0, *sad*, *devastated*, *afraid*, *angry*), below it on positive or settled states (*confident* 5.5, *trusting*, *grateful*, *hopeful*). That is what a system built for support should look like, and it also marks where it is weakest. With two conversations behind each value, these are indicative and no significance is claimed for them.
 
-| System | Nemotron 3 Ultra overall | gpt-oss-120b overall | Panel empathy | Panel relevance | Panel safety | Panel overall |
-|---|---|---|---|---|---|---|
-| Single model Qwen-7B | 8.87 | 8.92 | 8.15 | 8.68 | 9.86 | 8.9 |
-| Single model Phi-4-mini | 8.67 | 8.9 | 8.04 | 8.48 | 9.83 | 8.78 |
-| FINAL: two-stage Phi-4-mini | 8.58 | 8.79 | 7.84 | 8.45 | 9.76 | 8.68 |
-| RoBERTa + Phi-4-mini (top-1) | 8.42 | 8.88 | 7.84 | 8.29 | 9.81 | 8.65 |
-| Single model Qwen-1.5B | 8.02 | 8.46 | 7.15 | 8.02 | 9.56 | 8.24 |
-| Initial pipeline (GPT-2 + Qwen) | 7.78 | 8.29 | 6.98 | 7.63 | 9.5 | 8.04 |
-| Zero-shot Qwen-1.5B | 6.79 | 8.23 | 5.98 | 7.23 | 9.31 | 7.51 |
-| Fine-tuned Qwen-1.5B | 5.69 | 6.23 | 3.88 | 5.33 | 8.67 | 5.96 |
-
-*Table 5.2: Average AI-judge scores (1-10) by system*
+**What the ranking settles, and what it does not:** the four leading systems all use a generator of 3.8 billion parameters or more and sit within 0.08 of one another on the panel score, and none of the differences among them survives correction on the judges' own scores (Section 5.4.5). What the panel separates cleanly is scale: every system below those four uses a generator of 1.5 billion parameters or fewer. The panel is therefore evidence that the decoupled design holds its own at its scale, not that it beats the systems next to it; the case for choosing it over the same generator alone rests on the measures in Section 5.5.5, where the two are not tied.
 
 
 
-![Figure 5.2](figures/fig_judge_prompt.png)
+| Rank | System | Nemotron 3 Ultra (1-10) | gpt-oss-120b (1-10) | WASSA classifier (0-10) | Panel score |
+|---|---|---|---|---|---|
+| 1 | Single model Qwen-7B | 8.12 | 8.17 | 5.76 | +1.11 |
+| 2 | FINAL: two-stage Phi-4-mini | 7.69 | 8.00 | 5.05 | +0.59 |
+| 3 | Single model Phi-4-mini | 7.94 | 8.14 | 4.75 | +0.53 |
+| 4 | RoBERTa + Phi-4-mini (top-1) | 7.58 | 8.09 | 4.89 | +0.51 |
+| 5 | Single model Qwen-1.5B | 6.92 | 7.38 | 4.84 | +0.15 |
+| 6 | Initial pipeline (GPT-2 + Qwen) | 6.79 | 7.20 | 4.80 | +0.05 |
+| 7 | Zero-shot Qwen-1.5B | 5.33 | 6.66 | 4.25 | -0.72 |
+| 8 | Fine-tuned Qwen-1.5B | 3.89 | 3.86 | 3.36 | -2.22 |
 
-*Figure 5.2: The prompt each judge receives, and the controls that keep the scoring fair*
+*Table 5.2: The empathy panel: the two model judges, the classifier, and the combined panel score*
 
 
 
-![Figure 5.3](figures/fig_judge_emotion_coverage.png)
+![Figure 5.1](figures/fig_judge_prompt.png)
 
-*Figure 5.3: Judge empathy of the final system for each of the 32 emotions, two conversations each*
+*Figure 5.1: The prompt each judge receives, and the controls that keep the scoring fair*
+
+
+
+![Figure 5.2](figures/fig_judge_emotion_coverage.png)
+
+*Figure 5.2: Judge empathy of the final system for each of the 32 emotions, two conversations each*
 
 
 ### 5.1.6 Human Evaluation
@@ -110,20 +108,20 @@ To check the automatic measures against people, we ran a rating study. Participa
 
 Numbers say how often something happens; they do not show what the system does. Two figures close this section with the system running on real input, printing its audit trail.
 
-**The detector (Figure 5.4):** for each message it returns three candidates with their confidence and the words its attention selected: *lonely* at 91.9% for someone who moved city and stopped speaking to people, and *devastated* at 54.3% ahead of *sad* at 30.9% for a dog lost while its owner was away, where the attention picks out "My dog disappeared" and "and nobody told". Those candidates and cue words are exactly what the generator receives next.
+**The detector (Figure 5.3):** for each message it returns three candidates with their confidence and the words its attention selected: *lonely* at 91.9% for someone who moved city and stopped speaking to people, and *devastated* at 54.3% ahead of *sad* at 30.9% for a dog lost while its owner was away, where the attention picks out "My dog disappeared" and "and nobody told". Those candidates and cue words are exactly what the generator receives next.
 
-**The agent (Figure 5.5):** three turns of a conversation about having no time for one's parents. The trail above each reply shows the detector's window widening as the conversation grows, from one message to three, and the emotion it read at each turn: *guilty* at 56%, then *guilty* again at 67% once the second message is read together with the first, then *apprehensive* at 35% when the person asks whether they should talk to their parents, where the agent announces the change, guilty to apprehensive, and answers the feeling the person has now. Every reply obeys the rules it was given: 52, 44 and 49 words, exactly one question each. Neither figure is a mock-up; both print the record the system keeps for every turn.
-
-
-![Figure 5.4](figures/fig_demo_d1.png)
-
-*Figure 5.4: The detector on two messages: three candidates, their confidence, and the words its attention selected*
+**The agent (Figure 5.4):** three turns of a conversation about having no time for one's parents. The trail above each reply shows the detector's window widening as the conversation grows, from one message to three, and the emotion it read at each turn: *guilty* at 56%, then *guilty* again at 67% once the second message is read together with the first, then *apprehensive* at 35% when the person asks whether they should talk to their parents, where the agent announces the change, guilty to apprehensive, and answers the feeling the person has now. Every reply obeys the rules it was given: 52, 44 and 49 words, exactly one question each. Neither figure is a mock-up; both print the record the system keeps for every turn.
 
 
+![Figure 5.3](figures/fig_demo_d1.png)
 
-![Figure 5.5](figures/fig_demo_agent.png)
+*Figure 5.3: The detector on two messages: three candidates, their confidence, and the words its attention selected*
 
-*Figure 5.5: Three turns of the agent, with the audit trail it prints before each reply*
+
+
+![Figure 5.4](figures/fig_demo_agent.png)
+
+*Figure 5.4: Three turns of the agent, with the audit trail it prints before each reply*
 
 
 ## 5.2 Analysis of Design Solutions
@@ -144,13 +142,13 @@ Because that comparison changes the generator as well as the design, we built th
 
 Two findings settled the detector. First, **what the detector is trained on matters more than which network is used.** Training GPT-2 Medium on the dataset's situation descriptions but deploying it on the user's own message cost about nine points of accuracy (56.9% against 48.2%); retraining on the text the model actually receives was the single largest improvement made to the detector.
 
-Second, **among encoders trained on the right input, models of the same size are indistinguishable on top-1 accuracy** (48.8-50.2%); RoBERTa-base separates itself only on the quality of its ranking, with 85.0% top-5 against 81.7-82.7% for BERT and ELECTRA (Figure 5.6, Tables 5.11 and 5.12). Ranking is exactly what the two-stage design consumes. RoBERTa-large adds 2.9 points of top-1 accuracy for 7.4 times the training cost and changed no measure of reply quality inside the pipeline (Section 5.4.3), so RoBERTa-base was kept.
+Second, **among encoders trained on the right input, models of the same size are indistinguishable on top-1 accuracy** (48.8-50.2%); RoBERTa-base separates itself only on the quality of its ranking, with 85.0% top-5 against 81.7-82.7% for BERT and ELECTRA (Figure 5.5, Tables 5.11 and 5.12). Ranking is exactly what the two-stage design consumes. RoBERTa-large adds 2.9 points of top-1 accuracy for 7.4 times the training cost and changed no measure of reply quality inside the pipeline (Section 5.4.3), so RoBERTa-base was kept.
 
 
 
-![Figure 5.6](figures/fig_d1_backbone_comparison.png)
+![Figure 5.5](figures/fig_d1_backbone_comparison.png)
 
-*Figure 5.6: Top-1 and top-5 accuracy of the detector candidates under identical training*
+*Figure 5.5: Top-1 and top-5 accuracy of the detector candidates under identical training*
 
 
 
@@ -178,14 +176,14 @@ One limitation is worth stating plainly: this comparison removes three things at
 
 It lowered rule adherence in both versions, to 54.3% and 43.7% against 63.7% without retrieval (Table 5.3). The reason is visible in the data: real listener replies satisfy all three rules in only 4.3% of cases, so the retrieved examples teach a style that contradicts the instructions given in the same prompt. Compliance with the one-question rule fell to 76.0% in the first version; filtering the examples and repeating the rule recovered that but cut acknowledgement from 70.3% to 57.0%.
 
-**What the cost bought was nothing:** Table 5.3 reports retrieval on the same measures as every other system, because a design that loses rule adherence could still be worth keeping if it gained elsewhere. It did not: empathy is 4.85 against 4.80 without retrieval and emotion fidelity 27.7% against 26.0%, both well inside the confidence intervals of Figure 5.1, while the spread of its empathy scores is the widest of any system. Retrieval therefore cost 20 points of rule adherence and returned no measurable gain, which is why it was rejected before the judge panel was run; it is the one design in Table 5.1 the judges never scored, and its absence from the judge table and the composite follows from that rather than from selection. Three cells of the first attempt cannot be recovered, because its outputs were overwritten before those measures were computed, and the table says so instead of leaving them blank. For this task, examples of how people actually reply work against explicit behavioural rules rather than reinforcing them.
+**What the cost bought was nothing:** Table 5.3 reports retrieval on the same measures as every other system, because a design that loses rule adherence could still be worth keeping if it gained elsewhere. It did not: empathy is 4.85 against 4.80 without retrieval and emotion fidelity 27.7% against 26.0%, both far smaller than the uncertainty on those estimates (Section 5.4.2), while the spread of its empathy scores is the widest of any system. Retrieval therefore cost 20 points of rule adherence and returned no measurable gain, which is why it was rejected before the judge panel was run; it is the one design in Table 5.1 the model judges never scored, which is why it is absent from Table A.7 rather than left out by choice. Three cells of the first attempt cannot be recovered, because its outputs were overwritten before those measures were computed, and the table says so instead of leaving them blank. For this task, examples of how people actually reply work against explicit behavioural rules rather than reinforcing them.
 
 
 | Variant | Ack (%) | One question (%) | All rules (%) | Mean words | WASSA empathy | Emotion validation (%) |
 |---|---|---|---|---|---|---|
 | Without retrieval | 70.3 | 87.3 | 63.7 | 35.2 | 4.80 (SD 1.33) | 26.0 |
-| With retrieval, attempt 1: 1-2 retrieved examples | not recoverable | 76 | 54.3 | not recoverable | not recoverable | not recoverable |
-| With retrieval, attempt 2: filtered examples + rule reminder | 57.0 | 78 | 43.7 | 34.0 | 4.85 (SD 1.46) | 27.7 |
+| With retrieval, attempt 1: 1-2 retrieved examples | not recoverable | 76.0 | 54.3 | not recoverable | not recoverable | not recoverable |
+| With retrieval, attempt 2: filtered examples + rule reminder | 57.0 | 78.0 | 43.7 | 34.0 | 4.85 (SD 1.46) | 27.7 |
 
 *Table 5.3: Retrieval augmentation on every measure, against the same pipeline without it*
 
@@ -194,14 +192,13 @@ It lowered rule adherence in both versions, to 54.3% and 43.7% against 63.7% wit
 
 Performance is not the only criterion, and the alternatives separate cleanly on the others. The two designs that need training, the fine-tuned baseline and the retrieval pipeline, are also the two that cost most to change. Every single-model design, of any size, keeps its emotional decision inside itself, so there is nothing to inspect and nowhere to place a safeguard. The decoupled designs expose the emotion, and the selected one exposes the most: three candidates, the emotion chosen and the words that drove it, with the detector, the guidance and the generator each replaceable on their own.
 
-Because the performance measures disagree with one another, Table A.17 combines five of them into one ranking: rule adherence, empathy, emotion fidelity, judge-rated empathy and freedom from boilerplate, each standardised across the systems and averaged with equal weight. Nothing is tuned: the weights are equal, every judged system is included, and the measures are those already in Table 5.1.
+The performance measures disagree with one another, and the two tables of Section 5.1 are what settles the choice between them. On **what the replies do** (Table 5.1) the final system sits mid-table: it follows all three rules less often than the largest single model or its own generator prompted directly, and it expresses the person's real emotion more often than any other system. On **how empathetic they are judged to be** (Table A.7) it is second of eight, behind only the 7.6-billion-parameter single model, which needs 1.9 times its parameters and 62% more GPU memory, and **first among the systems that fit the 8 GB budget set as requirement N1 in Section 3.1.2**.
 
-On that ranking the final system is **second of eight**, behind only the 7.6-billion-parameter single model, and **first among the systems that fit the 8 GB budget set as requirement N1 in Section 3.1.2**. The result does not rest on one favourable measure: dropping any single measure leaves it second or third, always behind the larger single model. A composite depends on what goes into it, so we report it as a summary and not as evidence in its own right; the per-measure comparisons in Sections 5.4.2 and 5.5.7, with their significance tests, remain the basis for every claim in this thesis.
-
+That is the case for the selected design stated plainly: at the scale the hardware allows, nothing matches it on emotional fidelity, no system its own size is rated more empathetic, and it is the only design here whose emotional decision can be read, logged or intercepted. What it gives up is rule adherence, and Section 5.5.5 measures exactly how much.
 
 ## 5.3 Final Design Adjustments
 
-Evaluating the initial pipeline, a GPT-2 Medium detector with a Qwen2.5-1.5B generator, exposed several weaknesses. Each adjustment below was made in answer to a measured result, and each was re-evaluated on the same 300 conversations before it was kept. Table A.18 is the full log, with the evidence behind every change and its measured effect.
+Evaluating the initial pipeline, a GPT-2 Medium detector with a Qwen2.5-1.5B generator, exposed several weaknesses. Each adjustment below was made in answer to a measured result, and each was re-evaluated on the same 300 conversations before it was kept. Table A.17 is the full log, with the evidence behind every change and its measured effect.
 
 
 ### 5.3.1 Adjustments to the Detector, the Generator and the Prompt
@@ -218,7 +215,7 @@ The evaluation assumes one message and one reply. Turning the design into the ag
 
 **Why the dataset cannot answer it:** EmpatheticDialogues conversations have a median of 2 turns and a maximum of 4, and the gold emotion never changes inside one, in none of the 2,542 test conversations, so there is no multi-turn emotion shift in the data to tune a window against. We instead wrote conversations containing the shifts a real support conversation produces, above all the "I'm fine, actually I'm not" pattern in which the latest message alone says the opposite of what the person means. The column saying what a listener would hear is our own judgement, not an annotation, so this is **illustrative evidence for a design choice and not a statistical result**.
 
-**Reading only the latest message loses the thread:** across ten short conversations with a deliberate shift (Table A.19), moving from one turn to four moved the prediction to what a listener would hear in five of them, left it unchanged in three, and in two exchanged one neighbour of the intended emotion for another; in none did a correct single-message reading become wrong. The clearest case is the one that started this test: "I am okay. Well, not properly." alone is read as *content* at 72% confidence, and with the previous turn, "Someone yelled at me today very badly", as *angry*.
+**Reading only the latest message loses the thread:** across ten short conversations with a deliberate shift (Table A.18), moving from one turn to four moved the prediction to what a listener would hear in five of them, left it unchanged in three, and in two exchanged one neighbour of the intended emotion for another; in none did a correct single-message reading become wrong. The clearest case is the one that started this test: "I am okay. Well, not properly." alone is read as *content* at 72% confidence, and with the previous turn, "Someone yelled at me today very badly", as *angry*.
 
 **But a window can also be too wide:** Table 5.4 widens the window on four long conversations of six to eight turns, and four turns is the widest setting that degrades none of them. At six turns two of the four move away from the listener's reading, one of them confidently: the break-up conversation, correct at four turns (*lonely*, 61%), becomes *guilty* at 64% once the anger of the earlier turns re-enters the window. The control stays *anxious* at every width with rising confidence, so the damage comes from stale emotions competing with the current one and not from the length of the input. Neither setting recovers the burnout conversation, which we report rather than leave out.
 
@@ -260,7 +257,7 @@ The final system is compared with seven baselines on each measure, so p-values a
 
 ### 5.4.2 The Final System against Each Baseline
 
-Figure 5.7 shows every comparison at once: the difference between the final system and each baseline on the three headline measures, with its confidence interval, coloured by whether it survives correction. Table A.20 gives the same comparisons with exact p-values. Three patterns run through it.
+Figure 5.6 shows every comparison at once: the difference between the final system and each baseline on the three headline measures, with its confidence interval, coloured by whether it survives correction. Table A.19 gives the same comparisons with exact p-values. Three patterns run through it.
 
 **Empathy and emotion fidelity improve reliably over every comparable design.** The empathy score is higher than every baseline except the largest single model, by 0.16 to 0.25 points, and **by 0.30 over the same generator used alone** (95% CI [+0.19, +0.41], adjusted p < 0.001). Emotion fidelity is likewise higher than every baseline except the largest single model, by 8.3 to 18.3 points, all adjusted p < 0.013. Because the single-model baseline built on our own generator does no better than the 1.5-billion-parameter one on these two measures, the gains belong to the design and not to generator size (Section 5.5.5).
 
@@ -269,9 +266,9 @@ Figure 5.7 shows every comparison at once: the difference between the final syst
 **The largest single model is genuinely better on rules and empathy:** Qwen2.5-7B leads on overall rule adherence (+22.3 points), acknowledgement (+16.7), the one-question rule (+6.3) and empathy (+0.71), all surviving correction. We report that as it stands.
 
 
-![Figure 5.7](figures/fig_forest_effects.png)
+![Figure 5.6](figures/fig_forest_effects.png)
 
-*Figure 5.7: The final system against each baseline on three measures, with 95% confidence intervals*
+*Figure 5.6: The final system against each baseline on three measures, with 95% confidence intervals*
 
 
 
@@ -297,7 +294,7 @@ Taken together, **detection accuracy is not what limits reply quality**, which i
 Longer replies score higher on the empathy classifier in every system, with Spearman correlations from 0.14 to 0.54, all p < 0.02. A verbose system can therefore look empathetic without being so, which is the same bias reported for LLM judges [18]. This affects two comparisons in opposite directions. It explains Gemma-3-4B's high score entirely (Section 5.2.3). And it *strengthens* the final system's advantage over top-1 prompting, because the final system earns the higher score with shorter replies (57.1 against 80.4 words). The largest single model's lead cannot be explained this way either, since its replies average 52.9 words.
 
 
-Several conclusions lean on the empathy classifier, so we tested it against the judges on the 512 replies both scored (Table A.25). **Across systems** it agrees with the judges well (rho = 0.74) but disagrees on one: the single model built on our generator is second by judge empathy and seventh by classifier score. **Across individual replies** agreement is weak but real (rho = 0.30, p < 0.001) and survives controlling for length (partial rho = 0.25), so it is not merely a shared taste for long answers. **Within a single system** agreement is weak (rho = 0.05 to 0.41, reliable in four of eight systems), against 0.69 between the two judges.
+Several conclusions lean on the empathy classifier, so we tested it against the judges on the 512 replies both scored (Table A.24). **Across systems** it agrees with the judges well (rho = 0.74) but disagrees on one: the single model built on our generator is second by judge empathy and seventh by classifier score. **Across individual replies** agreement is weak but real (rho = 0.30, p < 0.001) and survives controlling for length (partial rho = 0.25), so it is not merely a shared taste for long answers. **Within a single system** agreement is weak (rho = 0.05 to 0.41, reliable in four of eight systems), against 0.69 between the two judges.
 
 This is the evidence behind the rule we follow throughout: the classifier compares system averages over 300 replies, never single replies, and always beside a second measure.
 
@@ -306,7 +303,7 @@ This is the evidence behind the rule we follow throughout: the classifier compar
 
 Against the same-size single model the final system is rated reliably higher on empathy (+0.70, CI [+0.39, +1.01], p < 0.001), relevance (+0.44, p = 0.023) and overall (+0.44, p = 0.001), and reliably higher overall than the initial pipeline (+0.65), zero-shot prompting (+1.18) and the fine-tuned model (+2.73), all p < 0.001. Against the largest single model it scores lower on empathy (-0.30) and overall (-0.21), but neither difference survives correction (p = 0.073 and p = 0.109). **The judges do not separate the three systems built on the same generator at all**: top-1 prompting (overall +0.04, p = 0.71) and that generator used alone (overall -0.10, p = 0.16).
 
-The panel itself holds up well. Across the 512 replies the two judges correlate at rho = 0.69 for empathy and 0.68 overall, and they rank the eight systems identically except for the final system and top-1 Phi-4-mini, whose panel scores differ by 0.03 and which swap places. Both judges scored all 512 replies, so every system was rated by the same two judges. Drawing the judges from different model families is what the literature recommends to limit a single model's bias [19], and the agreement we observe is consistent with that.
+The two judges themselves hold up: across the 512 replies they correlate at rho = 0.69 for empathy and 0.68 overall, and they rank the eight systems identically but for one pair differing by 0.03. Drawing them from different model families is what the literature recommends to limit a single model's bias [19], and the agreement we observe is consistent with that.
 
 
 
@@ -347,20 +344,20 @@ The fair summary is that **it reaches this accuracy while reading less**, one me
 | ESCM (Yang et al., 2023) | Joint model, full conversation | 41.19 |  | Findings of EMNLP 2023 |
 | Personality-aware model (Wu et al., 2025) | Joint model, text-only ED | 45.4 |  | COLING 2025 main.598, Table 4 |
 | EmpSOA | Joint model, text-only ED | 48.3 |  | COLING 2025 main.598, Table 4 |
-| fastText (Rashkin et al., 2019) | Classifier, situation description | 43 |  | ED paper |
-| DeepMoji (Rashkin et al., 2019) | Classifier, situation description | 48 |  | ED paper |
+| fastText (Rashkin et al., 2019) | Classifier, situation description | 43.0 |  | ED paper |
+| DeepMoji (Rashkin et al., 2019) | Classifier, situation description | 48.0 |  | ED paper |
 | RoBERTa-GPT2 (2021) | Joint model, full conversation | 51.51 |  | arXiv 2109.03004, Table 3 |
-| Chirpy Cardinal RoBERTa-large (Paranjape et al., 2020) | Classifier, first utterance, VALIDATION split | 61.5 | 92 | arXiv 2008.12348, App. D; checkpoint verified as roberta-large, official split |
+| Chirpy Cardinal RoBERTa-large (Paranjape et al., 2020) | Classifier, first utterance, VALIDATION split | 61.5 | 92.0 | arXiv 2008.12348, App. D; checkpoint verified as roberta-large, official split |
 | RoBERTa (Welivita and Pu, 2020) | Classifier, situation description | 65.88 |  | arXiv 2012.04080 |
 | OURS - RoBERTa-base d1 | Classifier, first utterance, TEST split | 50.3 | 84.3 | this work |
-| OURS - RoBERTa-large (not deployed) | Classifier, first utterance, TEST split | 53 | 87.2 | this work |
+| OURS - RoBERTa-large (not deployed) | Classifier, first utterance, TEST split | 53.0 | 87.2 | this work |
 
 *Table 5.5: Emotion recognition on EmpatheticDialogues in published work and in this thesis*
 
 
 Published *generation* scores, by contrast, **cannot** be compared with ours, and saying so is more useful than forcing a comparison: distinct-n is reported over a full test set while ours covers 300 replies, and it falls as the sample grows, from 32.3% at 50 replies to 15.6% at 300 on our own output; published BERTScore values compare a reply with a reference answer after a multi-turn context, while our systems answer a first message. We therefore report measures published work does not: rule adherence, an independent empathy classifier, emotion fidelity and paired significance tests.
 
-Human evaluation allows a comparison of direction, if not of size. People in published studies strongly prefer LLM replies to those of purpose-built empathetic models, rating ChatGPT at 4.64 out of 5 against 3.08 for CEM [13], and tool-augmented fine-tuned models win 61-72% of head-to-head empathy comparisons [28]. [[PENDING: the human-evaluation selection rate of the final system against the same-size and larger single models, and how its direction compares with these findings.]] Because the protocols differ, five-point ratings, A/B preferences and our three-way choice, only the direction is comparable.
+Human evaluation allows a comparison of direction, if not of size: people in published studies strongly prefer LLM replies to those of purpose-built empathetic models, rating ChatGPT at 4.64 out of 5 against 3.08 for CEM [13]. [[PENDING: the human-evaluation selection rate of the final system against the same-size and larger single models, and how its direction compares with these findings.]] Because the protocols differ, five-point ratings, A/B preferences and our three-way choice, only the direction is comparable.
 
 
 ### 5.5.2 What Detector Accuracy and Generator Capacity Each Buy
@@ -383,7 +380,7 @@ Two qualifications keep this honest. The Qwen2.5-1.5B single model is lighter (2
 
 ### 5.5.4 Do the Response Rules Measure Something That Matters?
 
-Rule adherence is one of our headline measures, so the rules themselves need justification: following our rules is only a virtue if the rules describe something worth doing. Table A.33 gives the origin of each rule and its measured effect, computed **within** each system by removing that system's own mean, so the effects cannot come from differences between systems.
+Rule adherence is one of our headline measures, so the rules themselves need justification: following our rules is only a virtue if the rules describe something worth doing. Table A.32 gives the origin of each rule and its measured effect, computed **within** each system by removing that system's own mean, so the effects cannot come from differences between systems.
 
 **Acknowledging the feeling** is the *emotional reactions* mechanism of EPITOME, a framework of empathy in text-based support built on established empathy scales [1]. In our data, replies with an acknowledgement score 0.36 points higher on the empathy classifier within the same system (p < 0.001, 3,300 replies); the judges point the same way but not reliably.
 
@@ -396,7 +393,7 @@ In short, two of the three rules are supported both by published practice and by
 
 ### 5.5.5 What the Detector Itself Contributes
 
-Every comparison so far holds the conversations and decoding fixed, but not the generator. The test that isolates the design gives **the final system's own generator the single-model prompt and no detector at all**. Figure 5.8 shows the result measure by measure, and Table A.34 adds a length control, since the single model writes 29% longer replies.
+Every comparison so far holds the conversations and decoding fixed, but not the generator. The test that isolates the design gives **the final system's own generator the single-model prompt and no detector at all**. Figure 5.7 shows the result measure by measure, and Table A.33 adds a length control, since the single model writes 29% longer replies.
 
 **The gains belong to the design, not to the generator:** moving from Qwen2.5-1.5B to Phi-4-mini as a single model raises rule adherence sharply (51.3% to 73.7%, p < 0.001) but leaves empathy and emotional fidelity where they were (4.84 to 4.75, p = 0.18; 25.7% to 27.0%, p = 0.70), so a larger generator on its own buys none of the empathy we report. Adding the detector, the three candidates and the per-emotion guidance to that same generator raises **empathy to 5.05 (p < 0.001) and emotion fidelity to 36.7% (p = 0.007)**. The empathy gain is the more robust of the two: it holds despite shorter replies and strengthens when length is held constant, whereas the fidelity gain weakens under that control (p = 0.13).
 
@@ -405,9 +402,9 @@ Every comparison so far holds the conversations and decoding fixed, but not the 
 The exchange, then, is this: at an equal generator the decoupled design expresses the person's emotion more accurately, scores higher on an independent empathy classifier, repeats itself less and writes shorter replies, and its emotional decision can be logged, audited or intercepted; it pays for that with some adherence to the rules. It is an exchange, not a clean win, and we report it as one.
 
 
-![Figure 5.8](figures/fig_decoupled_vs_single.png)
+![Figure 5.7](figures/fig_decoupled_vs_single.png)
 
-*Figure 5.8: The decoupled design against the same generator used alone, measure by measure*
+*Figure 5.7: The decoupled design against the same generator used alone, measure by measure*
 
 
 
@@ -419,7 +416,7 @@ This section reads the results as a whole: what they say about the research ques
 
 The thesis asked whether separating emotion detection from response generation produces better empathetic replies than asking one model to do both, on a single consumer GPU. The answer is a qualified yes, and Table 5.6 sets out the whole of it: our system against the same generator used alone, which isolates the design, and against the bigger single model, which is the strongest thing that fits the hardware.
 
-Read down that table, three claims hold and one does not. **It is parameter-efficient:** 52% of the bigger model's size for 97.5% of its judge score. **It is resource-efficient:** 3.40 GB of GPU memory against 5.47 GB, at a response time that is not reliably different. **It is more emotionally faithful than either:** 36.7% of its replies express the person's true feeling, against 32.3% and 27.0%, and it repeats itself less than the same generator alone while writing 22% fewer words. **What it does not win is rule adherence:** 60.0% against 73.7% and 82.3%, and we do not claim otherwise. Two cells are empty because the single Phi-4-mini baseline was never put through the resource measurement, and we leave it unmeasured rather than estimate it.
+Read down that table, three claims hold and one does not. **It is parameter-efficient:** 52% of the bigger model's size, and second to it on the empathy panel out of eight systems. **It is resource-efficient:** 3.40 GB of GPU memory against 5.47 GB, at a response time that is not reliably different. **It is more emotionally faithful than either:** 36.7% of its replies express the person's true feeling, against 32.3% and 27.0%, and it repeats itself less than the same generator alone while writing 22% fewer words. **What it does not win is rule adherence:** 60.0% against 73.7% and 82.3%, and we do not claim otherwise. Two cells are empty because the single Phi-4-mini baseline was never put through the resource measurement, and we leave it unmeasured rather than estimate it.
 
 
 | What a reader wants to know | Our system | The same generator alone | The bigger single model |
@@ -432,8 +429,7 @@ Read down that table, three claims hold and one does not. **It is parameter-effi
 | Follows all three rules | 60.0% | 73.7% | 82.3% |
 | Empathy classifier (0-10) | 5.05 | 4.75 | 5.76 |
 | Reply expresses the true feeling | 36.7% | 27.0% | 32.3% |
-| AI judges, overall (1-10) | 8.68 | 8.78 | 8.90 |
-| AI judges, empathy (1-10) | 7.84 | 8.04 | 8.15 |
+| Empathy panel (three raters, combined) | +0.59  (2 of 8) | +0.53  (3 of 8) | +1.11  (1 of 8) |
 | Replies using a stock phrase | 58.7% | 72.3% | 58.7% |
 | Words per reply | 57 | 73 | 53 |
 | Shows which emotion it answered | Yes: three candidates, the chosen one, and the cue words | No | No |

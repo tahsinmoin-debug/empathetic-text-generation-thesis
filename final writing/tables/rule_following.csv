@@ -1,0 +1,13 @@
+System,Acknowledges the feeling (%),Exactly one question (%),Within the length limit (%),All three rules (%),Mean words,Expresses the true emotion (%)
+Single model Qwen-7B,83.0,99.0,100.0,82.3,53,32.3
+Single model Phi-4-mini,77.3,96.0,99.3,73.7,73,27.0
+RoBERTa + Phi-4-mini (top-1),72.0,94.7,96.0,65.3,80,28.3
+Initial pipeline (GPT-2 + Qwen),70.3,87.3,100.0,63.7,35,26.0
+FINAL: two-stage Phi-4-mini,66.3,92.7,100.0,60.0,57,36.7
+RoBERTa + Qwen (top-1),67.7,84.3,100.0,57.7,35,25.3
+Single model Qwen-1.5B,70.7,73.7,100.0,51.3,42,25.7
+Initial pipeline + retrieval,57.0,78.0,100.0,43.7,34,27.7
+Two-stage Qwen-1.5B,47.0,74.3,99.7,36.7,44,27.0
+Fine-tuned Qwen-1.5B,30.0,74.0,100.0,22.3,10,18.3
+RoBERTa + Gemma-4B (top-1),96.7,92.0,27.7,22.0,133,35.0
+Zero-shot Qwen-1.5B,81.7,22.7,83.7,19.0,76,24.7

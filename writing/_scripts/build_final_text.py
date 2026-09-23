@@ -74,13 +74,21 @@ def resolve_cites(text, numbers):
 
 
 def fmt(v):
-    if isinstance(v, float):
-        return "" if pd.isna(v) else f"{v:.2f}".rstrip("0").rstrip(".")
-    return str(v)
+    """Print a cell as the CSV wrote it, and only shorten a number left at full precision.
+
+    Reading the file as text is what keeps "8.00" from collapsing to "8", "+0.59" from losing
+    its sign, and a p-value of 8e-05 from printing as "0", all of which happened when pandas
+    was allowed to parse the numbers first.
+    """
+    s = "" if v is None else str(v).strip()
+    if s in ("", "nan", "None"):
+        return ""
+    long_float = re.fullmatch(r"[-+]?\d+\.(\d{4,})", s)
+    return f"{float(s):.2f}" if long_float else s
 
 
 def csv_as_markdown(path):
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, dtype=str, keep_default_na=False)
     lines = ["| " + " | ".join(df.columns) + " |", "|" + "|".join("---" for _ in df.columns) + "|"]
     for _, r in df.iterrows():
         lines.append("| " + " | ".join(fmt(v).replace("|", "/") for v in r.tolist()) + " |")

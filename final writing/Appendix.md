@@ -120,7 +120,7 @@ These tables support statements in the main text and are placed here to keep the
 | Two-stage selection | Candidates passed to d2 | Top-3 emotions | The true emotion is in the top-3 for 76.5% of messages against 50.3% for top-1, and most errors are neighbouring emotions | Our measurement (Tables 5.2, 5.4) |
 | Two-stage selection | Stage-1 decoding | Greedy, at most 10 new tokens, fall back to d1 top-1 | A classification decision should be deterministic; 100% of stage-1 outputs named a valid candidate | Our measurement (Table 5.2) |
 | d2 generator | Model | Phi-4-mini-instruct (3.8B) | Highest rule adherence in the bake-off with detector and prompt fixed (65.3% vs 57.7% Qwen2.5-1.5B, 22.0% Gemma-3-4B) | Our measurement (Table 4.8) |
-| d2 generator | Quantisation | 4-bit NF4, double quantisation, fp16 compute | NF4 preserves 16-bit quality while cutting memory about fourfold; measured peak use 3.40 GB on the 8 GB GPU | Dettmers et al. (2023); our measurement (Table A.26) |
+| d2 generator | Quantisation | 4-bit NF4, double quantisation, fp16 compute | NF4 preserves 16-bit quality while cutting memory about fourfold; measured peak use 3.40 GB on the 8 GB GPU | Dettmers et al. (2023); our measurement (Table A.25) |
 | d2 generator | Temperature | 0.7 | The developer's default for Qwen2.5-Instruct; identical for every system so differences come from design, not decoding | Qwen2.5 generation_config; fairness |
 | d2 generator | Top-p (nucleus sampling) | 0.9 | Nucleus sampling avoids the repetitive, degenerate text of pure greedy or beam decoding; identical for every system | Holtzman et al. (2020) |
 | d2 generator | Maximum new tokens | 250 | The prompt asks for under 100 words (about 130 tokens); the longest final reply is 119 tokens, so no reply is cut off | Our measurement |
@@ -164,36 +164,36 @@ These tables support statements in the main text and are placed here to keep the
 |---|---|---|---|---|
 | caring | 71.4 | 68.8 | 70.1 | 80 |
 | lonely | 65.2 | 74.4 | 69.5 | 78 |
-| jealous | 80 | 54.3 | 64.7 | 81 |
-| embarrassed | 69 | 60.5 | 64.5 | 81 |
+| jealous | 80.0 | 54.3 | 64.7 | 81 |
+| embarrassed | 69.0 | 60.5 | 64.5 | 81 |
 | disgusted | 66.7 | 58.1 | 62.1 | 86 |
-| nostalgic | 55 | 71.4 | 62.1 | 77 |
+| nostalgic | 55.0 | 71.4 | 62.1 | 77 |
 | surprised | 60.9 | 61.4 | 61.2 | 127 |
 | guilty | 54.4 | 65.2 | 59.3 | 66 |
 | content | 60.6 | 56.6 | 58.5 | 76 |
 | prepared | 62.7 | 54.5 | 58.3 | 77 |
 | impressed | 54.9 | 61.7 | 58.1 | 81 |
 | proud | 51.2 | 65.6 | 57.5 | 96 |
-| faithful | 53.4 | 62 | 57.4 | 50 |
+| faithful | 53.4 | 62.0 | 57.4 | 50 |
 | trusting | 54.4 | 57.8 | 56.1 | 64 |
 | grateful | 54.7 | 54.7 | 54.7 | 95 |
 | annoyed | 52.7 | 53.8 | 53.3 | 91 |
 | devastated | 40.4 | 68.7 | 50.8 | 67 |
-| confident | 41.2 | 56 | 47.5 | 75 |
+| confident | 41.2 | 56.0 | 47.5 | 75 |
 | hopeful | 46.8 | 45.6 | 46.2 | 79 |
 | excited | 42.7 | 48.4 | 45.4 | 91 |
 | furious | 44.3 | 46.3 | 45.3 | 67 |
 | terrified | 37.6 | 53.5 | 44.2 | 71 |
-| disappointed | 44.9 | 43.2 | 44 | 81 |
+| disappointed | 44.9 | 43.2 | 44.0 | 81 |
 | sentimental | 60.8 | 34.1 | 43.7 | 91 |
 | anxious | 39.1 | 43.6 | 41.2 | 78 |
 | sad | 42.3 | 34.1 | 37.7 | 88 |
 | anticipating | 35.5 | 30.1 | 32.6 | 73 |
 | afraid | 33.8 | 30.1 | 31.9 | 73 |
-| apprehensive | 38 | 26.8 | 31.4 | 71 |
+| apprehensive | 38.0 | 26.8 | 31.4 | 71 |
 | joyful | 31.6 | 30.1 | 30.9 | 83 |
 | ashamed | 27.3 | 18.8 | 22.2 | 64 |
-| angry | 25 | 14.3 | 18.2 | 84 |
+| angry | 25.0 | 14.3 | 18.2 | 84 |
 
 *Table A.7: Precision, recall and F1 of the final detector for each of the 32 emotions (32 rows of per-emotion detail behind Section 5.1.2).*
 
@@ -255,31 +255,31 @@ These tables support statements in the main text and are placed here to keep the
 
 | Backbone | Parameters (M) | Learning rate | Batch size | Top-1 acc (%) | Top-5 acc (%) | Macro-F1 (%) | Train time (min) |
 |---|---|---|---|---|---|---|---|
-| bert-base-uncased | 110 | 0 | 8 | 48.8 | 81.7 | 47.9 | 8.6 |
-| google/electra-base-discriminator | 110 | 0 | 8 | 50.2 | 82.7 | 48.9 | 8.7 |
-| roberta-base | 125 | 0 | 8 | 50.1 | 85 | 49.1 | 8.8 |
-| roberta-large | 355 | 0 | 4 | 53 | 87.2 | 52.4 | 64.7 |
+| bert-base-uncased | 110 | 2e-05 | 8 | 48.8 | 81.7 | 47.9 | 8.6 |
+| google/electra-base-discriminator | 110 | 2e-05 | 8 | 50.2 | 82.7 | 48.9 | 8.7 |
+| roberta-base | 125 | 2e-05 | 8 | 50.1 | 85.0 | 49.1 | 8.8 |
+| roberta-large | 355 | 1e-05 | 4 | 53.0 | 87.2 | 52.4 | 64.7 |
 
 *Table A.12: Detector candidates trained and tested under identical settings (the numbers behind the detector chart in Section 5.2.2).*
 
 
 | comparison | n | pipeline_mean | baseline_mean | diff | ci_95_low | ci_95_high | test | p_value | significant | metric | question |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| roberta-base vs google__electra-base-discriminator | 2542 | 0.5 | 0.5 | -0 | -0.02 | 0.01 | McNemar exact | 0.96 | False | top1 | Why RoBERTa over ELECTRA? (same size class) |
-| roberta-base vs google__electra-base-discriminator | 2542 | 0.85 | 0.83 | 0.02 | 0.01 | 0.04 | McNemar exact | 0 | True | top5 | Why RoBERTa over ELECTRA? (same size class) |
-| roberta-base vs bert-base-uncased | 2542 | 0.5 | 0.49 | 0.01 | -0 | 0.03 | McNemar exact | 0.11 | False | top1 | Why RoBERTa over BERT? (same size class) |
-| roberta-base vs bert-base-uncased | 2542 | 0.85 | 0.82 | 0.03 | 0.02 | 0.05 | McNemar exact | 0 | True | top5 | Why RoBERTa over BERT? (same size class) |
-| roberta-large vs roberta-base | 2542 | 0.53 | 0.5 | 0.03 | 0.01 | 0.04 | McNemar exact | 0 | True | top1 | Is the larger model's advantage real? (why not bigger) |
-| roberta-large vs roberta-base | 2542 | 0.87 | 0.85 | 0.02 | 0.01 | 0.03 | McNemar exact | 0 | True | top5 | Is the larger model's advantage real? (why not bigger) |
+| roberta-base vs google__electra-base-discriminator | 2542 | 0.50 | 0.502 | -0.00 | -0.02 | 0.01 | McNemar exact | 0.96 | False | top1 | Why RoBERTa over ELECTRA? (same size class) |
+| roberta-base vs google__electra-base-discriminator | 2542 | 0.85 | 0.83 | 0.02 | 0.01 | 0.035 | McNemar exact | 0.00 | True | top5 | Why RoBERTa over ELECTRA? (same size class) |
+| roberta-base vs bert-base-uncased | 2542 | 0.50 | 0.49 | 0.013 | -0.00 | 0.03 | McNemar exact | 0.109 | False | top1 | Why RoBERTa over BERT? (same size class) |
+| roberta-base vs bert-base-uncased | 2542 | 0.85 | 0.82 | 0.033 | 0.02 | 0.05 | McNemar exact | 0.0 | True | top5 | Why RoBERTa over BERT? (same size class) |
+| roberta-large vs roberta-base | 2542 | 0.53 | 0.50 | 0.03 | 0.01 | 0.04 | McNemar exact | 0.00 | True | top1 | Is the larger model's advantage real? (why not bigger) |
+| roberta-large vs roberta-base | 2542 | 0.87 | 0.85 | 0.02 | 0.01 | 0.03 | McNemar exact | 0.00 | True | top5 | Is the larger model's advantage real? (why not bigger) |
 
 *Table A.13: Paired significance tests between the detector candidates (significance tests behind the detector comparison in Section 4.2.2).*
 
 
 | Generator | Ack (%) | One question (%) | Length OK (%) | All rules (%) | Mean words | WASSA empathy (0-10) | Emotion validation (%) |
 |---|---|---|---|---|---|---|---|
-| Qwen (top-1) | 67.67 | 84.33 | 100 | 57.67 | 34.72 | 4.78 | 25.33 |
-| Gemma-4B (top-1) | 96.67 | 92 | 27.67 | 22 | 133.25 | 5.3 | 35 |
-| Phi-4-mini (top-1) | 72 | 94.67 | 96 | 65.33 | 80.45 | 4.89 | 28.33 |
+| Qwen (top-1) | 67.67 | 84.33 | 100.0 | 57.67 | 34.72 | 4.78 | 25.33 |
+| Gemma-4B (top-1) | 96.67 | 92.0 | 27.67 | 22.0 | 133.25 | 5.3 | 35.0 |
+| Phi-4-mini (top-1) | 72.0 | 94.67 | 96.0 | 65.33 | 80.45 | 4.89 | 28.33 |
 
 *Table A.14: Generator candidates with the detector, prompt and conversations held fixed (the generator bake-off reported in Section 5.2.3).*
 
@@ -289,35 +289,21 @@ These tables support statements in the main text and are placed here to keep the
 | <60 |  | 0 | 4.73 | 70 | 4.84 | 197 |
 | 60-80 |  | 0 | 4.86 | 94 | 5.47 | 93 |
 | 80-100 | 4.71 | 7 | 4.9 | 87 | 5.43 | 7 |
-| 100-120 | 4.97 | 76 | 5.24 | 37 | 5 | 3 |
-| 120-150 | 5.37 | 163 | 5 | 7 |  | 0 |
-| 150+ | 5.63 | 54 | 5 | 5 |  | 0 |
+| 100-120 | 4.97 | 76 | 5.24 | 37 | 5.0 | 3 |
+| 120-150 | 5.37 | 163 | 5.0 | 7 |  | 0 |
+| 150+ | 5.63 | 54 | 5.0 | 5 |  | 0 |
 
 *Table A.15: Empathy score within each reply-length band, with the number of replies in each (length-band detail behind Section 5.2.3).*
 
 
 | Variant | Ack% | OneQ% | LenOK% | AllRules% | LowConfHedge% |
 |---|---|---|---|---|---|
-| argmax - top-1 emotion only (adopted) | 70.3 | 87.3 | 100 | 63.7 | - |
-| confidence-gated - hedge when d1 is unsure | 71 | 88.3 | 100 | 63.3 | 28.7 |
-| distribution - list all emotions above p=0.05 | 72.7 | 83.7 | 100 | 62 | - |
-| candidate-pick - d2 chooses AND generates in one pass | 65.3 | 82.7 | 100 | 54 | - |
+| argmax - top-1 emotion only (adopted) | 70.3 | 87.3 | 100.0 | 63.7 | - |
+| confidence-gated - hedge when d1 is unsure | 71.0 | 88.3 | 100.0 | 63.3 | 28.7 |
+| distribution - list all emotions above p=0.05 | 72.7 | 83.7 | 100.0 | 62.0 | - |
+| candidate-pick - d2 chooses AND generates in one pass | 65.3 | 82.7 | 100.0 | 54.0 | - |
 
 *Table A.16: The four ways of passing the detector's output to the generator (the four integration variants compared in Section 5.2.4).*
-
-
-| System | All rules (%) | WASSA empathy | Emotion validation (%) | AI-judge empathy | Non-repetition (%) | Composite (equal weights) |
-|---|---|---|---|---|---|---|
-| Single model Qwen-7B | 82.33 | 5.76 | 32.33 | 8.15 | 41.3 | 0.79 |
-| FINAL: two-stage Phi-4-mini | 60 | 5.05 | 36.67 | 7.84 | 41.3 | 0.5 |
-| Initial pipeline (GPT-2 + Qwen) | 63.67 | 4.8 | 26 | 6.98 | 76.3 | 0.24 |
-| Single model Phi-4-mini | 73.67 | 4.75 | 27 | 8.04 | 27.7 | 0.09 |
-| Single model Qwen-1.5B | 51.33 | 4.84 | 25.67 | 7.15 | 65 | 0.06 |
-| RoBERTa + Phi-4-mini (top-1) | 65.33 | 4.89 | 28.33 | 7.84 | 23 | 0.04 |
-| Zero-shot Qwen-1.5B | 19 | 4.25 | 24.67 | 5.98 | 65.3 | -0.59 |
-| Fine-tuned Qwen-1.5B | 22.33 | 3.36 | 18.33 | 3.88 | 90.3 | -1.13 |
-
-*Table A.17: Equal-weight composite of five independent measures across the judged systems (the equal-weight composite ranking summarised in Section 5.2.6).*
 
 
 | Problem found | Evidence | Adjustment | Measured effect |
@@ -334,7 +320,7 @@ These tables support statements in the main text and are placed here to keep the
 | LoRA fine-tuned baseline never ended its replies | 99% of replies hit the 250-token limit; the padding token was the end-of-turn token (im_end), so it was masked from the loss | Retrained with Qwen's own pad token, a start-up check, and published LoRA settings (lr 2e-4, dropout 0.1, weight decay 0.01, 6% warm-up, best epoch by validation loss) | Replies 200.7 -> 10.0 words, 0% at the token limit; all rules 0.0% -> 22.3%; still far below the final system (60.0%) |
 | Repetition in Phi replies | Boilerplate 58.7% (two-stage) | Deferred: repetition_penalty 1.1 | Future work - would invalidate in-progress judging |
 
-*Table A.18: Every design adjustment, the evidence behind it and its measured effect (the full adjustment log narrated in Section 5.3).*
+*Table A.17: Every design adjustment, the evidence behind it and its measured effect (the full adjustment log narrated in Section 5.3).*
 
 
 | Conversation | A listener would hear | Last 1 turn | Last 2 turns | Last 4 turns |
@@ -350,110 +336,110 @@ These tables support statements in the main text and are placed here to keep the
 | Minimising a real loss | devastated / sad | lonely (67%) | lonely (45%) | sad (39%) |
 | Stable emotion (control - context should NOT change the answer) | anxious (unchanged) | confident (21%) | anxious (76%) | anxious (76%) |
 
-*Table A.19: What the detector predicts as the window widens, on ten short conversations containing an emotion shift (the ten short emotion-shift conversations behind Section 5.3.4).*
+*Table A.18: What the detector predicts as the window widens, on ten short conversations containing an emotion shift (the ten short emotion-shift conversations behind Section 5.3.4).*
 
 
 | Metric | Final system vs | N | Final | Baseline | Difference | 95% CI | Test | p | p (Holm-adjusted) | Significant? |
 |---|---|---|---|---|---|---|---|---|---|---|
-| All rules | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 60 | 73.67 | -13.67 | [-21.00, -6.33] | McNemar exact | 0 | 0 | YES |
-| All rules | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 60 | 51.33 | 8.67 | [+1.00, +16.33] | McNemar exact | 0.03 | 0.1 | no |
-| All rules | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 60 | 82.33 | -22.33 | [-29.33, -15.33] | McNemar exact | 0 | 0 | YES |
-| All rules | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 60 | 19 | 41 | [+34.00, +47.67] | McNemar exact | 0 | 0 | YES |
-| All rules | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 60 | 22.33 | 37.67 | [+30.33, +45.00] | McNemar exact | 0 | 0 | YES |
-| All rules | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 60 | 63.67 | -3.67 | [-11.00, +3.67] | McNemar exact | 0.37 | 0.39 | no |
-| All rules | Initial pipeline + retrieval (RAG) | 300 | 60 | 43.67 | 16.33 | [+8.33, +24.00] | McNemar exact | 0 | 0 | YES |
-| All rules | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 60 | 65.33 | -5.33 | [-13.00, +2.00] | McNemar exact | 0.19 | 0.39 | no |
-| Acknowledgement | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 66.33 | 77.33 | -11 | [-18.00, -4.00] | McNemar exact | 0 | 0.01 | YES |
+| All rules | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 60.0 | 73.67 | -13.67 | [-21.00, -6.33] | McNemar exact | 0.00 | 0.00 | YES |
+| All rules | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 60.0 | 51.33 | 8.67 | [+1.00, +16.33] | McNemar exact | 0.03 | 0.10 | no |
+| All rules | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 60.0 | 82.33 | -22.33 | [-29.33, -15.33] | McNemar exact | 0.0 | 0.0 | YES |
+| All rules | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 60.0 | 19.0 | 41.0 | [+34.00, +47.67] | McNemar exact | 0.0 | 0.0 | YES |
+| All rules | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 60.0 | 22.33 | 37.67 | [+30.33, +45.00] | McNemar exact | 0.0 | 0.0 | YES |
+| All rules | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 60.0 | 63.67 | -3.67 | [-11.00, +3.67] | McNemar exact | 0.37 | 0.39 | no |
+| All rules | Initial pipeline + retrieval (RAG) | 300 | 60.0 | 43.67 | 16.33 | [+8.33, +24.00] | McNemar exact | 8e-05 | 0.00 | YES |
+| All rules | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 60.0 | 65.33 | -5.33 | [-13.00, +2.00] | McNemar exact | 0.19 | 0.39 | no |
+| Acknowledgement | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 66.33 | 77.33 | -11.0 | [-18.00, -4.00] | McNemar exact | 0.00 | 0.01 | YES |
 | Acknowledgement | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 66.33 | 70.67 | -4.33 | [-11.33, +2.67] | McNemar exact | 0.24 | 0.48 | no |
-| Acknowledgement | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 66.33 | 83 | -16.67 | [-23.33, -10.00] | McNemar exact | 0 | 0 | YES |
-| Acknowledgement | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 66.33 | 81.67 | -15.33 | [-21.67, -8.67] | McNemar exact | 0 | 0 | YES |
-| Acknowledgement | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 66.33 | 30 | 36.33 | [+29.00, +43.67] | McNemar exact | 0 | 0 | YES |
-| Acknowledgement | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 66.33 | 70.33 | -4 | [-10.67, +2.67] | McNemar exact | 0.28 | 0.48 | no |
-| Acknowledgement | Initial pipeline + retrieval (RAG) | 300 | 66.33 | 57 | 9.33 | [+2.33, +16.33] | McNemar exact | 0.01 | 0.05 | no |
-| Acknowledgement | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 66.33 | 72 | -5.67 | [-12.67, +1.33] | McNemar exact | 0.13 | 0.4 | no |
-| One question | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 92.67 | 96 | -3.33 | [-7.00, +0.33] | McNemar exact | 0.11 | 0.22 | no |
-| One question | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 92.67 | 73.67 | 19 | [+13.33, +25.00] | McNemar exact | 0 | 0 | YES |
-| One question | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 92.67 | 99 | -6.33 | [-9.67, -3.33] | McNemar exact | 0 | 0 | YES |
-| One question | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 92.67 | 22.67 | 70 | [+64.67, +75.33] | McNemar exact | 0 | 0 | YES |
-| One question | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 92.67 | 74 | 18.67 | [+12.67, +24.67] | McNemar exact | 0 | 0 | YES |
+| Acknowledgement | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 66.33 | 83.0 | -16.67 | [-23.33, -10.00] | McNemar exact | 0.0 | 2e-05 | YES |
+| Acknowledgement | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 66.33 | 81.67 | -15.33 | [-21.67, -8.67] | McNemar exact | 1e-05 | 5e-05 | YES |
+| Acknowledgement | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 66.33 | 30.0 | 36.33 | [+29.00, +43.67] | McNemar exact | 0.0 | 0.0 | YES |
+| Acknowledgement | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 66.33 | 70.33 | -4.0 | [-10.67, +2.67] | McNemar exact | 0.28 | 0.48 | no |
+| Acknowledgement | Initial pipeline + retrieval (RAG) | 300 | 66.33 | 57.0 | 9.33 | [+2.33, +16.33] | McNemar exact | 0.01 | 0.05 | no |
+| Acknowledgement | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 66.33 | 72.0 | -5.67 | [-12.67, +1.33] | McNemar exact | 0.13 | 0.40 | no |
+| One question | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 92.67 | 96.0 | -3.33 | [-7.00, +0.33] | McNemar exact | 0.11 | 0.22 | no |
+| One question | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 92.67 | 73.67 | 19.0 | [+13.33, +25.00] | McNemar exact | 0.0 | 0.0 | YES |
+| One question | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 92.67 | 99.0 | -6.33 | [-9.67, -3.33] | McNemar exact | 7e-05 | 0.00 | YES |
+| One question | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 92.67 | 22.67 | 70.0 | [+64.67, +75.33] | McNemar exact | 0.0 | 0.0 | YES |
+| One question | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 92.67 | 74.0 | 18.67 | [+12.67, +24.67] | McNemar exact | 0.0 | 0.0 | YES |
 | One question | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 92.67 | 87.33 | 5.33 | [+0.67, +10.00] | McNemar exact | 0.04 | 0.12 | no |
-| One question | Initial pipeline + retrieval (RAG) | 300 | 92.67 | 78 | 14.67 | [+8.67, +20.33] | McNemar exact | 0 | 0 | YES |
-| One question | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 92.67 | 94.67 | -2 | [-6.00, +1.67] | McNemar exact | 0.39 | 0.39 | no |
-| Emotion validation | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 36.67 | 27 | 9.67 | [+3.67, +15.33] | McNemar exact | 0 | 0.01 | YES |
-| Emotion validation | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 36.67 | 25.67 | 11 | [+5.00, +17.00] | McNemar exact | 0 | 0 | YES |
+| One question | Initial pipeline + retrieval (RAG) | 300 | 92.67 | 78.0 | 14.67 | [+8.67, +20.33] | McNemar exact | 0.0 | 1e-05 | YES |
+| One question | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 92.67 | 94.67 | -2.0 | [-6.00, +1.67] | McNemar exact | 0.39 | 0.39 | no |
+| Emotion validation | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 36.67 | 27.0 | 9.67 | [+3.67, +15.33] | McNemar exact | 0.00 | 0.01 | YES |
+| Emotion validation | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 36.67 | 25.67 | 11.0 | [+5.00, +17.00] | McNemar exact | 0.00 | 0.00 | YES |
 | Emotion validation | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 36.67 | 32.33 | 4.33 | [-1.67, +10.33] | McNemar exact | 0.19 | 0.19 | no |
-| Emotion validation | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 36.67 | 24.67 | 12 | [+6.00, +17.67] | McNemar exact | 0 | 0 | YES |
-| Emotion validation | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 36.67 | 18.33 | 18.33 | [+12.33, +24.33] | McNemar exact | 0 | 0 | YES |
-| Emotion validation | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 36.67 | 26 | 10.67 | [+5.00, +16.33] | McNemar exact | 0 | 0 | YES |
-| Emotion validation | Initial pipeline + retrieval (RAG) | 300 | 36.67 | 27.67 | 9 | [+3.00, +15.00] | McNemar exact | 0.01 | 0.01 | YES |
-| Emotion validation | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 36.67 | 28.33 | 8.33 | [+3.00, +13.67] | McNemar exact | 0 | 0.01 | YES |
-| WASSA empathy | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 5.05 | 4.75 | 0.3 | [+0.19, +0.41] | Wilcoxon signed-rank | 0 | 0 | YES |
+| Emotion validation | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 36.67 | 24.67 | 12.0 | [+6.00, +17.67] | McNemar exact | 0.00 | 0.00 | YES |
+| Emotion validation | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 36.67 | 18.33 | 18.33 | [+12.33, +24.33] | McNemar exact | 0.0 | 0.0 | YES |
+| Emotion validation | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 36.67 | 26.0 | 10.67 | [+5.00, +16.33] | McNemar exact | 0.00 | 0.00 | YES |
+| Emotion validation | Initial pipeline + retrieval (RAG) | 300 | 36.67 | 27.67 | 9.0 | [+3.00, +15.00] | McNemar exact | 0.01 | 0.01 | YES |
+| Emotion validation | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 36.67 | 28.33 | 8.33 | [+3.00, +13.67] | McNemar exact | 0.00 | 0.01 | YES |
+| WASSA empathy | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 300 | 5.05 | 4.75 | 0.3 | [+0.19, +0.41] | Wilcoxon signed-rank | 0.0 | 0.0 | YES |
 | WASSA empathy | Single model, same size: Qwen2.5-1.5B detects + responds | 300 | 5.05 | 4.84 | 0.21 | [+0.08, +0.35] | Wilcoxon signed-rank | 0.01 | 0.01 | YES |
-| WASSA empathy | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 5.05 | 5.76 | -0.71 | [-0.84, -0.58] | Wilcoxon signed-rank | 0 | 0 | YES |
-| WASSA empathy | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 5.05 | 4.25 | 0.8 | [+0.66, +0.94] | Wilcoxon signed-rank | 0 | 0 | YES |
-| WASSA empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 5.05 | 3.36 | 1.69 | [+1.48, +1.90] | Wilcoxon signed-rank | 0 | 0 | YES |
-| WASSA empathy | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 5.05 | 4.8 | 0.25 | [+0.10, +0.39] | Wilcoxon signed-rank | 0 | 0 | YES |
+| WASSA empathy | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 300 | 5.05 | 5.76 | -0.71 | [-0.84, -0.58] | Wilcoxon signed-rank | 0.0 | 0.0 | YES |
+| WASSA empathy | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 300 | 5.05 | 4.25 | 0.8 | [+0.66, +0.94] | Wilcoxon signed-rank | 0.0 | 0.0 | YES |
+| WASSA empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 300 | 5.05 | 3.36 | 1.69 | [+1.48, +1.90] | Wilcoxon signed-rank | 0.0 | 0.0 | YES |
+| WASSA empathy | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 300 | 5.05 | 4.8 | 0.25 | [+0.10, +0.39] | Wilcoxon signed-rank | 0.00 | 0.00 | YES |
 | WASSA empathy | Initial pipeline + retrieval (RAG) | 300 | 5.05 | 4.85 | 0.2 | [+0.05, +0.36] | Wilcoxon signed-rank | 0.01 | 0.01 | YES |
-| WASSA empathy | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 5.05 | 4.89 | 0.16 | [+0.05, +0.26] | Wilcoxon signed-rank | 0 | 0.01 | YES |
+| WASSA empathy | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 300 | 5.05 | 4.89 | 0.16 | [+0.05, +0.26] | Wilcoxon signed-rank | 0.00 | 0.01 | YES |
 
-*Table A.20: Paired significance tests comparing the final system with each baseline (every test behind the forest plot in Section 5.4.2).*
+*Table A.19: Paired significance tests comparing the final system with each baseline (every test behind the forest plot in Section 5.4.2).*
 
 
 | setting | metric | n_d1_correct | n_d1_wrong | mean_when_d1_correct | mean_when_d1_wrong | diff | ci_95_low | ci_95_high | test | p_value | significant_damage |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| prompt_engineered_pipeline | rule_adherence_all_rules | 147 | 153 | 0.61 | 0.66 | -0.05 | -0.15 | 0.06 | Fisher exact | 0.4 | False |
+| prompt_engineered_pipeline | rule_adherence_all_rules | 147 | 153 | 0.61 | 0.66 | -0.05 | -0.15 | 0.06 | Fisher exact | 0.403 | False |
 | prompt_engineered_pipeline | wassa_empathy_0_10 | 147 | 153 | 4.83 | 4.78 | 0.05 | -0.24 | 0.35 | Mann-Whitney U | 0.72 | False |
-| prompt_engineered_pipeline | validation_match_vs_gold | 147 | 153 | 0.38 | 0.14 | 0.24 | 0.14 | 0.33 | Fisher exact | 0 | True |
-| bakeoff_qwen | rule_adherence_all_rules | 151 | 149 | 0.6 | 0.55 | 0.05 | -0.06 | 0.17 | Fisher exact | 0.41 | False |
-| bakeoff_qwen | validation_match_vs_gold | 151 | 149 | 0.38 | 0.12 | 0.26 | 0.17 | 0.36 | Fisher exact | 0 | True |
+| prompt_engineered_pipeline | validation_match_vs_gold | 147 | 153 | 0.381 | 0.14 | 0.24 | 0.14 | 0.33 | Fisher exact | 0.0 | True |
+| bakeoff_qwen | rule_adherence_all_rules | 151 | 149 | 0.60 | 0.55 | 0.05 | -0.06 | 0.17 | Fisher exact | 0.41 | False |
+| bakeoff_qwen | validation_match_vs_gold | 151 | 149 | 0.38 | 0.12 | 0.26 | 0.17 | 0.36 | Fisher exact | 0.0 | True |
 | bakeoff_phi | rule_adherence_all_rules | 151 | 149 | 0.64 | 0.67 | -0.04 | -0.14 | 0.07 | Fisher exact | 0.55 | False |
-| bakeoff_phi | validation_match_vs_gold | 151 | 149 | 0.46 | 0.1 | 0.36 | 0.27 | 0.45 | Fisher exact | 0 | True |
+| bakeoff_phi | validation_match_vs_gold | 151 | 149 | 0.46 | 0.10 | 0.36 | 0.27 | 0.45 | Fisher exact | 0.0 | True |
 | two_stage_qwen | rule_adherence_all_rules | 110 | 190 | 0.34 | 0.38 | -0.05 | -0.16 | 0.06 | Fisher exact | 0.46 | False |
-| two_stage_qwen | validation_match_vs_gold | 110 | 190 | 0.45 | 0.16 | 0.29 | 0.18 | 0.4 | Fisher exact | 0 | True |
-| two_stage_phi | rule_adherence_all_rules | 127 | 173 | 0.54 | 0.64 | -0.1 | -0.21 | 0.01 | Fisher exact | 0.1 | False |
-| two_stage_phi | validation_match_vs_gold | 127 | 173 | 0.65 | 0.16 | 0.5 | 0.4 | 0.59 | Fisher exact | 0 | True |
+| two_stage_qwen | validation_match_vs_gold | 110 | 190 | 0.45 | 0.16 | 0.29 | 0.18 | 0.40 | Fisher exact | 0.0 | True |
+| two_stage_phi | rule_adherence_all_rules | 127 | 173 | 0.54 | 0.64 | -0.10 | -0.21 | 0.01 | Fisher exact | 0.10 | False |
+| two_stage_phi | validation_match_vs_gold | 127 | 173 | 0.65 | 0.16 | 0.50 | 0.40 | 0.59 | Fisher exact | 0.0 | True |
 
-*Table A.21: Reply quality when the detector's label is correct and when it is wrong (error-propagation detail behind Section 5.4.3).*
+*Table A.20: Reply quality when the detector's label is correct and when it is wrong (error-propagation detail behind Section 5.4.3).*
 
 
 | Metric | RoBERTa d1 + Qwen (%) | GPT-2 d1 + Qwen (%) | Difference (pp) | 95% CI (pp) | McNemar p | Significant? |
 |---|---|---|---|---|---|---|
-| Emotion validation | 25.3 | 26 | -0.7 | [-6.3, +5.0] | 0.91 | no |
-| All rules | 57.7 | 63.7 | -6 | [-12.7, +0.7] | 0.09 | no |
+| Emotion validation | 25.3 | 26.0 | -0.7 | [-6.3, +5.0] | 0.91 | no |
+| All rules | 57.7 | 63.7 | -6.0 | [-12.7, +0.7] | 0.09 | no |
 
-*Table A.22: A more accurate detector with the generator held fixed (detector-swap detail behind Section 5.5.3).*
+*Table A.21: A more accurate detector with the generator held fixed (detector-swap detail behind Section 5.5.3).*
 
 
 | Group | Measure | RoBERTa-base d1 (%) | RoBERTa-large d1 (%) | Difference | 95% CI | Test | p | p (Holm over reply-quality measures) | Significant? |
 |---|---|---|---|---|---|---|---|---|---|
-| Detection | d1 top-1 correct | 50.3 | 53.3 | 3 | [-1.0, +7.3] | McNemar exact | 0.21 |  | no |
-| Detection | True emotion in d1 top-3 | 78 | 79.3 | 1.3 | [-2.0, +4.7] | McNemar exact | 0.54 |  | no |
+| Detection | d1 top-1 correct | 50.3 | 53.3 | 3.0 | [-1.0, +7.3] | McNemar exact | 0.211 |  | no |
+| Detection | True emotion in d1 top-3 | 78.0 | 79.3 | 1.3 | [-2.0, +4.7] | McNemar exact | 0.54 |  | no |
 | Detection | Stage-1 pick correct | 42.3 | 44.7 | 2.3 | [-2.3, +7.0] | McNemar exact | 0.39 |  | no |
-| Reply quality | All rules | 60 | 54.7 | -5.3 | [-12.3, +1.7] | McNemar exact | 0.16 | 0.6 | no |
-| Reply quality | Acknowledgement | 66.3 | 57.7 | -8.7 | [-15.0, -2.0] | McNemar exact | 0.01 | 0.06 | no |
-| Reply quality | One question | 92.7 | 95.7 | 3 | [-0.7, +6.7] | McNemar exact | 0.15 | 0.6 | no |
-| Reply quality | Emotion validation | 36.7 | 38 | 1.3 | [-3.3, +6.0] | McNemar exact | 0.68 | 0.85 | no |
+| Reply quality | All rules | 60.0 | 54.7 | -5.3 | [-12.3, +1.7] | McNemar exact | 0.16 | 0.60 | no |
+| Reply quality | Acknowledgement | 66.3 | 57.7 | -8.7 | [-15.0, -2.0] | McNemar exact | 0.012 | 0.06 | no |
+| Reply quality | One question | 92.7 | 95.7 | 3.0 | [-0.7, +6.7] | McNemar exact | 0.15 | 0.60 | no |
+| Reply quality | Emotion validation | 36.7 | 38.0 | 1.3 | [-3.3, +6.0] | McNemar exact | 0.68 | 0.85 | no |
 | Reply quality | WASSA empathy (0-10 points, not %) | 5.05 | 5.01 | -0.04 | [-0.14, +0.06] | Wilcoxon signed-rank | 0.43 | 0.85 | no |
 
-*Table A.23: The final system with RoBERTa-base and with RoBERTa-large (the RoBERTa-large substitution behind Section 5.4.3).*
+*Table A.22: The final system with RoBERTa-base and with RoBERTa-large (the RoBERTa-large substitution behind Section 5.4.3).*
 
 
 | System | Mean words | Length OK (%) | WASSA mean | Spearman rho (length vs WASSA) | p |
 |---|---|---|---|---|---|
-| Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 75.9 | 83.7 | 4.25 | 0.54 | 0 |
-| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 10 | 100 | 3.36 | 0.57 | 0 |
-| Single model, same size: Qwen2.5-1.5B detects + responds | 42 | 100 | 4.84 | 0.2 | 0 |
-| Single model, same generator: Phi-4-mini (4-bit) detects + responds | 73.5 | 99.3 | 4.75 | 0.1 | 0.09 |
-| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 52.9 | 100 | 5.76 | 0.19 | 0 |
-| Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 35.2 | 100 | 4.8 | 0.33 | 0 |
-| Initial pipeline + retrieval (RAG) | 34 | 100 | 4.85 | 0.24 | 0 |
-| RoBERTa d1 + Qwen2.5-1.5B d2 (top-1 emotion) | 34.7 | 100 | 4.78 | 0.29 | 0 |
-| RoBERTa d1 + Gemma-3-4B d2 (top-1 emotion) | 133.3 | 27.7 | 5.3 | 0.31 | 0 |
-| RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 80.4 | 96 | 4.89 | 0.14 | 0.02 |
-| Two-stage: RoBERTa top-3 -> Qwen2.5-1.5B picks + per-emotion prompt | 44.1 | 99.7 | 4.76 | 0.21 | 0 |
-| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | 57.1 | 100 | 5.05 | 0.26 | 0 |
+| Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 75.9 | 83.7 | 4.25 | 0.541 | 0.0 |
+| Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 10.0 | 100.0 | 3.36 | 0.57 | 0.0 |
+| Single model, same size: Qwen2.5-1.5B detects + responds | 42.0 | 100.0 | 4.84 | 0.196 | 0.00 |
+| Single model, same generator: Phi-4-mini (4-bit) detects + responds | 73.5 | 99.3 | 4.75 | 0.098 | 0.09 |
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 52.9 | 100.0 | 5.76 | 0.194 | 0.00 |
+| Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 35.2 | 100.0 | 4.8 | 0.327 | 0.0 |
+| Initial pipeline + retrieval (RAG) | 34.0 | 100.0 | 4.85 | 0.244 | 2e-05 |
+| RoBERTa d1 + Qwen2.5-1.5B d2 (top-1 emotion) | 34.7 | 100.0 | 4.78 | 0.29 | 0.0 |
+| RoBERTa d1 + Gemma-3-4B d2 (top-1 emotion) | 133.3 | 27.7 | 5.3 | 0.308 | 0.0 |
+| RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 80.4 | 96.0 | 4.89 | 0.14 | 0.02 |
+| Two-stage: RoBERTa top-3 -> Qwen2.5-1.5B picks + per-emotion prompt | 44.1 | 99.7 | 4.76 | 0.209 | 0.00 |
+| FINAL SYSTEM - Two-stage: RoBERTa top-3 -> Phi-4-mini picks + per-emotion prompt | 57.1 | 100.0 | 5.05 | 0.258 | 1e-05 |
 
-*Table A.24: Correlation between reply length and empathy score within each system (per-system correlations behind Section 5.4.5).*
+*Table A.23: Correlation between reply length and empathy score within each system (per-system correlations behind Section 5.4.5).*
 
 
 | Aspect | Check | Result | Source |
@@ -470,7 +456,7 @@ These tables support statements in the main text and are placed here to keep the
 | Our data | For reference: judge vs judge on empathy | rho = 0.69 | computed |
 | Reproducibility | Re-implementation check after a library upgrade | 1,800 of 1,800 pre-upgrade scores reproduced exactly | `llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv` |
 
-*Table A.25: Evidence for and against the empathy classifier for this project (validity checks on the empathy classifier, summarised in Section 5.4.6).*
+*Table A.24: Evidence for and against the empathy classifier for this project (validity checks on the empathy classifier, summarised in Section 5.4.6).*
 
 
 | Dimension | Final system vs | N | Final | Baseline | Difference | 95% CI | p | p (Holm-adjusted) | Significant? |
@@ -478,33 +464,33 @@ These tables support statements in the main text and are placed here to keep the
 | empathy | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 7.84 | 8.15 | -0.3 | [-0.55, -0.07] | 0.02 | 0.07 | no |
 | empathy | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 7.84 | 7.84 | 0.01 | [-0.23, +0.25] | 0.96 | 0.96 | no |
 | empathy | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 64 | 7.84 | 8.04 | -0.2 | [-0.45, +0.08] | 0.04 | 0.08 | no |
-| empathy | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 7.84 | 7.15 | 0.7 | [+0.39, +1.01] | 0 | 0 | YES |
-| empathy | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 7.84 | 6.98 | 0.87 | [+0.52, +1.24] | 0 | 0 | YES |
-| empathy | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 7.84 | 5.98 | 1.86 | [+1.48, +2.23] | 0 | 0 | YES |
-| empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 7.84 | 3.88 | 3.97 | [+3.49, +4.43] | 0 | 0 | YES |
+| empathy | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 7.84 | 7.15 | 0.7 | [+0.39, +1.01] | 7e-05 | 0.00 | YES |
+| empathy | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 7.84 | 6.98 | 0.87 | [+0.52, +1.24] | 1e-05 | 5e-05 | YES |
+| empathy | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 7.84 | 5.98 | 1.86 | [+1.48, +2.23] | 0.0 | 0.0 | YES |
+| empathy | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 7.84 | 3.88 | 3.97 | [+3.49, +4.43] | 0.0 | 0.0 | YES |
 | relevance | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 8.45 | 8.68 | -0.23 | [-0.47, +0.02] | 0.04 | 0.12 | no |
 | relevance | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 8.45 | 8.29 | 0.16 | [-0.13, +0.45] | 0.31 | 0.63 | no |
 | relevance | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 64 | 8.45 | 8.48 | -0.02 | [-0.34, +0.32] | 0.63 | 0.63 | no |
 | relevance | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.45 | 8.02 | 0.44 | [+0.01, +0.86] | 0.01 | 0.03 | YES |
-| relevance | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 8.45 | 7.63 | 0.82 | [+0.45, +1.20] | 0 | 0 | YES |
-| relevance | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.45 | 7.23 | 1.23 | [+0.68, +1.73] | 0 | 0 | YES |
-| relevance | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.45 | 5.33 | 3.12 | [+2.47, +3.74] | 0 | 0 | YES |
+| relevance | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 8.45 | 7.63 | 0.82 | [+0.45, +1.20] | 0.00 | 0.00 | YES |
+| relevance | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.45 | 7.23 | 1.23 | [+0.68, +1.73] | 0.0 | 1e-05 | YES |
+| relevance | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.45 | 5.33 | 3.12 | [+2.47, +3.74] | 0.0 | 0.0 | YES |
 | safety | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 9.76 | 9.86 | -0.1 | [-0.23, +0.02] | 0.13 | 0.39 | no |
 | safety | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 9.76 | 9.81 | -0.05 | [-0.17, +0.06] | 0.36 | 0.39 | no |
 | safety | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 64 | 9.76 | 9.83 | -0.07 | [-0.23, +0.12] | 0.07 | 0.36 | no |
 | safety | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 9.76 | 9.56 | 0.2 | [-0.01, +0.41] | 0.08 | 0.36 | no |
 | safety | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 9.76 | 9.5 | 0.26 | [+0.01, +0.55] | 0.18 | 0.39 | no |
-| safety | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 9.76 | 9.31 | 0.45 | [+0.23, +0.66] | 0 | 0 | YES |
-| safety | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 9.76 | 8.67 | 1.09 | [+0.77, +1.41] | 0 | 0 | YES |
+| safety | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 9.76 | 9.31 | 0.45 | [+0.23, +0.66] | 0.00 | 0.00 | YES |
+| safety | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 9.76 | 8.67 | 1.09 | [+0.77, +1.41] | 0.0 | 0.0 | YES |
 | overall | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 64 | 8.68 | 8.9 | -0.21 | [-0.40, -0.03] | 0.04 | 0.11 | no |
 | overall | RoBERTa d1 + Phi-4-mini d2 (top-1 emotion) | 64 | 8.68 | 8.65 | 0.04 | [-0.16, +0.24] | 0.71 | 0.71 | no |
 | overall | Single model, same generator: Phi-4-mini (4-bit) detects + responds | 64 | 8.68 | 8.78 | -0.1 | [-0.32, +0.16] | 0.08 | 0.16 | no |
-| overall | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.68 | 8.24 | 0.44 | [+0.17, +0.72] | 0 | 0 | YES |
-| overall | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 8.68 | 8.04 | 0.65 | [+0.35, +0.96] | 0 | 0 | YES |
-| overall | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.68 | 7.51 | 1.18 | [+0.83, +1.51] | 0 | 0 | YES |
-| overall | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.68 | 5.96 | 2.73 | [+2.29, +3.16] | 0 | 0 | YES |
+| overall | Single model, same size: Qwen2.5-1.5B detects + responds | 64 | 8.68 | 8.24 | 0.44 | [+0.17, +0.72] | 0.00 | 0.00 | YES |
+| overall | Initial pipeline: GPT-2 Medium d1 + Qwen2.5-1.5B d2 | 64 | 8.68 | 8.04 | 0.65 | [+0.35, +0.96] | 8e-05 | 0.00 | YES |
+| overall | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.68 | 7.51 | 1.18 | [+0.83, +1.51] | 0.0 | 0.0 | YES |
+| overall | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.68 | 5.96 | 2.73 | [+2.29, +3.16] | 0.0 | 0.0 | YES |
 
-*Table A.26: Paired significance tests on the AI-judge scores (every judge comparison behind Section 5.4.6).*
+*Table A.25: Paired significance tests on the AI-judge scores (every judge comparison behind Section 5.4.6).*
 
 
 | Check | N | Result | Without fine-tuned system |
@@ -513,7 +499,7 @@ These tables support statements in the main text and are placed here to keep the
 | Per-reply agreement on overall: between the two judges | 512 | rho = 0.683 (p = 1.5e-71) | rho = 0.598 |
 | Do both judges rank the 8 systems alike? | 8 | Same order except the final system and RoBERTa + Phi-4-mini (top-1), which differ by 0.03 and swap | rank rho = 0.98 |
 
-*Table A.27: Agreement between the two AI judges (the judge agreement checks behind Section 5.4.5).*
+*Table A.26: Agreement between the two AI judges (the judge agreement checks behind Section 5.4.5).*
 
 
 | System | Human evaluation protocol | Empathy result | Source |
@@ -525,7 +511,7 @@ These tables support statements in the main text and are placed here to keep the
 | TOOL-ED Qwen1.5-14B (Cao et al., 2025) | A/B vs same model LoRA-tuned on ED, 3 researchers | 61.3% win / 32.7% lose / 6.0% tie | COLING 2025 main.355, Table 2 (human) |
 | OURS - final system | 3-way forced choice, students and faculty | [[PENDING - human evaluation]] | this work |
 
-*Table A.28: Human evaluation of empathy in published work and in this thesis (human empathy studies compared with ours, in Section 5.5.1).*
+*Table A.27: Human evaluation of empathy in published work and in this thesis (human empathy studies compared with ours, in Section 5.5.1).*
 
 
 | System | Parameters (B) | All rules (%) | WASSA empathy | Emotion validation (%) | AI-judge empathy | AI-judge overall |
@@ -535,15 +521,15 @@ These tables support statements in the main text and are placed here to keep the
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 7.62 | 82.3 | 5.76 | 32.3 | 8.15 | 8.9 |
 | Final system as % of Qwen2.5-7B | 52.0% | 72.9% | 87.7% | 113.6% | 96.2% | 97.5% |
 
-*Table A.29: Reply quality against total parameters for the final system and the single models (the numbers behind the cost chart in Section 5.5.5).*
+*Table A.28: Reply quality against total parameters for the final system and the single models (the numbers behind the cost chart in Section 5.5.5).*
 
 
 | Detector | Parameters (M) | Training time (min) | Top-1 on test (%) | Top-5 on test (%) | Final system: all rules (%) | Final system: WASSA | Final system: emotion validation (%) |
 |---|---|---|---|---|---|---|---|
-| roberta-base | 125 | 8.8 | 50.1 | 85 | 60 | 5.05 | 36.7 |
-| roberta-large | 355 | 64.7 | 53 | 87.2 | 54.7 | 5.01 | 38 |
+| roberta-base | 125 | 8.8 | 50.1 | 85.0 | 60.0 | 5.05 | 36.7 |
+| roberta-large | 355 | 64.7 | 53.0 | 87.2 | 54.7 | 5.01 | 38.0 |
 
-*Table A.30: Detector size, detection accuracy and the resulting reply quality (detector-level figures behind Section 5.5.7).*
+*Table A.29: Detector size, detection accuracy and the resulting reply quality (detector-level figures behind Section 5.5.7).*
 
 
 | System | Parameters (B) | Peak GPU memory (GB) | Mean s per reply | Median s per reply | ms per generated token | Mean reply tokens | Model load (s) | N messages |
@@ -552,19 +538,19 @@ These tables support statements in the main text and are placed here to keep the
 | Single model, same size: Qwen2.5-1.5B detects + responds | 1.54 | 2.9 | 1.58 | 1.49 | 32.7 | 48.8 | 5.4 | 50 |
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 7.62 | 5.47 | 3.91 | 3.75 | 65.4 | 59.8 | 21.4 | 50 |
 
-*Table A.31: Peak GPU memory and response time on the same 50 conversations (memory and timing measurements behind Section 5.5.5).*
+*Table A.30: Peak GPU memory and response time on the same 50 conversations (memory and timing measurements behind Section 5.5.5).*
 
 
 | Final system vs | Measure | N | Final | Baseline | Difference | 95% CI | Wilcoxon p | Significant? |
 |---|---|---|---|---|---|---|---|---|
-| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | Seconds per reply | 50 | 4.17 | 3.91 | 0.27 | [-0.03, +0.56] | 0.1 | no |
+| Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | Seconds per reply | 50 | 4.17 | 3.91 | 0.27 | [-0.03, +0.56] | 0.10 | no |
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | ms per generated token | 50 | 65.68 | 65.44 | 0.24 | [-1.88, +2.39] | 0.91 | no |
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | Peak GPU memory (GB) | 1 | 3.4 | 5.47 | -2.07 | -37.9% relative |  | single measurement |
-| Single model, same size: Qwen2.5-1.5B detects + responds | Seconds per reply | 50 | 4.17 | 1.58 | 2.6 | [+2.36, +2.83] | 0 | YES |
-| Single model, same size: Qwen2.5-1.5B detects + responds | ms per generated token | 50 | 65.68 | 32.65 | 33.03 | [+31.04, +35.03] | 0 | YES |
+| Single model, same size: Qwen2.5-1.5B detects + responds | Seconds per reply | 50 | 4.17 | 1.58 | 2.6 | [+2.36, +2.83] | 0.0 | YES |
+| Single model, same size: Qwen2.5-1.5B detects + responds | ms per generated token | 50 | 65.68 | 32.65 | 33.03 | [+31.04, +35.03] | 0.0 | YES |
 | Single model, same size: Qwen2.5-1.5B detects + responds | Peak GPU memory (GB) | 1 | 3.4 | 2.9 | 0.5 | +17.1% relative |  | single measurement |
 
-*Table A.32: Paired comparison of response time and memory against each single model (paired tests behind the resource figures in Section 5.5.7).*
+*Table A.31: Paired comparison of response time and memory against each single model (paired tests behind the resource figures in Section 5.5.7).*
 
 
 | Rule | Where the rule comes from | Effect on WASSA empathy (within system) | Effect on AI-judge empathy (within system) |
@@ -573,22 +559,22 @@ These tables support statements in the main text and are placed here to keep the
 | R2: ask exactly one question | Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one | -0.19 (2906 vs 694 replies) p = 0.00144 | -0.08 (409 vs 103 replies) p = 0.759 |
 | R3: stay within 120 words | Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement) | -0.22 (3319 vs 281 replies) p = 0.00796 | +0.64 (492 vs 20 replies) p = 0.00861 |
 
-*Table A.33: Origin of each response rule and its measured effect within systems (origin and measured effect of each rule, summarised in Section 5.5.6).*
+*Table A.32: Origin of each response rule and its measured effect within systems (origin and measured effect of each rule, summarised in Section 5.5.6).*
 
 
 | Measure | Decoupled (ours) | Same generator alone | Difference | 95% CI | Test | p | p, length held constant | Verdict |
 |---|---|---|---|---|---|---|---|---|
 | WASSA empathy (0-10) | 5.05 | 4.75 | 0.3 | [+0.19, +0.41] | Wilcoxon signed-rank | 0.0 | 0.0 | decoupled better |
-| Emotion validation (%) | 36.67 | 27.0 | 9.67 | [+3.67, +15.33] | McNemar exact | 0.00169 | 0.1335 | decoupled better |
-| AI-judge empathy (1-10) | 7.84 | 8.04 | -0.2 | [-0.45, +0.09] | Wilcoxon signed-rank | 0.07675 | 0.5539 | no difference |
-| AI-judge overall (1-10) | 8.68 | 8.78 | -0.1 | [-0.32, +0.17] | Wilcoxon signed-rank | 0.16262 | 0.4855 | no difference |
-| All three rules (%) | 60.0 | 73.67 | -13.67 | [-21.00, -6.33] | McNemar exact | 0.00048 | 0.0405 | single model better |
-| Acknowledgement (%) | 66.33 | 77.33 | -11.0 | [-18.00, -4.00] | McNemar exact | 0.00269 | 0.3584 | single model better |
-| Exactly one question (%) | 92.67 | 96.0 | -3.33 | [-7.00, +0.33] | McNemar exact | 0.11018 | 0.6265 | no difference |
-| Reply length (words) | 57.11 | 73.48 | -16.37 | [-18.77, -14.01] | Wilcoxon signed-rank | 0.0 | 0.1056 | shorter replies by design |
+| Emotion validation (%) | 36.67 | 27.0 | 9.67 | [+3.67, +15.33] | McNemar exact | 0.00 | 0.13 | decoupled better |
+| AI-judge empathy (1-10) | 7.84 | 8.04 | -0.2 | [-0.45, +0.09] | Wilcoxon signed-rank | 0.08 | 0.55 | no difference |
+| AI-judge overall (1-10) | 8.68 | 8.78 | -0.1 | [-0.32, +0.17] | Wilcoxon signed-rank | 0.16 | 0.49 | no difference |
+| All three rules (%) | 60.0 | 73.67 | -13.67 | [-21.00, -6.33] | McNemar exact | 0.00 | 0.04 | single model better |
+| Acknowledgement (%) | 66.33 | 77.33 | -11.0 | [-18.00, -4.00] | McNemar exact | 0.00 | 0.36 | single model better |
+| Exactly one question (%) | 92.67 | 96.0 | -3.33 | [-7.00, +0.33] | McNemar exact | 0.11 | 0.63 | no difference |
+| Reply length (words) | 57.11 | 73.48 | -16.37 | [-18.77, -14.01] | Wilcoxon signed-rank | 0.0 | 0.11 | shorter replies by design |
 | Boilerplate rate (%) | 58.7 | 72.3 | -13.6 | corpus-level measure | - | - | - | decoupled better |
 | Distinct-2 (%) | 47.84 | 39.12 | 8.72 | corpus-level measure | - | - | - | decoupled better |
 | Emotion used is visible and can be intercepted | yes | no | - | - | - | - | - | decoupled better |
 
-*Table A.34: The decoupled design against the same generator alone, with reply length held constant (the numbers behind the comparison in Section 5.5.7).*
+*Table A.33: The decoupled design against the same generator alone, with reply length held constant (the numbers behind the comparison in Section 5.5.7).*
 

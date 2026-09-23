@@ -1,0 +1,9 @@
+Rank,System,Nemotron 3 Ultra (1-10),gpt-oss-120b (1-10),WASSA classifier (0-10),Panel score
+1,Single model Qwen-7B,8.12,8.17,5.76,+1.11
+2,FINAL: two-stage Phi-4-mini,7.69,8.00,5.05,+0.59
+3,Single model Phi-4-mini,7.94,8.14,4.75,+0.53
+4,RoBERTa + Phi-4-mini (top-1),7.58,8.09,4.89,+0.51
+5,Single model Qwen-1.5B,6.92,7.38,4.84,+0.15
+6,Initial pipeline (GPT-2 + Qwen),6.79,7.20,4.80,+0.05
+7,Zero-shot Qwen-1.5B,5.33,6.66,4.25,-0.72
+8,Fine-tuned Qwen-1.5B,3.89,3.86,3.36,-2.22
