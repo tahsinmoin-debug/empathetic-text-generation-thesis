@@ -38,4 +38,4 @@ Two changes were **deferred**. A repetition penalty would probably reduce the bo
 
 **Correcting the fine-tuned baseline:** a check of the monolithic LoRA baseline found a configuration error. Its training script used the end-of-turn token as the padding token, and the collator excludes padding from the loss, so the model was never trained to stop: 99% of its replies ran to the 250-token limit, averaging 200.7 words and 7.07 questions, and none followed all three rules. We retrained it with the model's own padding token, added a start-up check that aborts training if the end-of-turn token would be masked, and selected the best epoch by validation loss. The corrected model ends its replies normally (10.0 words, none reaching the limit) and follows all rules in 22.3% of cases. Every result in this thesis uses the corrected baseline; the original run is recorded here only as a documented error.
 
-The complete configuration after all adjustments, with the justification of every value, is listed in Table 4.9.
+The complete configuration after all adjustments, with the justification of every value, is listed in Table 4.9 in the appendix.

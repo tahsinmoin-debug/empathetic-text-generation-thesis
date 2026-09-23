@@ -335,7 +335,7 @@ The monolithic baselines share the pipeline's scaffolding so that only the inten
 
 ### 4.4.5 Complete Parameter Listing
 
-Every parameter of the final system, of the baselines and of the evaluation was fixed before the final comparison, and each is justified by one of three things: published practice, a measurement on our own data, or an explicit hardware constraint. Settings that were never tuned are marked as such rather than presented as choices. The complete listing, with the justification and the evidence for each value, is given in Table A.6.
+Every parameter of the final system, of the baselines and of the evaluation was fixed before the final comparison, and each is justified by one of three things: published practice, a measurement on our own data, or an explicit hardware constraint. Settings that were never tuned are marked as such rather than presented as choices. The complete listing, with the justification and the evidence for each value, is given in Table A.6, which is in the appendix at the end of this report.
 
 
 ### 4.4.6 Verification and Safeguards
