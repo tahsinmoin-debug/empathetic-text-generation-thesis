@@ -4,4 +4,4 @@ The system was implemented in Python 3.10 using PyTorch 2.5.1 and Hugging Face T
 
 Evaluation combined SciPy and scikit-learn for paired statistical tests and classification metrics, sentence-transformers for the retrieval baseline, the WASSA 2024 empathy classifier, and two AI judges accessed through the OpenRouter and Groq APIs, selected from different developers to avoid self-preference bias. A Gradio interface was prepared for demonstration on Hugging Face Spaces, the human study was conducted with Google Forms, and all tables and figures in this report were generated from saved experiment outputs by scripts using pandas and matplotlib, so that every reported number can be reproduced.
 
-[[TABLE A.0 | tools_and_versions.csv | Software and hardware used in this work]]
+[[TABLE 0.1 | tools_and_versions.csv | Software and hardware used in this work]]

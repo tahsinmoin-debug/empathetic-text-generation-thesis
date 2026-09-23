@@ -6,7 +6,28 @@ The system was implemented in Python 3.10 using PyTorch 2.5.1 and Hugging Face T
 
 Evaluation combined SciPy and scikit-learn for paired statistical tests and classification metrics, sentence-transformers for the retrieval baseline, the WASSA 2024 empathy classifier, and two AI judges accessed through the OpenRouter and Groq APIs, selected from different developers to avoid self-preference bias. A Gradio interface was prepared for demonstration on Hugging Face Spaces, the human study was conducted with Google Forms, and all tables and figures in this report were generated from saved experiment outputs by scripts using pandas and matplotlib, so that every reported number can be reproduced.
 
-[[TABLE A.0 | tools_and_versions.csv | Software and hardware used in this work]]
+
+| Purpose | Tool | Version |
+|---|---|---|
+| Language | Python | 3.10.9 |
+| Deep learning | PyTorch (CUDA 12.1) | 2.5.1 |
+| Models and training | Hugging Face Transformers | 5.16.1 |
+| Parameter-efficient tuning | PEFT | 0.18.1 |
+| Quantisation | bitsandbytes (4-bit NF4) | 0.49.2 |
+| Training utilities | Accelerate / Datasets | 1.13.0 / 4.8.5 |
+| Statistics | SciPy / scikit-learn | 1.15.3 / 1.7.2 |
+| Data handling | pandas / NumPy | 2.3.3 / 2.2.6 |
+| Retrieval | sentence-transformers | 5.7.0 |
+| Evaluation | bert-score | 0.3.13 |
+| AI-judge APIs | openai SDK (OpenRouter), groq SDK | 2.53.0 / 1.6.0 |
+| Demo interface | Gradio on Hugging Face Spaces | 5.9.1 (planned) |
+| Human evaluation | Google Forms | - |
+| Documents | python-docx, Microsoft Word | 1.2.0 |
+| Version control | Git | - |
+| Hardware | NVIDIA RTX 4060 8 GB, 16 GB RAM, Windows 11 Pro | driver 616.56 |
+
+*Table A.1: Software and hardware used in this work*
+
 ## A. Supplementary Tables
 
 These tables support statements in the main text and are placed here to keep the chapters readable. Each caption states where the result is used.
@@ -120,7 +141,7 @@ These tables support statements in the main text and are placed here to keep the
 | Statistics | Tests | McNemar exact (binary), Wilcoxon signed-rank (scores) | Paired tests matched to the data type; Wilcoxon does not assume normal differences | McNemar (1947); Wilcoxon (1945) |
 | Statistics | Confidence intervals | Paired bootstrap, 10,000 resamples | More than the 1,000 resamples recommended for percentile intervals, giving stable limits | Efron and Tibshirani (1993) |
 | Statistics | Multiple comparisons | Holm correction; significant only if adjusted p < 0.05 and CI excludes zero | Controls the family-wise error rate with more power than Bonferroni | Holm (1979) |
-| Human evaluation | Design | 13 items (11 scored + 2 attention checks), 3-way forced choice | Keeps the form short enough to avoid rater fatigue; preference judgements follow comparable studies | Cao et al. (2025); Wu et al. (2025) |
+| Human evaluation | Design | 8 situations x 3 replies, each rated 1-5 on three dimensions, plus one preference question | Rating as well as choosing gives every system a score on every situation, so the size of a difference can be measured; 24 ratings keeps the form short enough to avoid rater fatigue | Cao et al. (2025); Wu et al. (2025) |
 | Resource benchmark | Protocol | 50 messages, 3 warm-up, one system per run | Warm-up removes first-call overhead; separate runs keep memory readings clean | Design choice |
 
 *Table A.6: Every parameter used in this work, its value, justification and evidence (the full parameter listing behind Chapter 4).*

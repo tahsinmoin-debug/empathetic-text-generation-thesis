@@ -238,6 +238,10 @@ RENDERED = set()
 def render(text, tmap, fmap, numbers):
     out = []
     for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("[[TABLE") or stripped.startswith("[[FIGURE"):
+            if not (TABLE.fullmatch(stripped) or FIGURE.fullmatch(stripped)):
+                raise SystemExit(f"Marker the renderer cannot read, so it would print raw: {stripped[:80]}")
         t = TABLE.fullmatch(line.strip())
         f = FIGURE.fullmatch(line.strip())
         if t:
