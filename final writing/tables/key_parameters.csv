@@ -1,0 +1,14 @@
+Parameter,Value,Why this value
+Detector: learning rate,2e-5,"Inside the fine-tuning ranges recommended for BERT (2e-5 to 5e-5) and used for RoBERTa (1e-5 to 3e-5) (Devlin et al., 2019; Liu et al., 2019)"
+Detector: effective batch size,16 (8 per step x 2 accumulation),"Batch size recommended for BERT/RoBERTa fine-tuning; 8 per step fits in 8 GB (Devlin et al., 2019; Liu et al., 2019)"
+Detector: epochs and checkpoint choice,"Up to 4, early stopping (patience 1), best checkpoint by validation accuracy","BERT recommends 2-4 fine-tuning epochs; keeping the best validation checkpoint prevents over-fitting (Devlin et al., 2019)"
+Detector: precision and seed,fp16 mixed precision / 42,Fits the 8 GB GPU and trains faster; fixed seed for reproducibility
+Detector: RoBERTa-large learning rate and batch,1e-5 / 4,"The base settings diverged; 1e-5 is the lowest value of RoBERTa's fine-tuning range and batch 4 fits in memory (Liu et al., 2019; our observation)"
+Attention cues: how much is kept,"Top 40% of content tokens, floor 3 and ceiling 14, merged into at most 3 phrases","A fixed count returns nearly the whole message for short inputs, which adds nothing because the generator already has it; the cap keeps the prompt short (attention_cues.py)"
+Generator: quantisation,"4-bit NF4, double quantisation, fp16 compute","NF4 preserves 16-bit quality while cutting memory about fourfold; measured peak use 3.40 GB on the 8 GB GPU (Dettmers et al., 2023; our measurement)"
+Generator: temperature,0.7,"Set to Qwen2.5-Instruct's published default when Qwen was the generator, then held fixed for every system and every later generator, so that differences come from the design and not from decoding; sampling rather than greedy decoding, which is known to produce repetitive text (Qwen2.5 generation_config; Holtzman et al., 2020; held constant by design)"
+Agent: how much the detector reads,Last 4 user turns,"Four turns was best or joint best in 3 of 4 long scenarios, and 6 turns degraded 2 of them, measured in Section 5.3.2 (Poria et al., 2019; our scenario tests)"
+Agent: how much the generator remembers,"Last 10 exchanges, verbatim",Support conversations are short; verbatim history avoids losing emotional detail through summarisation
+LoRA baseline: rank and alpha,16 / 32,"Low ranks are sufficient to adapt attention weights; alpha = 2 x rank scales the update (Hu et al., 2022)"
+"LoRA baseline: learning rate, dropout, weight decay",2e-4 / 0.1 / 0.01,"LoRA's GPT-2 settings; QLoRA uses 2e-4 and dropout 0.1 for models up to 13B (Hu et al., 2022; Dettmers et al., 2023)"
+LoRA baseline: epochs and checkpoint choice,"Up to 3, best epoch by validation loss, early stopping (patience 1)","Validation loss rose after epoch 1 (1.4607 to 1.4626), so epoch 1 was kept (Our training log)"

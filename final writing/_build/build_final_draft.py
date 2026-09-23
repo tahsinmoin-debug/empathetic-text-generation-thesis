@@ -64,6 +64,7 @@ MAIN_TABLES = {
     "d1_candidates_design.csv", "d2_candidates_design.csv", "integration_variants_design.csv",
     "baseline_designs.csv", "detector_training_config.csv", "generation_config.csv",
     "preprocessed_data_summary.csv", "conversational_agent_design.csv",
+    "key_parameters.csv",
     "context_window_long_scenarios.csv", "head_to_head_three_systems.csv",
     "rule_following.csv", "empathy_panel.csv",
     "human_eval_results_PENDING.csv",
