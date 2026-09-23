@@ -72,6 +72,11 @@ LEGEND = [("Final system", FINAL), ("Other decoupled pipelines", PIPE),
           ("Single model, no detector", SINGLE), ("Zero-shot or fine-tuned", PLAIN)]
 
 
+def table_root(rel):
+    """A results file from the repository root."""
+    return pd.read_csv(ROOT / rel)
+
+
 def table(name):
     """The full table, from the writing kit; `tables/` holds the trimmed print copies."""
     hits = sorted((ROOT / "writing").glob(f"*/tables/{name}"))
@@ -277,6 +282,46 @@ LONG_TO_KEY = {
 }
 
 
+# ---------------------------------------------------------------- 5.1.8 judge coverage
+def judge_emotion_coverage():
+    """Every one of the 32 emotions reached the judges, and this is how each one scored."""
+    n = table_root("llm_judge_evaluation/nemotron_openrouter_scores.csv")
+    g = table_root("llm_judge_evaluation/gptoss_groq_scores.csv")
+    test = pd.read_csv(ROOT / "ed_data" / "empatheticdialogues" / "test.csv", on_bad_lines="skip")
+    emo = test.drop_duplicates("conv_id").set_index("conv_id")["context"]
+    first = (test.sort_values(["conv_id", "utterance_idx"]).drop_duplicates("conv_id")
+             .set_index("conv_id")["utterance"])
+
+    j = n.merge(g, on=["conv_id", "setting"], suffixes=("_n", "_g"))
+    j = j[j["setting"] == "two_stage_phi"].copy()
+    j["emotion"] = j["conv_id"].map(emo)
+    j["words"] = j["conv_id"].map(first).str.split().str.len()
+    j["panel"] = (j["empathy_n"] + j["empathy_g"]) / 2
+    per = j.groupby("emotion").agg(panel=("panel", "mean"), n=("panel", "size"),
+                                   short=("words", "min"), long=("words", "max"))
+    per = per.sort_values("panel")
+
+    y = np.arange(len(per))
+    fig, ax = plt.subplots(figsize=(6.2, 5.2))
+    mean = j["panel"].mean()
+    ax.axvline(mean, color="#b0bec5", linewidth=1, linestyle="--", zorder=0)
+    for i, (name, r) in enumerate(per.iterrows()):
+        colour = FINAL if r["panel"] >= mean else "#7aa9d6"
+        ax.plot([mean, r["panel"]], [i, i], color=colour, linewidth=1.2, alpha=0.5, zorder=1)
+        ax.plot(r["panel"], i, "o", color=colour, markersize=5.5, zorder=2,
+                markeredgecolor="white", markeredgewidth=1)
+        ax.text(10.15, i, f"{int(r['short'])} and {int(r['long'])} words", fontsize=6.4,
+                color=INK2, va="center")
+    ax.set_yticks(y, per.index, fontsize=7)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(4.6, 10.0)
+    ax.set_xlabel("Judge empathy score of the final system (1-10), two conversations per emotion")
+    ax.set_title(f"All 32 emotions reached the judges; the panel mean is {mean:.2f}", loc="left")
+    ax.spines["left"].set_visible(False)
+    grid_x(ax)
+    save(fig, NEW, "fig_judge_emotion_coverage.png")
+
+
 # ---------------------------------------------------------------- 5.2.6
 def radar_composite():
     df = table("composite_ranking.csv")
@@ -428,6 +473,7 @@ def decoupled_vs_single():
 
 if __name__ == "__main__":
     scoreboard()
+    judge_emotion_coverage()
     rule_adherence()
     emotion_fidelity()
     wassa_ci()

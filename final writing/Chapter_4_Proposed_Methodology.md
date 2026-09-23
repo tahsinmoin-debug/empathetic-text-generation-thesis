@@ -230,6 +230,15 @@ All data comes from EmpatheticDialogues [2], a corpus in which one crowdworker d
 *Figure 4.6: From the released corpus to the datasets used in this work*
 
 
+**Why not GoEmotions:** the project began on GoEmotions [42], and the first months went into preparing it: 54,263 Reddit comments across 27 emotions and a neutral class, processed into a 28-label multi-label set, analysed, and then rewritten into dialogue form with templated replies. It was abandoned for four reasons, each measured on that prepared data rather than assumed.
+
+1. **It contains no replies:** A comment carries a label and nothing else, so there is nothing to train or evaluate a response generator against. The replies we produced for it were written from our own templates, which means any system trained on them would only be learning our wording back.
+2. **A third of it has no emotion to answer:** *Neutral* is the largest class at 32.75% of the corpus. A support system is not asked to respond to 18,000 neutral comments.
+3. **The emotions it does carry are the wrong ones:** Its frequent classes are reactions to online comments, with *admiration* at 9.4%, *approval* at 6.8% and *amusement* at 5.3%, while the states a support conversation actually has to answer are its rarest: *grief* appears 96 times against *admiration*'s 5,122, a ratio of 53 to 1, and the set has no *lonely*, *devastated*, *terrified* or *apprehensive* at all.
+4. **Its labels overlap:** 16.25% of examples carry more than one emotion, with *anger* and *annoyance* the most common pair, which does not fit a design that conditions one reply on one feeling.
+
+EmpatheticDialogues answers all four: every conversation is a first-person disclosure written to be replied to, it comes with the listener's reply, it carries exactly one of 32 emotions chosen by the speaker before writing, and those 32 are the states a support conversation is made of. The GoEmotions work is kept in the repository, and the change of corpus is the reason the project's own labels are the 32 used throughout this thesis rather than the 28 of the earlier plan.
+
 ### 4.3.2 Data Cleaning
 
 Three cleaning steps are applied, each for a specific defect of the released files. Commas are stored in the corpus as the literal string `_comma_`, which is restored to a comma; left in place it would appear inside the text a model reads and inside the replies a rater sees. Rows that do not parse as valid CSV, a small number caused by unescaped quotation marks, are skipped rather than repaired, because a partially parsed utterance cannot be trusted. Rows with an empty utterance or an empty emotion label are dropped, since neither can be used for supervision. Surrounding whitespace is stripped from both the text and the label.
