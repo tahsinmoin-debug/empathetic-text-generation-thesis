@@ -323,7 +323,7 @@ This section places the results beside published work where such a comparison is
 
 Table 5.5 places our detector among published results on the same 32 emotions. Two things have to be held in mind when reading it: **what the system reads**, which may be a whole conversation, the situation description, or only the speaker's first message; and **which partition the number comes from**.
 
-Our detector's 50.3% exceeds every joint recognition-and-generation model listed, at 30.6-41.2% [6], [7], [10], [11], and the personality-aware models at 45.4-48.3% [16]; it is on par with RoBERTa-GPT2 at 51.5% [42]. Four things explain that gap, and only the last is a decision we can take credit for.
+Our detector's 50.3% exceeds eleven of the fourteen published figures in the table: every joint recognition-and-generation model, at 30.6-41.2% [6], [7], [10], [11], the personality-aware models at 45.4-48.3% [16], and both classifiers reported in the dataset's own paper, fastText at 43.0% and DeepMoji at 48.0% [4]; it is on par with RoBERTa-GPT2 at 51.5% [42]. Four things explain that gap, and only the last is a decision we can take credit for.
 
 1. **It starts from a far stronger encoder:** Our detector is fine-tuned from RoBERTa, pre-trained on about 160 GB of text, while MoEL, MIME, CEM and CASE initialise their word representations from GloVe vectors and train their encoders on EmpatheticDialogues alone. The one joint model in the table that is built on pre-trained components, RoBERTa-GPT2, is also the only one that matches us.
 2. **It does one job:** The joint models learn emotion recognition as an auxiliary task and share their capacity with response generation; ours is trained and selected for classification and nothing else.
