@@ -241,7 +241,7 @@ These tables support statements in the main text and are placed here to keep the
 | 7 | furious | False | student situation |
 | 8 | sad | True | core supportive emotion |
 
-*Table A.10: Design of the human-evaluation items (item-by-item design of the human study described in Section 5.1.9).*
+*Table A.10: Design of the human-evaluation items (item-by-item design of the human study described in Section 5.1.6).*
 
 
 | d1 version | Trained on | Evaluated on | Top-1 (%) | Top-5 (%) |
@@ -272,7 +272,7 @@ These tables support statements in the main text and are placed here to keep the
 | roberta-large vs roberta-base | 2542 | 0.53 | 0.50 | 0.03 | 0.01 | 0.04 | McNemar exact | 0.00 | True | top1 | Is the larger model's advantage real? (why not bigger) |
 | roberta-large vs roberta-base | 2542 | 0.87 | 0.85 | 0.02 | 0.01 | 0.03 | McNemar exact | 0.00 | True | top5 | Is the larger model's advantage real? (why not bigger) |
 
-*Table A.13: Paired significance tests between the detector candidates (significance tests behind the detector comparison in Section 4.2.2).*
+*Table A.13: Paired significance tests between the detector candidates (significance tests behind the detector comparison in Section 5.2.2).*
 
 
 | Generator | Ack (%) | One question (%) | Length OK (%) | All rules (%) | Mean words | WASSA empathy (0-10) | Emotion validation (%) |
@@ -336,7 +336,7 @@ These tables support statements in the main text and are placed here to keep the
 | Minimising a real loss | devastated / sad | lonely (67%) | lonely (45%) | sad (39%) |
 | Stable emotion (control - context should NOT change the answer) | anxious (unchanged) | confident (21%) | anxious (76%) | anxious (76%) |
 
-*Table A.18: What the detector predicts as the window widens, on ten short conversations containing an emotion shift (the ten short emotion-shift conversations behind Section 5.3.4).*
+*Table A.18: What the detector predicts as the window widens, on ten short conversations containing an emotion shift (the ten short emotion-shift conversations behind Section 5.3.2).*
 
 
 | Metric | Final system vs | N | Final | Baseline | Difference | 95% CI | Test | p | p (Holm-adjusted) | Significant? |
@@ -407,7 +407,7 @@ These tables support statements in the main text and are placed here to keep the
 | Emotion validation | 25.3 | 26.0 | -0.7 | [-6.3, +5.0] | 0.91 | no |
 | All rules | 57.7 | 63.7 | -6.0 | [-12.7, +0.7] | 0.09 | no |
 
-*Table A.21: A more accurate detector with the generator held fixed (detector-swap detail behind Section 5.5.3).*
+*Table A.21: A more accurate detector with the generator held fixed (detector-swap detail behind Section 5.5.2).*
 
 
 | Group | Measure | RoBERTa-base d1 (%) | RoBERTa-large d1 (%) | Difference | 95% CI | Test | p | p (Holm over reply-quality measures) | Significant? |
@@ -456,7 +456,7 @@ These tables support statements in the main text and are placed here to keep the
 | Our data | For reference: judge vs judge on empathy | rho = 0.69 | computed |
 | Reproducibility | Re-implementation check after a library upgrade | 1,800 of 1,800 pre-upgrade scores reproduced exactly | `llm_judge_evaluation/wassa_empathy_scores_BACKUP_pre_upgrade.csv` |
 
-*Table A.24: Evidence for and against the empathy classifier for this project (validity checks on the empathy classifier, summarised in Section 5.4.6).*
+*Table A.24: Evidence for and against the empathy classifier for this project (validity checks on the empathy classifier, summarised in Section 5.4.4).*
 
 
 | Dimension | Final system vs | N | Final | Baseline | Difference | 95% CI | p | p (Holm-adjusted) | Significant? |
@@ -490,7 +490,7 @@ These tables support statements in the main text and are placed here to keep the
 | overall | Zero-shot Qwen2.5-1.5B (no detector, generic prompt) | 64 | 8.68 | 7.51 | 1.18 | [+0.83, +1.51] | 0.0 | 0.0 | YES |
 | overall | Monolithic LoRA fine-tuned Qwen2.5-1.5B (no detector) | 64 | 8.68 | 5.96 | 2.73 | [+2.29, +3.16] | 0.0 | 0.0 | YES |
 
-*Table A.25: Paired significance tests on the AI-judge scores (every judge comparison behind Section 5.4.6).*
+*Table A.25: Paired significance tests on the AI-judge scores (every judge comparison behind Section 5.4.5).*
 
 
 | Check | N | Result | Without fine-tuned system |
@@ -521,7 +521,7 @@ These tables support statements in the main text and are placed here to keep the
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 7.62 | 82.3 | 5.76 | 32.3 | 8.15 | 8.9 |
 | Final system as % of Qwen2.5-7B | 52.0% | 72.9% | 87.7% | 113.6% | 96.2% | 97.5% |
 
-*Table A.28: Reply quality against total parameters for the final system and the single models (the numbers behind the cost chart in Section 5.5.5).*
+*Table A.28: Reply quality against total parameters for the final system and the single models (the numbers behind the cost chart in Section 5.5.3).*
 
 
 | Detector | Parameters (M) | Training time (min) | Top-1 on test (%) | Top-5 on test (%) | Final system: all rules (%) | Final system: WASSA | Final system: emotion validation (%) |
@@ -529,7 +529,7 @@ These tables support statements in the main text and are placed here to keep the
 | roberta-base | 125 | 8.8 | 50.1 | 85.0 | 60.0 | 5.05 | 36.7 |
 | roberta-large | 355 | 64.7 | 53.0 | 87.2 | 54.7 | 5.01 | 38.0 |
 
-*Table A.29: Detector size, detection accuracy and the resulting reply quality (detector-level figures behind Section 5.5.7).*
+*Table A.29: Detector size, detection accuracy and the resulting reply quality (detector-level figures behind Section 5.5.2).*
 
 
 | System | Parameters (B) | Peak GPU memory (GB) | Mean s per reply | Median s per reply | ms per generated token | Mean reply tokens | Model load (s) | N messages |
@@ -538,7 +538,7 @@ These tables support statements in the main text and are placed here to keep the
 | Single model, same size: Qwen2.5-1.5B detects + responds | 1.54 | 2.9 | 1.58 | 1.49 | 32.7 | 48.8 | 5.4 | 50 |
 | Single model, bigger: Qwen2.5-7B (4-bit) detects + responds | 7.62 | 5.47 | 3.91 | 3.75 | 65.4 | 59.8 | 21.4 | 50 |
 
-*Table A.30: Peak GPU memory and response time on the same 50 conversations (memory and timing measurements behind Section 5.5.5).*
+*Table A.30: Peak GPU memory and response time on the same 50 conversations (memory and timing measurements behind Section 5.5.3).*
 
 
 | Final system vs | Measure | N | Final | Baseline | Difference | 95% CI | Wilcoxon p | Significant? |
@@ -550,7 +550,7 @@ These tables support statements in the main text and are placed here to keep the
 | Single model, same size: Qwen2.5-1.5B detects + responds | ms per generated token | 50 | 65.68 | 32.65 | 33.03 | [+31.04, +35.03] | 0.0 | YES |
 | Single model, same size: Qwen2.5-1.5B detects + responds | Peak GPU memory (GB) | 1 | 3.4 | 2.9 | 0.5 | +17.1% relative |  | single measurement |
 
-*Table A.31: Paired comparison of response time and memory against each single model (paired tests behind the resource figures in Section 5.5.7).*
+*Table A.31: Paired comparison of response time and memory against each single model (paired tests behind the resource figures in Section 5.5.3).*
 
 
 | Rule | Where the rule comes from | Effect on WASSA empathy (within system) | Effect on AI-judge empathy (within system) |
@@ -559,7 +559,7 @@ These tables support statements in the main text and are placed here to keep the
 | R2: ask exactly one question | Explorations are an EPITOME mechanism, but counselling guidance warns against the question-answer trap of asking several questions (SAMHSA TIP 35, 2019); only 4.7% of EmpatheticDialogues listener replies ask more than one | -0.19 (2906 vs 694 replies) p = 0.00144 | -0.08 (409 vs 103 replies) p = 0.759 |
 | R3: stay within 120 words | Keeps the reply readable for a distressed user and prevents the runaway replies seen in the fine-tuned baseline (design requirement) | -0.22 (3319 vs 281 replies) p = 0.00796 | +0.64 (492 vs 20 replies) p = 0.00861 |
 
-*Table A.32: Origin of each response rule and its measured effect within systems (origin and measured effect of each rule, summarised in Section 5.5.6).*
+*Table A.32: Origin of each response rule and its measured effect within systems (origin and measured effect of each rule, summarised in Section 5.5.4).*
 
 
 | Measure | Decoupled (ours) | Same generator alone | Difference | 95% CI | Test | p | p, length held constant | Verdict |
@@ -576,5 +576,5 @@ These tables support statements in the main text and are placed here to keep the
 | Distinct-2 (%) | 47.84 | 39.12 | 8.72 | corpus-level measure | - | - | - | decoupled better |
 | Emotion used is visible and can be intercepted | yes | no | - | - | - | - | - | decoupled better |
 
-*Table A.33: The decoupled design against the same generator alone, with reply length held constant (the numbers behind the comparison in Section 5.5.7).*
+*Table A.33: The decoupled design against the same generator alone, with reply length held constant (the numbers behind the comparison in Section 5.5.5).*
 
