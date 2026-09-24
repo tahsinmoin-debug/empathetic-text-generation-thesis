@@ -332,6 +332,8 @@ Our detector's 50.3% exceeds every joint recognition-and-generation model listed
 
 The fair summary is that **it reaches this accuracy while reading less**, one message rather than a whole conversation, which is what a live system actually has.
 
+Two entries in the table sit above our detector, and both are explained rather than omitted. Welivita and Pu report 65.9% [32], but on the situation description instead of the user's message, and Section 5.3.1 measures that difference on our own data at about nine points in favour of the description. The harder case is Chirpy Cardinal, whose RoBERTa classifier reaches 61.5% reading the first utterance, exactly as ours does [45]. Our own measurements account for part of that 11.2-point gap and not for all of it. Moving from RoBERTa-base to RoBERTa-large is worth 2.7 points on our test split, 50.3% to 53.0%; and their figure is on the validation split, which for our own RoBERTa-large is 2.2 points easier than test, 55.2% against 53.0%. Compared like for like, RoBERTa-large on validation, the two numbers are 55.2% and 61.5%, and the remaining six points are not explained by anything we can measure: the figure comes from an appendix of an Alexa Prize technical report that does not give the training protocol. We report the gap rather than explain it away, and we do not claim the best published accuracy on this corpus.
+
 
 | System | Input and split | Top-1 (%) | Top-5 (%) | Source |
 |---|---|---|---|---|
