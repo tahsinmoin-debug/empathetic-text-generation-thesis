@@ -1,0 +1,83 @@
+% ---------------------------------------------------------------------------
+%  A Decoupled Empathetic Response System
+%  BRAC University, Department of Computer Science and Engineering, CSE400
+%
+%  Compile with:   pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+%  (or simply:     latexmk -pdf main)
+% ---------------------------------------------------------------------------
+\documentclass[12pt,a4paper,oneside]{report}
+
+% --- page -------------------------------------------------------------------
+\usepackage[a4paper,left=1.5in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- text -------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% --- figures and tables -----------------------------------------------------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,justification=centering}
+
+% ragged-right X columns keep long text tables from overfull lines
+\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% --- references and links ---------------------------------------------------
+\usepackage[hidelinks]{hyperref}
+\usepackage{cite}
+
+\begin{document}
+
+% ---------------------------------------------------------------------------
+%  Front matter: replace with the department's official title page, declaration,
+%  approval, ethics statement, acknowledgement and abstract.
+% ---------------------------------------------------------------------------
+\begin{titlepage}
+\centering
+\vspace*{1in}
+{\LARGE\bfseries A Decoupled Empathetic Response System\par}
+\vspace{0.4in}
+{\large Emotion detection and response generation as separate stages,\\
+within the memory of a consumer graphics card\par}
+\vspace{0.8in}
+{\large Department of Computer Science and Engineering\\
+BRAC University\par}
+\vspace{0.6in}
+{\large \today\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+\cleardoublepage
+
+\pagenumbering{arabic}
+
+% ---------------------------------------------------------------------------
+%  Chapters
+% ---------------------------------------------------------------------------
+\input{chapter1}
+\input{chapter2}
+\input{chapter3}
+\input{chapter4}
+\input{chapter5}
+\input{chapter6}
+
+% ---------------------------------------------------------------------------
+%  Bibliography.  Do not add a thebibliography block as well: a document may
+%  have one or the other, never both.
+% ---------------------------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
