@@ -95,4 +95,4 @@ Figure 1.1 sets out the whole of this work on one page: the data it starts from,
 
 **Chapter 5** provides the Results and Analysis, covering the performance of every system on the same conversations, the analysis of the design alternatives, the adjustments made to the final design, the statistical analysis of every reported difference, the comparison of the results with published work, and a discussion of what the results mean and what they do not establish.
 
-**Chapter 6** provides the Conclusion, summarising the findings, stating the contributions of the work, and giving recommendations for future research.
+**Chapter 6** provides the Conclusion, summarising the findings, stating the contributions of the work, restating the limitations that bound them, and giving recommendations for future research.
