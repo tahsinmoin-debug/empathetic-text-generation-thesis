@@ -4,110 +4,99 @@
 \section{Background}
 \label{sec:1.1}
 
-People are increasingly bringing their issues to the screen. A student unable to sleep the night before a viva, someone who has just lost a pet, someone who has moved to a new city and not spoken to anybody for a fortnight: all of them are likelier to type the sentence than to say it aloud. The latest global mental health estimate from the World Health Organization (WHO) indicates that there is a large and growing disconnect between the number of people who require mental health care and the services available to meet this need \cite{who2022report}. That gap is what has made text-based support -- counselling services, student helplines and everyday chat apps -- the step between having nobody to tell and seeing a professional. A response that is factually helpful but emotionally wrong, offering a solution to someone who wanted a loss acknowledged, does not merely fail to help. Empathy in text-based support is not a nebulous idea. The EPITOME framework, derived from existing empathy scales and applied to online mental-health conversations, is as much about what not to say: a series of questions turns into an interrogation \cite{samhsa2019tip35} as it is about what to say: the responses should be divided into emotional responses, their own interpretation of what the person is saying, and their speculations on what they have not yet said \cite{sharma2020epitome}. This capacity of a machine has been investigated since the inception of neural dialogue systems and the main corpus for this research is EmpatheticDialogues, a crowdsourced dataset of 24,850 dialogues, with one describing a situation related to one of 32 emotions and another responding as a listener \cite{rashkin2019,ed_github}. Two lines of work have developed out of it. The first ones learn the emotion implicitly in the layers of the neural network, such as MoEL \cite{lin2019moel} and MIME \cite{majumder2020mime} with listeners, external commonsense knowledge or graph reasoning \cite{li2020empdg,li2022kemp,sabour2022cem,zhou2023case,yang2023escm} (CEM, CASE and ESCM). The second, newer line of work is to give a large language model the tools to steer and ask it how to do so, either by prompting \cite{qian2023llm,loh2023harnessing}, by providing tools \cite{cao2025tooled}, by conditioning on personality \cite{wu2025traits} or by reasoning about emotion step by step before answering \cite{li2024emotioncot}.
+People increasingly bring their difficulties to a screen. A student unable to sleep before a viva, someone who has just lost a pet, someone who has moved to a new city and not spoken to anybody for a fortnight: all are likelier to type the sentence than say it aloud. The World Health Organization's latest global estimate shows a large and growing gap between the number of people who need mental health care and the services available \cite{who2022report}, and that gap is what has made text-based support the step between having nobody to tell and seeing a professional. A reply that is factually helpful but emotionally wrong, offering a solution to someone who wanted a loss acknowledged, does not merely fail to help. Empathy in text-based support is not a nebulous idea: the EPITOME framework, drawn from existing empathy scales and applied to online mental-health conversations, divides a reply into emotional reactions, interpretations of what the person is saying and explorations of what they have not yet said \cite{sharma2020epitome}, while counselling guidance warns that a series of questions turns into an interrogation \cite{samhsa2019tip35}. The main corpus is EmpatheticDialogues, 24,850 crowdsourced dialogues in which one worker describes a situation tied to one of 32 emotions and another replies as a listener \cite{rashkin2019,ed_github}, and two lines of work have grown from it. The first learns the emotion implicitly inside the network, as in MoEL \cite{lin2019moel} and MIME \cite{majumder2020mime}, and later with commonsense knowledge or graph reasoning \cite{li2020empdg,li2022kemp,sabour2022cem,zhou2023case,yang2023escm}. The second steers a large language model from outside, by prompting \cite{qian2023llm,loh2023harnessing}, by providing tools \cite{cao2025tooled}, by conditioning on personality \cite{wu2025traits} or by reasoning about emotion step by step before answering \cite{li2024emotioncot}.
 
-The recognition of the emotion is a research issue by itself. The literature of emotion recognition in conversation has its own and its own challenges: emotions in a conversation are not always explicit and have to be deduced from the context \cite{poria2019erc}; emotions are not always read off the words in a single message, but can be implicit \cite{koga2023implicit}; a single message can have multiple emotions \cite{belay2025}; and large language models, while capable, are not necessarily more effective than a purpose-trained classifier \cite{feng2023affect}. In parallel to this, an increasing amount of work is using the same machinery for clinical screening, ranging from depression detection on social media \cite{lan2024depression} to shared tasks on mental-health timelines \cite{tseriotou2025clpsych} and systematic review shows that, despite their fluency, large language models' empathy is repetitive and obvious \cite{sorin2024jmir} and that data scarcity and bias are unsolved problems in this field \cite{kumar2024unlocking}. One thing nearly all this work has in common is that the emotional decision is never recorded. Whether the emotion is learned in the hidden layers of a joint model or inferred silently by a large language model, nobody -- not the developer, the supervisor or the clinician -- can point to it and say which feeling the reply was written for. This thesis takes the opposite position: in a system that answers feelings, the emotional decision should be a separate and visible one.
+Recognising the emotion is a research problem in itself: emotions in conversation are often implicit and must be inferred from context \cite{poria2019erc,koga2023implicit}; one message can carry several \cite{belay2025}; and large language models are not necessarily better at it than a purpose-trained classifier \cite{feng2023affect}. The same machinery is increasingly used for clinical screening, from depression detection on social media \cite{lan2024depression} to shared tasks on mental-health timelines \cite{tseriotou2025clpsych}, while systematic review finds large models' empathy, however fluent, repetitive \cite{sorin2024jmir} and data scarcity and bias unsolved \cite{kumar2024unlocking}. Nearly all of it has one thing in common: the emotional decision is never recorded. Whether the emotion is learned in the hidden layers of a joint model or inferred silently by a large language model, nobody -- not the developer, the supervisor or the clinician -- can point to it and say which feeling the reply was written for. This thesis takes the opposite position: in a system that answers feelings, the emotional decision should be a separate and visible one.
 
 \section{Rationale of the Study or Motivation}
 \label{sec:1.2}
 
-Our motivation is practical rather than architectural. For a system like this to be adopted by a university well-being service or a small organisation, three conditions have to hold at once. It has to run on the hardware those services already own, because none of them will buy a data-centre card for a chat window. What the person typed has to stay on the machine they typed it on, because a disclosure sent to an outside service is no longer private. And somebody has to be able to look at a reply afterwards and see which feeling it was written for, because a supervisor cannot take responsibility for a decision nobody can see.
+Our motivation is practical rather than architectural. For a system like this to be adopted by a university well-being service or a small organisation, three conditions must hold at once: it must run on hardware those services already own, since none will buy a data-centre card for a chat window; what the person typed must stay on the machine they typed it on, since a disclosure sent elsewhere is no longer private; and somebody must be able to look at a reply afterwards and see which feeling it was written for, since a supervisor cannot take responsibility for a decision nobody can see.
 
 Published work satisfies at most one of the three at a time, and the following section sets out the four gaps that follow from this. Two further difficulties come from our own preliminary work rather than from the literature, and are stated as challenges in Section 1.6: a dataset that gives one emotion to a whole conversation, and a detector trained on text it will never actually be given.
 
 \section{Problem Statement}
 \label{sec:1.3}
 
-Text-based support is now the first place many people take a difficult feeling, and the number who need such help far exceeds the number of people trained to answer them \cite{who2022report}. Whatever a service does afterwards, it must do one thing first: make the person feel understood. That is a specific job, not a vague one. A support reply has to show that the feeling has been registered, speak to the situation the person actually described, and leave room for them to say more without burying them in questions \cite{samhsa2019tip35,sharma2020epitome}. A reply that is sensible but emotionally wrong, offering a fix to someone who wanted a loss acknowledged, fails at that job however well formed its words are.
+Text-based support is now the first place many people take a difficult feeling, and the number who need such help far exceeds the number trained to answer them \cite{who2022report}. Whatever a service does afterwards, it must do one thing first: make the person feel understood. That is a specific job. A support reply has to show the feeling has been registered, speak to the situation the person actually described, and leave room for them to say more without burying them in questions \cite{samhsa2019tip35,sharma2020epitome}.
 
-Two families of systems attempt this job, and both hide the part that matters. The joint models trained on EmpatheticDialogues learn the emotion inside their own hidden layers as a side task of generation \cite{lin2019moel,majumder2020mime,sabour2022cem,zhou2023case}; four years of architectural work moved their emotion accuracy only from 30.6\% to 41.2\%, so they still read the speaker's feeling wrongly in about three conversations out of five. The newer approach gives the whole job to a large language model and asks it to work the feeling out silently \cite{qian2023llm,loh2023harnessing}. Its replies are better and people prefer them, but its emotional judgement is no more reliable than a small purpose-trained classifier's \cite{feng2023affect,belay2025}, and it is never written down. In both families the emotional decision exists only as a passing state inside a network.
+Two families of systems attempt this job, and both hide the part that matters. The joint models trained on EmpatheticDialogues learn the emotion inside their hidden layers as a side task of generation \cite{lin2019moel,majumder2020mime,sabour2022cem,zhou2023case}; four years of architectural work moved their accuracy only from 30.6\% to 41.2\%, so they still misread the feeling in about three conversations out of five. The newer approach gives the whole job to a large language model and lets it work the feeling out silently \cite{qian2023llm,loh2023harnessing}: its replies are better and people prefer them, but its emotional judgement is no more reliable than a small purpose-trained classifier's \cite{feng2023affect,belay2025} and is never written down. In both families the emotional decision exists only as a passing state inside a network.
 
 Four problems follow from this, and they compound.
 
-\textbf{Nothing can be inspected and nothing can intervene:} because no emotion is recorded, neither a developer, a supervisor nor a clinician can ask which feeling a reply was written for, and no safeguard can sit between reading the message and writing the answer, which is the one point at which a system could decline to improvise.
+\textbf{Nothing can be inspected and nothing can intervene:} because no emotion is recorded, no developer, supervisor or clinician can ask which feeling a reply was written for, and no safeguard can sit between reading the message and writing the answer.
 
-\textbf{Quality is tied to scale, and scale is tied to hardware:} the strongest published results come from models too large for the equipment a university well-being service or a small charity already owns, so using them means sending what a distressed person typed to another organisation's computer. The settings that most need private, local operation are the ones that cannot have it.
+\textbf{Quality is tied to scale, and scale is tied to hardware:} the strongest published results come from models too large for the equipment a university well-being service or a small charity already owns, so using them means sending what a distressed person typed to another organisation's computer. The settings that most need private, local operation cannot have it.
 
-\textbf{The measures reward the wrong thing:} published work is judged mainly on how far a reply overlaps in wording with one reference answer, which rewards resemblance to the corpus rather than doing what a support reply must do. It is also blind to the failure a systematic review names as the characteristic weakness of machine empathy: fluent, kind replies drawn repeatedly from the same few phrases \cite{sorin2024jmir}. A repetitive reply can sit very close to a good reference.
+\textbf{The measures reward the wrong thing:} published work is judged mainly on how far a reply overlaps in wording with one reference answer, which rewards resemblance to the corpus rather than doing what a support reply must do, and is blind to the failure a systematic review names as the characteristic weakness of machine empathy: fluent, kind replies drawn repeatedly from the same few phrases \cite{sorin2024jmir}.
 
-\textbf{Comparisons do not separate the design from the generator:} where a separated design does beat a single model, the generator has usually been changed at the same time, so the gain cannot be credited to the separation. The one published framework with a comparable two-stage structure builds it as an internal reasoning step rather than a record, and does not test it under a memory limit \cite{yang2024hef}.
+\textbf{Comparisons do not separate the design from the generator:} where a separated design beats a single model, the generator has usually been changed at the same time, so the gain cannot be credited to the separation. The one published framework with a comparable two-stage structure builds it as an internal reasoning step rather than a record, and does not test it under a memory limit \cite{yang2024hef}.
 
-The problem this thesis addresses is the combination: \textbf{the emotional reasoning of current empathetic response systems is invisible, their quality depends on hardware that most support services do not have, and the measures used to judge them do not test whether a reply does what a supportive reply is supposed to do.}
-
-The question it asks is therefore narrow enough to answer: \textbf{does detecting the emotion in a separate, visible step produce better empathetic replies than asking one model to do both, when the whole system must fit on a single consumer GPU?} Building a working system does not answer it. Four things are needed, and this thesis is organised around them: measuring replies against what a support reply must do rather than against a reference string; holding the generator fixed so that any benefit belongs to the design rather than to model size; testing every reported difference conversation by conversation, with correction for multiple comparisons, instead of stopping at the higher average; and putting the automatic verdicts in front of people to see whether they agree.
+The problem is the combination of the three: \textbf{the emotional reasoning of current systems is invisible, their quality depends on hardware most support services do not have, and the measures used to judge them do not test whether a reply does what a supportive reply should.} The question this thesis asks is therefore narrow enough to answer: \textbf{does detecting the emotion in a separate, visible step produce better empathetic replies than asking one model to do both, when the whole system must fit on a single consumer GPU?} Building a working system does not answer it. Four things are needed, and this thesis is organised around them: measuring replies against what a support reply must do rather than against a reference string; holding the generator fixed so any benefit belongs to the design rather than to model size; testing every reported difference conversation by conversation with correction for multiple comparisons; and putting the automatic verdicts in front of people to see whether they agree.
 
 \section{Objective}
 \label{sec:1.4}
 
-The aim of this research is to design, build and evaluate an empathetic-response system in which emotion detection and response generation are separate, independently tested components that together run on consumer hardware. Six specific objectives follow from it.
+The aim is to design, build and evaluate an empathetic-response system in which emotion detection and response generation are separate, independently tested components running together on consumer hardware. Six objectives follow.
 
-\textbf{1. Train the detector on the text it will actually receive:} fine-tune an emotion detector over the 32 categories of EmpatheticDialogues on the user's own message, rather than on the situation description the dataset supplies.
-
-\textbf{2. Establish how the detector's output should reach the generator:} build and compare the ways of passing it on, from a single label to three candidates, per-emotion guidance and attention-derived cue words, and keep whichever measurably improves the reply.
-
-\textbf{3. Keep the whole system within 8 GB of GPU memory:} so that it fits a graphics card people already own and no user message leaves the machine it was typed on.
-
-\textbf{4. Evaluate against single models of both its own size and a larger one:} on five independent signals, rule adherence, an independent empathy classifier, emotional fidelity, a panel of AI judges and human raters, with every difference tested by paired statistics.
-
-\textbf{5. Separate the design from the size of the generator:} run the system's own generator alone as a baseline, so that any gain can be credited to the separation rather than to model capacity.
-
-\textbf{6. Show that the design is usable and not only measurable:} run it as a multi-turn conversational agent that reports the emotional decision behind every reply.
+\begin{enumerate}
+  \item \textbf{Train the detector on the text it will actually receive:} fine-tune it over the 32 categories of EmpatheticDialogues on the user's own message rather than on the situation description the dataset supplies.
+  \item \textbf{Establish how the detector's output should reach the generator:} compare the ways of passing it on, from a single label to three candidates, per-emotion guidance and attention-derived cue words, and keep whichever measurably improves the reply.
+  \item \textbf{Keep the whole system within 8 GB of GPU memory:} so it fits a graphics card people already own and no message leaves the machine it was typed on.
+  \item \textbf{Evaluate against single models of both its own size and a larger one:} on five independent signals, rule adherence, an empathy classifier, emotional fidelity, a panel of AI judges and human raters, with every difference tested by paired statistics.
+  \item \textbf{Separate the design from the size of the generator:} run the system's own generator alone as a baseline, so any gain can be credited to the separation rather than to capacity.
+  \item \textbf{Show the design is usable and not only measurable:} run it as a multi-turn agent that reports the emotional decision behind every reply.
+\end{enumerate}
 
 \section{Methodology in Brief}
 \label{sec:1.5}
 
-The proposed system has two parts, and the work was carried out in four steps.
+The system has two parts and the work ran in four steps; Chapter 4 gives the full design.
 
-The detector, d1: a RoBERTa-base encoder is fine-tuned over the 32 emotions of EmpatheticDialogues on the first message of each conversation, which is the text the system receives in use. For each message it outputs the three most likely emotions with their confidences, and the words its classification token attended to most. This backbone was chosen from five trained under identical settings.
+\textbf{The detector, d1:} a RoBERTa-base encoder fine-tuned over the 32 emotions of EmpatheticDialogues on the first message of each conversation, the text it receives in use. It returns the three most likely emotions with their confidences and the words its classification token attended to most, and was chosen from five backbones trained under identical settings.
 
-The generator, d2: Phi-4-mini-instruct in 4-bit form, which fits beside the detector in 8 GB, produces the reply in two calls. The first is short and deterministic, asking the model to pick one of the detector's three candidates. The second builds a prompt from that one emotion, the cue words, guidance written for that emotion and three universal rules, and writes the reply. It was chosen against three generators with everything else held fixed.
+\textbf{The generator, d2:} Phi-4-mini-instruct in 4-bit form, which fits beside the detector in 8 GB, writes the reply in two calls: a short deterministic one picking among the three candidates, then one building a prompt from that emotion, the cue words, guidance written for it and three universal rules. It was chosen against three generators with everything else fixed.
 
-The alternatives: six designs were built without a detector: zero-shot prompting, a model fine-tuned with LoRA on the listener replies from the dataset, single models of 1.5, 3.8 and 7.6 billion parameters prompted to detect and respond in one shot, and a retrieval-augmented pipeline.
+\textbf{The alternatives:} six designs without a detector, namely zero-shot prompting, a LoRA fine-tune on the dataset's listener replies, single models of 1.5, 3.8 and 7.6 billion parameters prompted to detect and reply in one shot, and a retrieval-augmented pipeline.
 
-The evaluation: every system answers the same 300 conversations under the same decoding settings, measured on five independent signals: automatic checks of the three response rules, the WASSA 2024 shared-task empathy classifier \cite{giorgi2024wassa,yang2024hyy33}, emotional fidelity, which reads the reply back through the detector and compares it with the conversation's emotion, two blind judges from unrelated developers \cite{zheng2023judge,verga2024}, and a human rating study. Differences are tested with paired statistics and corrected for multiple comparisons. Chapter 4 gives the full design.
+\textbf{The evaluation:} every system answers the same 300 conversations under the same decoding settings, on five signals: the three response rules, the WASSA 2024 empathy classifier \cite{giorgi2024wassa,yang2024hyy33}, emotional fidelity, two blind judges from unrelated developers \cite{zheng2023judge,verga2024}, and a human rating study, with every difference tested by paired statistics and corrected for multiple comparisons.
 
 \section{Scopes and Challenges}
 \label{sec:1.6}
 
- \textbf{Scopes:}
+\textbf{Scopes:}
 
-\textbf{1. Emotionally aware support on ordinary hardware: }the complete system runs inside 8 GB of GPU memory, so a user's disclosure never has to leave the machine it was typed on.
+\begin{itemize}
+  \item \textbf{Emotionally aware support on ordinary hardware: }the whole system runs inside 8 GB, so a disclosure never leaves the machine it was typed on.
+  \item \textbf{An inspectable emotional decision:} each answer carries an audit trail, the three emotions with their confidences, the one selected and the words behind it, which a single end-to-end model cannot produce.
+  \item \textbf{Replaceable components: }the detector, the guidance and the generator can each be swapped without disturbing the others, as shown by substituting a larger detector into the finished system.
+  \item \textbf{Not only a benchmark entry: }the same components run as a conversational agent that reads previous turns and relaxes its rules after the first.
+  \item \textbf{Evaluation relative to the use case:} replies are judged on the rules, an empathy classifier, a judge panel and human raters, not on similarity to a reference.
+  \item \textbf{Reproducibility: }every parameter, seed and measurement is recorded, and all tables and figures are generated by script from saved outputs.
+\end{itemize}
 
-\textbf{2. An inspectable emotional decision:} each answer carries an audit trail, the three emotions with their confidences, the one selected, and the words behind the detection, which a single end-to-end model cannot produce.
+\textbf{Challenges:}
 
-\textbf{3. Replaceable components: }the detector, the per-emotion guidance and the generator can each be swapped without disturbing the others, as we show by substituting a larger detector into the finished system.
-
-\textbf{4. Not only a benchmark entry, but a multi-turn agent: }the same components run as a conversational agent that reads the user's previous turns and relaxes its rules after the first.
-
-\textbf{5. Evaluation relative to the use case:} replies are judged on the rules, an independent empathy classifier, a judge panel and human raters, not on similarity to a reference reply.
-
-\textbf{6. Reproducibility: }every parameter, seed and measurement is recorded, and all tables and figures are generated by script from the saved outputs.
-
-\textbf{ Challenges:}
-
-\textbf{1. One label for a collection of emotions: }the dataset gives a whole conversation one emotion, though a message may carry several, so a detector trained on it can only ever be asked for one.
-
-\textbf{2. Training text against deployment text: }the detector was first trained on text unlike the text it receives in use, costing about nine points of accuracy until the mismatch was found and corrected.
-
-\textbf{3. A memory budget that leaves no room to spare: }both models share 8 GB, which forces 4-bit quantisation and rules out the larger generators used in published work.
-
-\textbf{4. Measures that reward length: }both the empathy classifier and the judges score longer replies higher, so comparisons between systems of different verbosity need care.
-
-\textbf{5. Judges that may favour their own kind: }models used as evaluators tend to prefer text from their own family \cite{panickssery2024}, which restricts which of them may judge which systems.
-
-\textbf{6. No category for crisis: }nothing in the emotion set matches suicidal ideation, and the system must not be used as a mental-health service.
+\begin{itemize}
+  \item \textbf{One label for a collection of emotions: }the dataset gives a whole conversation one emotion though a message may carry several, so a detector trained on it can only be asked for one.
+  \item \textbf{Training text against deployment text: }the detector was first trained on text unlike what it receives in use, costing about nine points of accuracy until the mismatch was found.
+  \item \textbf{A memory budget with no room to spare: }both models share 8 GB, forcing 4-bit quantisation and ruling out the larger generators used in published work.
+  \item \textbf{Measures that reward length: }both the empathy classifier and the judges score longer replies higher, so comparisons between systems of different verbosity need care.
+  \item \textbf{Judges that may favour their own kind: }models used as evaluators prefer text from their own family \cite{panickssery2024}, restricting which may judge which systems.
+  \item \textbf{No category for crisis: }nothing in the emotion set matches suicidal ideation, so the system must not be used as a mental-health service.
+\end{itemize}
 
 \section{Thesis Structure}
 \label{sec:1.7}
 
-\textbf{Chapter 1} gives the background to empathetic response generation and text-based support, the motivation, the problem, the objectives, a brief account of the methodology, and the scopes and challenges of the work.
+\textbf{Chapter 1} gives the background, motivation, problem, objectives, a brief methodology, and the scopes and challenges.
 
-\textbf{Chapter 2} reviews the literature: the preliminaries of empathetic dialogue and emotion recognition, the model families used here, existing work with purpose-built models and with large language models, and the findings and gaps that follow.
+\textbf{Chapter 2} reviews the literature: the preliminaries of empathetic dialogue and emotion recognition, existing work with purpose-built models and with large language models, and the findings and gaps that follow.
 
-\textbf{Chapter 3} sets out the requirements and specifications, the societal and environmental impacts, the ethical aspects, the standards followed, the project and risk management plans, and the economic analysis.
+\textbf{Chapter 3} sets out the requirements, the societal and environmental impacts, the ethical aspects, the standards followed, the project and risk management plans, and the economic analysis.
 
-\textbf{Chapter 4} presents the methodology: the design process, every design considered, the detector and generator candidates, the ways of connecting them, the designs built without a detector, the preparation of the data, and the implementation of the selected design.
+\textbf{Chapter 4} presents the methodology: the design process, the detector and generator candidates, the ways of connecting them, the designs built without a detector, and the preparation and implementation of the selected design.
 
-\textbf{Chapter 5} reports the results: how each system performed on the same conversations, the analysis of the design alternatives, the adjustments made to the final design, the statistics behind every reported difference, the comparison with published work, and what the results do and do not establish.
+\textbf{Chapter 5} reports the results: how each system performed, the design alternatives, the adjustments to the final design, the statistics behind every reported difference, the comparison with published work, and what the results do and do not establish.
 
-\textbf{Chapter 6} concludes, summarising the findings, stating the contributions and recommending future work.
+\textbf{Chapter 6} concludes with the findings, the contributions and recommendations for future work.

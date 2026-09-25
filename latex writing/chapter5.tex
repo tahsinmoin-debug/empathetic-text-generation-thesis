@@ -198,7 +198,7 @@ The generator decides how well the rules are followed: Phi-4-mini reaches 65.3\%
 
 How the two models are connected is a design decision in its own right, and the variants differ in how much reasoning they ask of the generator. With the same detector and generator, the two-stage design raises emotional fidelity from 28.3\% to 36.7\% and empathy from 4.89 to 5.05, both reliable after correction, and shortens replies from 80.4 to 57.1 words, at an unreliable cost of 5.3 points of rule adherence.
 
-The benefit depends on the generator's capacity. The same change applied to Qwen2.5-1.5B drops adherence to 36.7\% and acknowledgement to 47.0\%: a small model given more to reason about becomes less compliant with the output format. One limitation should be explicit: this comparison removes the top-3 selection, the per-emotion guidance and the attention cues at once, and separating them is listed as future work (Section 5.6.6).
+The benefit depends on the generator's capacity. The same change applied to Qwen2.5-1.5B drops adherence to 36.7\% and acknowledgement to 47.0\%: a small model given more to reason about becomes less compliant with the output format. One limitation should be explicit: this comparison removes the top-3 selection, the per-emotion guidance and the attention cues at once, and separating them is listed as future work (Section 5.6.5).
 
 \subsection{Retrieval Augmentation}
 \label{sec:5.2.5}
